@@ -191,6 +191,7 @@
   <select id="filter-tier"><option value="">All Tiers</option></select>
   <select id="filter-region"><option value="">All Regions</option></select>
   <select id="filter-district"><option value="">All Districts</option></select>
+  <select id="filter-area"><option value="">All Areas</option></select>
   <select id="filter-manager"><option value="">All Managers</option></select>
 
   <div class="view-toggle">
@@ -272,21 +273,19 @@ function avatarHTML(name, size=40, fs=14) {
 // Populate filters
 function populateFilters() {
   const fields = {
-    'filter-segment': 'segment',
-    'filter-channel': 'channel',
-    'filter-tier': 'tier',
-    'filter-region': 'region',
-    'filter-manager': 'manager',
+    'filter-segment':  'segment',
+    'filter-channel':  'channel',
+    'filter-tier':     'tier',
+    'filter-region':   'region',
+    'filter-district': 'district',
+    'filter-area':     'area',
+    'filter-manager':  'manager',
   };
   for (const [id, key] of Object.entries(fields)) {
     const vals = [...new Set(DATA.map(d => d[key]).filter(Boolean))].sort();
     const sel = document.getElementById(id);
     vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
   }
-  // States
-  const districts = [...new Set(DATA.map(d => d.district).filter(Boolean))].sort();
-  const sel = document.getElementById('filter-district');
-  districts.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o); });
 }
 
 let currentView = 'table';
@@ -300,6 +299,7 @@ function getFiltered() {
   const tier = document.getElementById('filter-tier').value;
   const reg = document.getElementById('filter-region').value;
   const dist = document.getElementById('filter-district').value;
+  const area = document.getElementById('filter-area').value;
   const mgr = document.getElementById('filter-manager').value;
 
   return DATA.filter(d => {
@@ -308,6 +308,7 @@ function getFiltered() {
     if (tier && d.tier     !== tier) return false;
     if (reg  && d.region   !== reg)  return false;
     if (dist && d.district !== dist) return false;
+    if (area && d.area     !== area) return false;
     if (d.titleGroup === 'Unknown') return false;
     if (mgr  && d.manager  !== mgr)  return false;
     if (q) {
@@ -519,14 +520,14 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 });
 
 // Filters & search
-['search','filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-manager'].forEach(id => {
+['search','filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-area','filter-manager'].forEach(id => {
   document.getElementById(id).addEventListener('input', render);
   document.getElementById(id).addEventListener('change', render);
 });
 
 document.getElementById('clear-filters').addEventListener('click', () => {
   document.getElementById('search').value = '';
-  ['filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-manager'].forEach(id => { document.getElementById(id).value = ''; });
+  ['filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-area','filter-manager'].forEach(id => { document.getElementById(id).value = ''; });
   render();
 });
 
@@ -650,6 +651,7 @@ document.getElementById('file-input').addEventListener('change', function() {
         'filter-region':  'region',
         'filter-manager': 'manager',
         'filter-district':'district',
+        'filter-area':    'area',
       };
       for (const [id, key] of Object.entries(filterDefs)) {
         const sel = document.getElementById(id);

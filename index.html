@@ -339,20 +339,74 @@ function avatarHTML(name, size=40, fs=14) {
 }
 
 // Populate filters
+// Map of filter id → data key
+const FILTER_FIELDS = {
+  'filter-segment':  'segment',
+  'filter-channel':  'channel',
+  'filter-tier':     'tier',
+  'filter-region':   'region',
+  'filter-district': 'district',
+  'filter-area':     'area',
+  'filter-manager':  'manager',
+};
+
 function populateFilters() {
-  const fields = {
-    'filter-segment':  'segment',
-    'filter-channel':  'channel',
-    'filter-tier':     'tier',
-    'filter-region':   'region',
-    'filter-district': 'district',
-    'filter-area':     'area',
-    'filter-manager':  'manager',
-  };
-  for (const [id, key] of Object.entries(fields)) {
+  // Initial full population from all DATA
+  for (const [id, key] of Object.entries(FILTER_FIELDS)) {
     const vals = [...new Set(DATA.map(d => d[key]).filter(Boolean))].sort();
     const sel = document.getElementById(id);
+    sel.innerHTML = `<option value="">${sel.options[0].textContent}</option>`;
     vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+  }
+}
+
+// Bidirectional cascading: rebuild every dropdown based on what the
+// OTHER filters (all except the one being rebuilt) currently allow.
+function updateCascadingDropdowns(changedId) {
+  for (const [id, key] of Object.entries(FILTER_FIELDS)) {
+    if (id === changedId) continue; // don't touch the one the user just changed
+
+    const sel = document.getElementById(id);
+    const currentVal = sel.value; // preserve selection if still valid
+
+    // Build a filtered set using all active filters EXCEPT this dropdown
+    const q    = document.getElementById('search').value.toLowerCase();
+    const vals = {};
+    for (const [fid, fkey] of Object.entries(FILTER_FIELDS)) {
+      if (fid === id) continue; // skip self
+      vals[fkey] = document.getElementById(fid).value;
+    }
+
+    const available = [...new Set(
+      DATA.filter(d => {
+        if (d.titleGroup === 'Unknown') return false;
+        for (const [fkey, fval] of Object.entries(vals)) {
+          if (fval && d[fkey] !== fval) return false;
+        }
+        if (q) {
+          const hay = [d.name,d.title,d.email,d.location,d.manager,d.director,d.segment,d.channel,d.tier,d.region,d.area,d.district,d.phone].join(' ').toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      }).map(d => d[key]).filter(Boolean)
+    )].sort();
+
+    const placeholder = sel.options[0].textContent;
+    sel.innerHTML = `<option value="">${placeholder}</option>`;
+    available.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v;
+      o.textContent = v;
+      // Grey out — actually just skip unavailable so list stays clean
+      sel.appendChild(o);
+    });
+
+    // Restore previous value if still available, otherwise reset
+    if (available.includes(currentVal)) {
+      sel.value = currentVal;
+    } else {
+      sel.value = '';
+    }
   }
 }
 
@@ -587,15 +641,23 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
   });
 });
 
-// Filters & search
-['search','filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-area','filter-manager'].forEach(id => {
-  document.getElementById(id).addEventListener('input', render);
-  document.getElementById(id).addEventListener('change', render);
+// Filters & search — with bidirectional cascade
+document.getElementById('search').addEventListener('input', () => {
+  updateCascadingDropdowns('search');
+  render();
+});
+
+Object.keys(FILTER_FIELDS).forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    updateCascadingDropdowns(id);
+    render();
+  });
 });
 
 document.getElementById('clear-filters').addEventListener('click', () => {
   document.getElementById('search').value = '';
-  ['filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-area','filter-manager'].forEach(id => { document.getElementById(id).value = ''; });
+  Object.keys(FILTER_FIELDS).forEach(id => { document.getElementById(id).value = ''; });
+  populateFilters(); // restore all options
   render();
 });
 
@@ -712,23 +774,8 @@ document.getElementById('file-input').addEventListener('change', function() {
       newRecords.forEach(r => DATA.push(r));
 
       // Rebuild filter dropdowns
-      const filterDefs = {
-        'filter-segment': 'segment',
-        'filter-channel': 'channel',
-        'filter-tier':    'tier',
-        'filter-region':  'region',
-        'filter-manager': 'manager',
-        'filter-district':'district',
-        'filter-area':    'area',
-      };
-      for (const [id, key] of Object.entries(filterDefs)) {
-        const sel = document.getElementById(id);
-        const cur = sel.value;
-        const first = sel.options[0].outerHTML;
-        const vals = [...new Set(DATA.map(d => d[key]).filter(Boolean))].sort();
-        sel.innerHTML = first + vals.map(v => `<option value="${v}">${v}</option>`).join('');
-        if (vals.includes(cur)) sel.value = cur;
-      }
+      // Rebuild all dropdowns after data update
+      populateFilters();
 
       // Update header meta
       document.querySelector('.header-meta').textContent = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long'}) + ' · ' + newRecords.length.toLocaleString() + ' coworkers';

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDW Sales Org Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161921;
+    --surface2: #1e2330;
+    --border: #262c3d;
+    --accent: #4f7cff;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #fb923c;
+    --text: #e8eaf0;
+    --muted: #7880a0;
+    --tag-bg: #1e2330;
+    --card-hover: #1c2235;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0d1220 0%, #111828 60%, #0e1420 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);
+  }
+  .header-title { flex: 1; min-width: 220px; }
+  .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; letter-spacing: -.3px; }
+  header h1 em { font-style: italic; color: var(--accent2); }
+  .header-meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* SEARCH */
+  .search-wrap { flex: 2; min-width: 260px; max-width: 480px; position: relative; }
+  .search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  #search { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 14px 10px 42px; outline: none; transition: border-color .2s; }
+  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--muted); }
+
+  /* FILTERS */
+  .filters { padding: 14px 40px; display: flex; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); align-items: center; background: var(--surface); }
+  .filter-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 2px; white-space: nowrap; }
+  select { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 6px 28px 6px 10px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237880a0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; outline: none; transition: border-color .2s; }
+  select:focus { border-color: var(--accent); }
+  .count-badge { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; white-space: nowrap; }
+  .count-badge span { color: var(--accent); font-weight: 500; }
+  .clear-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 6px 10px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: .05em; transition: all .15s; white-space: nowrap; }
+  .clear-btn:hover { border-color: var(--accent4); color: var(--accent4); }
+  .upload-btn { background: none; border: 1px solid rgba(79,124,255,.4); border-radius: 6px; color: var(--accent); cursor: pointer; padding: 6px 12px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: .05em; transition: all .15s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .upload-btn:hover { background: rgba(79,124,255,.1); border-color: var(--accent); }
+  #file-input { display: none; }
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 10px; z-index: 300; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; box-shadow: 0 8px 32px rgba(0,0,0,.4); white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: rgba(52,211,153,.4); }
+  .toast.error   { border-color: rgba(248,113,113,.4); }
+  .toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .toast.success .toast-dot { background: var(--accent3); }
+  .toast.error   .toast-dot { background: #f87171; }
+
+  /* VIEW TOGGLE */
+  .view-toggle { display: flex; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 3px; }
+  .view-btn { background: none; border: none; color: var(--muted); cursor: pointer; border-radius: 5px; padding: 5px 8px; display: flex; align-items: center; transition: all .15s; }
+  .view-btn.active { background: var(--accent); color: white; }
+
+  /* LAYOUT */
+  #app { padding: 28px 40px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: var(--surface2); }
+  th { padding: 11px 14px; text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; cursor: pointer; user-select: none; white-space: nowrap; border-bottom: 1px solid var(--border); transition: color .15s; }
+  th:hover { color: var(--text); }
+  th.sorted { color: var(--accent); }
+  th .sort-icon { margin-left: 4px; opacity: .5; }
+  th.sorted .sort-icon { opacity: 1; }
+  tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .12s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--card-hover); }
+  td { padding: 10px 14px; color: var(--text); vertical-align: middle; }
+  .name-cell strong { display: block; font-weight: 500; }
+  .name-cell small { color: var(--muted); font-size: 11px; font-family: 'DM Mono', monospace; }
+  .email-link { color: var(--accent); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 11px; }
+  .email-link:hover { text-decoration: underline; }
+
+  /* CARDS */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; cursor: pointer; transition: border-color .15s, transform .15s, background .15s; }
+  .card:hover { border-color: var(--accent); background: var(--card-hover); transform: translateY(-1px); }
+  .card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 14px; color: white; flex-shrink: 0; font-style: italic; }
+  .card-name { font-weight: 500; font-size: 14px; line-height: 1.3; }
+  .card-title { color: var(--muted); font-size: 11px; margin-top: 2px; line-height: 1.4; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .tag { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .tag.seg { color: var(--accent); border-color: rgba(79,124,255,.3); background: rgba(79,124,255,.08); }
+  .tag.ch  { color: var(--accent3); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.08); }
+  .tag.tier{ color: var(--accent4); border-color: rgba(251,146,60,.3); background: rgba(251,146,60,.08); }
+  .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); }
+  .card-mgr { font-size: 11px; color: var(--muted); }
+  .card-mgr strong { color: var(--text); font-weight: 400; }
+
+  /* GROUPS */
+  .group-section { margin-bottom: 28px; }
+  .group-header { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px 8px 0 0; cursor: pointer; user-select: none; }
+  .group-header:hover { background: var(--card-hover); }
+  .group-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 13px; color: white; font-style: italic; flex-shrink: 0; }
+  .group-name { font-weight: 500; font-size: 14px; }
+  .group-sub { font-size: 11px; color: var(--muted); margin-left: 2px; }
+  .group-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; }
+  .group-chevron { color: var(--muted); transition: transform .2s; flex-shrink: 0; }
+  .group-header.collapsed .group-chevron { transform: rotate(-90deg); }
+  .group-rows { border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; animation: slideUp .2s ease; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .modal-header { padding: 22px 26px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 16px; }
+  .modal-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 20px; color: white; flex-shrink: 0; font-style: italic; }
+  .modal-name { font-family: 'DM Serif Display', serif; font-size: 21px; font-weight: 400; }
+  .modal-title { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .modal-close { margin-left: auto; background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 5px 10px; font-size: 16px; line-height: 1; transition: all .15s; }
+  .modal-close:hover { border-color: var(--text); color: var(--text); }
+  .modal-body { padding: 22px 26px; }
+  .detail-section { margin-bottom: 20px; }
+  .detail-section-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .detail-item {}
+  .detail-item.full { grid-column: 1 / -1; }
+  .detail-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .detail-value { font-size: 13px; color: var(--text); }
+  .detail-value a { color: var(--accent); text-decoration: none; }
+  .detail-value a:hover { text-decoration: underline; }
+  .chain-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; margin-bottom: 8px; }
+  .chain-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; min-width: 54px; }
+  .chain-name { font-size: 13px; font-weight: 500; }
+  .chain-title { font-size: 11px; color: var(--muted); }
+  .chain-email { margin-left: auto; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 80px 20px; color: var(--muted); }
+  .empty svg { margin-bottom: 16px; opacity: .3; }
+  .empty p { font-size: 15px; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 640px) {
+    header, .filters, #app { padding-left: 16px; padding-right: 16px; }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <div class="header-eyebrow">CDW · Sales Sector</div>
+    <h1>Sales Org <em>Directory</em></h1>
+    <div class="header-meta">2026 · 2,536 coworkers</div>
+  </div>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search name, title, email, location, manager…">
+  </div>
+</header>
+
+<div id="loading-screen" style="text-align:center;padding:100px 20px;color:var(--muted)">
+  <div style="display:inline-flex;flex-direction:column;align-items:center;gap:16px">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+    <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Loading directory…</p>
+  </div>
+</div>
+
+<div id="app-shell" style="display:none" style="display:none">
+<div class="filters">
+  <span class="filter-label">Filter</span>
+  <select id="filter-segment"><option value="">All Segments</option></select>
+  <select id="filter-channel"><option value="">All Channels</option></select>
+  <select id="filter-tier"><option value="">All Tiers</option></select>
+  <select id="filter-region"><option value="">All Regions</option></select>
+  <select id="filter-district"><option value="">All Districts</option></select>
+  <select id="filter-manager"><option value="">All Managers</option></select>
+
+  <div class="view-toggle">
+    <button class="view-btn active" id="btn-table" title="Table view">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+    </button>
+    <button class="view-btn" id="btn-cards" title="Card view">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="view-btn" id="btn-groups" title="Group by manager">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+  </div>
+
+  <input type="file" id="file-input" accept=".xlsx,.xls">
+  <button class="upload-btn" id="upload-btn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Update Data
+  </button>
+  <button class="clear-btn" id="clear-filters">✕ Clear</button>
+  <div class="count-badge"><span id="count">3395</span> people</div>
+</div>
+
+<div id="app"></div>
+
+</div><!-- /app-shell -->
+
+<div id="toast" class="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modal-header"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+let DATA = [];
+let dataLoaded = false;
+
+async function loadData() {
+  try {
+    const res = await fetch('data.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    DATA = await res.json();
+    dataLoaded = true;
+    populateFilters();
+    render();
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('app-shell').style.display = '';
+  } catch(err) {
+    document.getElementById('loading-screen').innerHTML = `
+      <div style="text-align:center;padding:80px 20px;color:var(--muted)">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:16px;opacity:.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p style="font-size:15px;margin-bottom:8px">Could not load data.json</p>
+        <p style="font-size:12px;font-family:'DM Mono',monospace;color:#f87171">${err.message}</p>
+        <p style="font-size:12px;margin-top:12px">Make sure data.json is in the same directory as index.html</p>
+      </div>`;
+  }
+}
+
+const COLORS = ['#4f7cff','#a78bfa','#34d399','#f472b6','#fb923c','#38bdf8','#facc15','#f87171','#4ade80','#c084fc','#e879f9','#2dd4bf'];
+const colorCache = {};
+function getColor(name) {
+  if (!colorCache[name]) {
+    const idx = Object.keys(colorCache).length % COLORS.length;
+    colorCache[name] = COLORS[idx];
+  }
+  return colorCache[name];
+}
+function initials(name) {
+  return name.split(' ').filter(Boolean).map(p => p[0]).slice(0,2).join('').toUpperCase();
+}
+function avatarHTML(name, size=40, fs=14) {
+  const c = getColor(name || '?');
+  return `<div class="avatar" style="width:${size}px;height:${size}px;font-size:${fs}px;background:linear-gradient(135deg,${c}cc,${c}55)">${initials(name||'?')}</div>`;
+}
+
+// Populate filters
+function populateFilters() {
+  const fields = {
+    'filter-segment': 'segment',
+    'filter-channel': 'channel',
+    'filter-tier': 'tier',
+    'filter-region': 'region',
+    'filter-manager': 'manager',
+  };
+  for (const [id, key] of Object.entries(fields)) {
+    const vals = [...new Set(DATA.map(d => d[key]).filter(Boolean))].sort();
+    const sel = document.getElementById(id);
+    vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+  }
+  // States
+  const districts = [...new Set(DATA.map(d => d.district).filter(Boolean))].sort();
+  const sel = document.getElementById('filter-district');
+  districts.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o); });
+}
+
+let currentView = 'table';
+let sortCol = 'name';
+let sortDir = 1;
+
+function getFiltered() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const seg = document.getElementById('filter-segment').value;
+  const ch  = document.getElementById('filter-channel').value;
+  const tier = document.getElementById('filter-tier').value;
+  const reg = document.getElementById('filter-region').value;
+  const dist = document.getElementById('filter-district').value;
+  const mgr = document.getElementById('filter-manager').value;
+
+  return DATA.filter(d => {
+    if (seg  && d.segment  !== seg)  return false;
+    if (ch   && d.channel  !== ch)   return false;
+    if (tier && d.tier     !== tier) return false;
+    if (reg  && d.region   !== reg)  return false;
+    if (dist && d.district !== dist) return false;
+    if (d.titleGroup === 'Unknown') return false;
+    if (mgr  && d.manager  !== mgr)  return false;
+    if (q) {
+      const hay = [d.name,d.title,d.email,d.location,d.manager,d.director,d.segment,d.channel,d.tier,d.region,d.area,d.district,d.phone].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render() {
+  const filtered = getFiltered();
+  document.getElementById('count').textContent = filtered.length.toLocaleString();
+  const app = document.getElementById('app');
+  if (filtered.length === 0) {
+    app.innerHTML = `<div class="empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No results found</p></div>`;
+    return;
+  }
+  if (currentView === 'table') renderTable(filtered);
+  else if (currentView === 'cards') renderCards(filtered);
+  else renderGroups(filtered);
+}
+
+function renderTable(data) {
+  const sorted = [...data].sort((a,b) => {
+    const av = a[sortCol] || '', bv = b[sortCol] || '';
+    return av.localeCompare(bv) * sortDir;
+  });
+  const cols = [
+    {key:'name',    label:'Name'},
+    {key:'title',   label:'Title'},
+    {key:'segment', label:'Segment'},
+    {key:'channel', label:'Channel'},
+    {key:'tier',    label:'Tier'},
+    {key:'region',  label:'Region'},
+    {key:'location',label:'Location'},
+    {key:'manager', label:'Manager'},
+  ];
+  const thead = cols.map(c => {
+    const s = sortCol === c.key;
+    return `<th class="${s?'sorted':''}" data-col="${c.key}">${c.label}<span class="sort-icon">${s?(sortDir===1?'↑':'↓'):'↕'}</span></th>`;
+  }).join('');
+  const tbody = sorted.map(d => `
+    <tr data-email="${d.email}" data-name="${encodeURIComponent(d.name)}">
+      <td class="name-cell"><strong>${d.name}</strong><small>${d.email ? `<a class="email-link" href="mailto:${d.email}" onclick="event.stopPropagation()">${d.email}</a>` : ''}</small></td>
+      <td>${d.title||'—'}</td>
+      <td>${d.segment||'—'}</td>
+      <td>${d.channel||'—'}</td>
+      <td>${d.tier||'—'}</td>
+      <td>${d.region||'—'}</td>
+      <td>${d.location||'—'}</td>
+      <td>${d.manager||'—'}</td>
+    </tr>`).join('');
+  document.getElementById('app').innerHTML = `<div class="table-wrap"><table><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table></div>`;
+  document.querySelectorAll('th[data-col]').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      sortDir = (sortCol === col) ? sortDir * -1 : 1;
+      sortCol = col;
+      render();
+    });
+  });
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    tr.addEventListener('click', () => openModal(decodeURIComponent(tr.dataset.name)));
+  });
+}
+
+function renderCards(data) {
+  const html = data.map(d => `
+    <div class="card" data-name="${encodeURIComponent(d.name)}">
+      <div class="card-header">
+        ${avatarHTML(d.name)}
+        <div><div class="card-name">${d.name}</div><div class="card-title">${d.title||''}</div></div>
+      </div>
+      <div class="card-tags">
+        ${d.segment  ? `<span class="tag seg">${d.segment}</span>`    : ''}
+        ${d.channel  ? `<span class="tag ch">${d.channel}</span>`    : ''}
+        ${d.tier     ? `<span class="tag tier">${d.tier}</span>`     : ''}
+        ${d.district ? `<span class="tag">${d.district}</span>`      : ''}
+      </div>
+      <div class="card-footer">
+        <div class="card-mgr">${d.manager ? `Mgr: <strong>${d.manager}</strong>` : ''}</div>
+        ${d.email ? `<a class="email-link" href="mailto:${d.email}" onclick="event.stopPropagation()" title="${d.email}">✉</a>` : ''}
+      </div>
+    </div>`).join('');
+  document.getElementById('app').innerHTML = `<div class="cards-grid">${html}</div>`;
+  document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => openModal(decodeURIComponent(c.dataset.name))));
+}
+
+function renderGroups(data) {
+  const groups = {};
+  data.forEach(d => {
+    const key = d.manager || '— No Manager —';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(d);
+  });
+  const sortedKeys = Object.keys(groups).sort((a,b) => a.localeCompare(b));
+  const html = sortedKeys.map(mgr => {
+    const members = groups[mgr];
+    const mgrData = members[0];
+    const rows = members.map(d => `
+      <tr data-name="${encodeURIComponent(d.name)}" style="border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--card-hover)'" onmouseout="this.style.background=''">
+        <td style="padding:9px 14px;display:flex;align-items:center;gap:10px">
+          ${avatarHTML(d.name,28,11)}
+          <div><div style="font-weight:500;font-size:13px">${d.name}</div><div style="color:var(--muted);font-size:11px">${d.title||''}</div></div>
+        </td>
+        <td style="padding:9px 14px;font-size:12px;color:var(--muted)">${d.segment||'—'}</td>
+        <td style="padding:9px 14px;font-size:12px;color:var(--muted)">${d.channel||'—'}</td>
+        <td style="padding:9px 14px;font-size:12px;color:var(--muted)">${d.location||'—'}</td>
+        <td style="padding:9px 14px"><a class="email-link" href="mailto:${d.email}" onclick="event.stopPropagation()">${d.email||''}</a></td>
+      </tr>`).join('');
+    const mgrTitle = mgrData.managerTitle || '';
+    return `<div class="group-section">
+      <div class="group-header" data-group="${encodeURIComponent(mgr)}">
+        ${avatarHTML(mgr, 32, 13)}
+        <div><div class="group-name">${mgr}</div>${mgrTitle ? `<div class="group-sub">${mgrTitle}</div>` : ''}</div>
+        <div class="group-count">${members.length}</div>
+        <svg class="group-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="group-rows"><table style="width:100%;border-collapse:collapse"><tbody>${rows}</tbody></table></div>
+    </div>`;
+  }).join('');
+  document.getElementById('app').innerHTML = html;
+  document.querySelectorAll('.group-header').forEach(gh => {
+    gh.addEventListener('click', () => {
+      gh.classList.toggle('collapsed');
+      const rows = gh.nextElementSibling;
+      rows.style.display = gh.classList.contains('collapsed') ? 'none' : '';
+    });
+  });
+  document.querySelectorAll('tbody tr[data-name]').forEach(tr => {
+    tr.addEventListener('click', () => openModal(decodeURIComponent(tr.dataset.name)));
+  });
+}
+
+function openModal(name) {
+  const d = DATA.find(p => p.name === name);
+  if (!d) return;
+
+  document.getElementById('modal-header').innerHTML = `
+    ${avatarHTML(d.name, 52, 20)}
+    <div>
+      <div class="modal-name">${d.name}</div>
+      <div class="modal-title">${d.title||''}</div>
+      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+        ${d.segment ? `<span class="tag seg">${d.segment}</span>` : ''}
+        ${d.channel  ? `<span class="tag ch">${d.channel}</span>`  : ''}
+        ${d.tier     ? `<span class="tag tier">${d.tier}</span>`   : ''}
+      </div>
+    </div>
+    <button class="modal-close" id="modal-close-btn">✕</button>`;
+
+  const contactFields = [
+    {label:'Email', value: d.email ? `<a href="mailto:${d.email}">${d.email}</a>` : '—', full:true},
+    {label:'Phone', value: d.phone || '—'},
+    {label:'Location', value: d.location || '—'},
+    {label:'State', value: d.state || '—'},
+    {label:'Tenure', value: d.losMonths ? `${d.losMonths} (${d.losGroup})` : d.losGroup || '—', full:true},
+    {label:'Academy Status', value: d.academyFlag || '—'},
+  ];
+
+  const orgFields = [
+    {label:'Region', value: d.region || '—'},
+    {label:'Area',   value: d.area   || '—'},
+    {label:'District', value: d.district || '—', full:true},
+  ];
+
+  const chainHTML = [
+    {label:'Manager',  name: d.manager,  title: d.managerTitle,  email: d.managerEmail},
+    {label:'Director', name: d.director, title: d.directorTitle, email: d.directorEmail},
+  ].filter(x => x.name).map(x => `
+    <div class="chain-row">
+      ${avatarHTML(x.name, 32, 12)}
+      <div><div class="chain-name">${x.name}</div><div class="chain-title">${x.title||''}</div></div>
+      ${x.email ? `<a class="email-link chain-email" href="mailto:${x.email}" title="${x.email}">✉</a>` : ''}
+    </div>`).join('');
+
+  document.getElementById('modal-body').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Contact & Location</div>
+      <div class="detail-grid">
+        ${contactFields.map(f => `<div class="detail-item ${f.full?'full':''}"><div class="detail-label">${f.label}</div><div class="detail-value">${f.value}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Org Structure</div>
+      <div class="detail-grid">
+        ${orgFields.map(f => `<div class="detail-item ${f.full?'full':''}"><div class="detail-label">${f.label}</div><div class="detail-value">${f.value}</div></div>`).join('')}
+      </div>
+    </div>
+    ${chainHTML ? `<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>${chainHTML}</div>` : ''}`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-close-btn').onclick = closeModal;
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// View toggle
+['table','cards','groups'].forEach(v => {
+  document.getElementById(`btn-${v}`).addEventListener('click', () => {
+    currentView = v;
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`btn-${v}`).classList.add('active');
+    render();
+  });
+});
+
+// Filters & search
+['search','filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-manager'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+  document.getElementById(id).addEventListener('change', render);
+});
+
+document.getElementById('clear-filters').addEventListener('click', () => {
+  document.getElementById('search').value = '';
+  ['filter-segment','filter-channel','filter-tier','filter-region','filter-district','filter-manager'].forEach(id => { document.getElementById(id).value = ''; });
+  render();
+});
+
+loadData();
+
+// ── UPLOAD / UPDATE LOGIC ──────────────────────────────────────────
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toast-msg');
+  t.className = 'toast ' + type;
+  m.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+document.getElementById('upload-btn').addEventListener('click', () => {
+  document.getElementById('file-input').click();
+});
+
+document.getElementById('file-input').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  this.value = ''; // reset so same file can be re-uploaded
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      if (typeof XLSX === 'undefined') {
+        showToast('SheetJS not loaded yet — please wait a moment and retry.', 'error');
+        return;
+      }
+      const wb = XLSX.read(e.target.result, {type: 'array'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, {defval: ''});
+
+      if (!rows.length) { showToast('File appears empty.', 'error'); return; }
+
+      // Detect columns (flexible mapping)
+      const sample = rows[0];
+      const keys = Object.keys(sample);
+      const has = k => keys.some(x => x.toLowerCase().includes(k.toLowerCase()));
+      if (!has('CoworkerName') && !has('name')) {
+        showToast('Could not find CoworkerName column.', 'error');
+        return;
+      }
+
+      function extractState(loc) {
+        let m = loc.match(/VIRTUAL - ([A-Z]{2})\)/i);
+        if (m) return m[1].toUpperCase();
+        m = loc.match(/ - ([A-Z]{2}) \(/);
+        if (m) return m[1].toUpperCase();
+        return '';
+      }
+      function cleanLoc(loc) {
+        return loc.replace(/\s*\([^)]*\)\s*$/, '').trim().replace(/\s*-\s*$/, '').trim();
+      }
+      function toTitle(s) {
+        if (!s) return '';
+        return s.replace(/[A-Za-z]+('[A-Za-z]+)?/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+      }
+      function cleanRefName(s) {
+        return toTitle(s.replace(/\s*\([^)]*\)\s*$/, '').trim());
+      }
+      function cleanPersonName(s) {
+        return toTitle(s.replace(/^\([^)]*\)\s*/, '').trim());
+      }
+
+      const newRecords = [];
+      for (const r of rows) {
+        const name = cleanPersonName(String(r['CoworkerName'] || r['name'] || ''));
+        if (!name) continue;
+        const sector = String(r['Sector'] || r['sector'] || '');
+        if (sector && sector !== 'Sales') continue; // keep Sales only
+        const tg = String(r['CoworkerTitleGroupDescription'] || r['titleGroup'] || '');
+        if (tg === 'Unknown') continue; // filter unknowns
+        const locRaw = String(r['CoworkerLocationDescription'] || r['location'] || '');
+        const los = r['LOSMonth'] || r['losMonths'] || '';
+        let losDisplay = '';
+        const losNum = parseFloat(los);
+        if (!isNaN(losNum)) losDisplay = Math.round(losNum) + ' months';
+
+        newRecords.push({
+          name,
+          email:        String(r['EmailAddress']               || r['email']        || ''),
+          phone:        String(r['DirectPhone']                || r['phone']        || ''),
+          location:     cleanLoc(locRaw),
+          state:        extractState(locRaw),
+          title:        String(r['CoworkerTitleDescription']   || r['title']        || ''),
+          titleGroup:   tg,
+          losMonths:    losDisplay,
+          losGroup:     String(r['LOSGroupDescription']        || r['losGroup']     || ''),
+          academyFlag:  String(r['academyamflagdescription']   || r['academyFlag']  || ''),
+          manager:      cleanRefName(String(r['Manager']       || r['manager']      || '')),
+          managerEmail: String(r['ManagerEmailAddress']        || r['managerEmail'] || ''),
+          managerTitle: String(r['ManagerTitle']               || r['managerTitle'] || ''),
+          director:     cleanRefName(String(r['Director']      || r['director']     || '')),
+          directorEmail:String(r['Director Email']             || r['directorEmail']|| ''),
+          directorTitle:String(r['Director Title']             || r['directorTitle']|| ''),
+          segment:      String(r['Segment']                    || r['segment']      || ''),
+          channel:      String(r['Channel']                    || r['channel']      || ''),
+          tier:         String(r['Tier']                       || r['tier']         || ''),
+          region:       String(r['Region']                     || r['region']       || ''),
+          area:         String(r['Area']                       || r['area']         || ''),
+          district:     String(r['District']                   || r['district']     || ''),
+        });
+      }
+
+      if (!newRecords.length) {
+        showToast('No valid Sales coworkers found in file.', 'error');
+        return;
+      }
+
+      // Replace global DATA
+      DATA.length = 0;
+      newRecords.forEach(r => DATA.push(r));
+
+      // Rebuild filter dropdowns
+      const filterDefs = {
+        'filter-segment': 'segment',
+        'filter-channel': 'channel',
+        'filter-tier':    'tier',
+        'filter-region':  'region',
+        'filter-manager': 'manager',
+        'filter-district':'district',
+      };
+      for (const [id, key] of Object.entries(filterDefs)) {
+        const sel = document.getElementById(id);
+        const cur = sel.value;
+        const first = sel.options[0].outerHTML;
+        const vals = [...new Set(DATA.map(d => d[key]).filter(Boolean))].sort();
+        sel.innerHTML = first + vals.map(v => `<option value="${v}">${v}</option>`).join('');
+        if (vals.includes(cur)) sel.value = cur;
+      }
+
+      // Update header meta
+      document.querySelector('.header-meta').textContent = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long'}) + ' · ' + newRecords.length.toLocaleString() + ' coworkers';
+
+      render();
+      showToast(`✓ Updated — ${newRecords.length.toLocaleString()} coworkers loaded`, 'success');
+    } catch(err) {
+      console.error(err);
+      showToast('Error reading file: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>

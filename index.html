@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.5';
+var APP_VERSION='2.6';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -897,7 +897,14 @@ function setLoc(loc,ppl,geo,all){
 
 function fppl(ppl){var q=mq.toLowerCase(),r=mf1,s=mf2;return ppl.filter(function(d){if(r&&d.role!==r)return false;if(s&&d.segment!==s)return false;if(q){var h=[d.name,d.role,d.segment,d.manager].join(' ').toLowerCase();if(h.indexOf(q)===-1)return false;}return true;});}
 
-function prow(d){return'<div class="map-person-row" data-name="'+encodeURIComponent(d.name)+'">'+av(d.name,28,10)+'<div class="map-person-info"><div class="map-person-name">'+e(d.name)+'</div><div class="map-person-role">'+e(d.role||'')+(d.segment?' \u00b7 '+e(d.segment):'')+'</div></div>'+(d.email?'<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()">&#x2709;</a>':'')+'</div>';}
+function prow(d){
+  var roleStr=e(d.titleGroup||d.role||'');
+  var titleStr=e(d.title||'');
+  var sub=roleStr;
+  if(titleStr&&titleStr!==roleStr)sub+=(sub?' \u00b7 ':'')+titleStr;
+  if(d.segment)sub+=(sub?' \u00b7 ':'')+e(d.segment);
+  return'<div class="map-person-row" data-name="'+encodeURIComponent(d.name)+'">'+av(d.name,28,10)+'<div class="map-person-info"><div class="map-person-name">'+e(d.name)+'</div><div class="map-person-role">'+sub+'</div></div>'+(d.email?'<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()">&#x2709;</a>':'')+'</div>';
+}
 
 function refreshList(all,locPpl){
   var list=document.getElementById('panel-list');

@@ -325,7 +325,7 @@ var CFG = {
     cols:[{k:'name',l:'Name'},{k:'titleGroup',l:'Role'},{k:'segment',l:'Segment'},{k:'channel',l:'Channel'},{k:'tier',l:'Tier'},{k:'region',l:'Region'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
     sub:function(d){return d.title||d.titleGroup||'';},
-    tags:function(d){var t=[];if(d.titleGroup)t.push({c:'tag seg',v:d.titleGroup});if(d.channel)t.push({c:'tag ch',v:d.channel});if(d.tier)t.push({c:'tag tier',v:d.tier});if(d.region)t.push({c:'tag',v:d.region});if(d.district)t.push({c:'tag',v:d.district});return t;},
+    tags:function(d){var t=[];if(d.titleGroup)t.push({c:'tag seg',v:d.titleGroup});if(d.channel)t.push({c:'tag ch',v:d.channel});if(d.tier)t.push({c:'tag tier',v:d.tier});if(d.region)t.push({c:'tag',v:d.region});if(d.district)t.push({c:'tag',v:d.district});if(d.location)t.push({c:'tag',v:'Home Location \u2013 '+d.location});return t;},
     mhdr:function(d){var t='';if(d.titleGroup)t+='<span class="tag seg">'+e(d.titleGroup)+'</span> ';if(d.segment)t+='<span class="tag ch">'+e(d.segment)+'</span> ';if(d.channel)t+='<span class="tag tier">'+e(d.channel)+'</span>';return{s:d.title||d.titleGroup||'',t:t};},
     mbody:function(d){
       var s1=ds('Contact &amp; Location',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Phone',v:e(d.phone)||'&mdash;'},{l:'Location',v:e(d.location)||'&mdash;'},{l:'State',v:e(d.state)||'&mdash;'},{l:'LOS',v:e(d.losMonths)||'&mdash;'},{l:'LOS Group',v:e(d.losGroup)||'&mdash;'},{l:'Academy',v:e(d.academyFlag)||'&mdash;'}]);
@@ -338,7 +338,7 @@ var CFG = {
     cols:[{k:'name',l:'Name'},{k:'title',l:'Title'},{k:'segment',l:'Segment'},{k:'solutionArea',l:'Solution Area'},{k:'homeLocation',l:'Home'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
     sub:function(d){return d.title||'';},
-    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.solutionArea)t.push({c:'tag sol',v:d.solutionArea});if(d.homeLocation)t.push({c:'tag',v:d.homeLocation});return t;},
+    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.solutionArea)t.push({c:'tag sol',v:d.solutionArea});if(d.homeLocation)t.push({c:'tag',v:'Home Location \u2013 '+d.homeLocation});return t;},
     mhdr:function(d){var t='';if(d.segment)t+='<span class="tag seg">'+e(d.segment)+'</span> ';if(d.solutionArea)t+='<span class="tag sol">'+e(d.solutionArea)+'</span>';return{s:d.title||'',t:t};},
     mbody:function(d){var m=(!d.manager||d.manager==='-'||d.manager.charAt(0)==='_')?'Leadership':e(d.manager);return ds('Details',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Manager',v:m},{l:'Solution Area',v:e(d.solutionArea)||'&mdash;'},{l:'Segment',v:e(d.segment)||'&mdash;',f:1},{l:'Home Location',v:e(d.homeLocation)||'&mdash;'},{l:'CDW Office',v:e(d.officeLocation)||'&mdash;'},{l:'States Covered',v:e(d.statesCovers)||'&mdash;',f:1}]);}},
   canada:{file:'canada_data.json',eyebrow:'CDW \u00b7 Canada',title:'Canada Org <em>Directory</em>',hint:'Search name, email, location, manager\u2026',hasMap:true,
@@ -346,7 +346,7 @@ var CFG = {
     cols:[{k:'name',l:'Name'},{k:'role',l:'Role'},{k:'segment',l:'Segment'},{k:'province',l:'Province',dfn:function(v){return v?(PROV[v]||v)+' ('+v+')':'&mdash;';}},{k:'location',l:'Location'},{k:'manager',l:'Manager'},{k:'srManager',l:'Sr Manager'}],
     grpKey:'manager',
     sub:function(d){return d.role||'';},
-    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.province)t.push({c:'tag prov',v:PROV[d.province]||d.province});if(d.losMonths)t.push({c:'tag',v:d.losMonths});return t;},
+    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.province)t.push({c:'tag prov',v:PROV[d.province]||d.province});if(d.losMonths)t.push({c:'tag',v:d.losMonths});if(d.location)t.push({c:'tag',v:'Home Location \u2013 '+d.location});return t;},
     mhdr:function(d){var rc=d.role==='Account Manager'?'role-AM':d.role==='Manager'?'role-Mgr':d.role==='FAE'?'role-FAE':'role-ATAE';var t='<span class="tag '+rc+'">'+e(d.role||'')+'</span> ';if(d.segment)t+='<span class="tag seg">'+e(d.segment)+'</span> ';if(d.province)t+='<span class="tag prov">'+e(PROV[d.province]||d.province)+'</span>';return{s:d.dept||d.role||'',t:t};},
     mbody:function(d){var s1=ds('Contact &amp; Location',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Location',v:e(d.location)||'&mdash;',f:1},{l:'Province',v:d.province?e(PROV[d.province]||d.province):'&mdash;'},{l:'Tenure',v:e(d.losMonths)||'&mdash;'},{l:'Dept',v:e(d.dept)||'&mdash;',f:1}]);var ch='';if(d.manager)ch+=cr('Manager',d.manager,'','');if(d.srManager)ch+=cr('Sr Manager',d.srManager,'','');if(ch)ch='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+ch+'</div>';return s1+ch;}}
 };

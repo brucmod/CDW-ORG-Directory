@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.4';
+var APP_VERSION='2.5';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1045,9 +1045,16 @@ function normaliseRows(rows){
       r.titleGroup=r.title&&r.title.trim()?r.title.trim():'Other';
     }
   });
+  // Patterns that indicate non-person/house/bot accounts
+  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|trainee|placeholder|vacant|open\s*req|tbd|n\/a)\b/i;
+  var JUNK_START=/^(core\s+hse|all\s+|total\s+|group\s+|houseacct|rpabot|donotdelete)/i;
   return out.filter(function(r){
     if(!r.name&&!r.email)return false;
     if(r.sector&&r.sector.toLowerCase()!=='sales')return false;
+    var nm=r.name||'';
+    if(JUNK_NAME.test(nm)||JUNK_START.test(nm))return false;
+    // All-caps names longer than 20 chars are usually account placeholders
+    if(nm===nm.toUpperCase()&&nm.replace(/\s/g,'').length>20)return false;
     return true;
   });
 }

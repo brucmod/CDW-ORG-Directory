@@ -22,7 +22,10 @@
   .org-selector { display:flex; gap:6px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:4px; }
   .org-btn { background:none; border:none; color:var(--muted); cursor:pointer; border-radius:5px; padding:6px 14px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
   .org-btn:hover { color:var(--text); background:rgba(255,255,255,.06); }
-  .org-btn.active { background:var(--accent); color:white; }
+  .org-btn.active { color:white; }
+  .org-btn.active[data-org="cdw"]    { background:#FF7023; }
+  .org-btn.active[data-org="dcs"]    { background:#4A7C6F; }
+  .org-btn.active[data-org="canada"] { background:#8B3A3A; }
   .org-btn:disabled { opacity:.4; cursor:default; }
   .search-wrap { flex:2; min-width:240px; max-width:420px; position:relative; }
   .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
@@ -286,7 +289,9 @@ function loadOrg(org,cb){
   x.send();
 }
 
+var ORG_BG={cdw:'#2D2A27',dcs:'#1E2A27',canada:'#2A1E1E'};
 function switchOrg(org){
+  document.documentElement.style.setProperty('--bg',ORG_BG[org]||'#2D2A27');
   document.querySelectorAll('.org-btn').forEach(function(b){b.disabled=true;b.classList.toggle('active',b.dataset.org===org);});
   showLoading('Loading '+org.toUpperCase()+'&hellip;');
   loadOrg(org,function(err,data){

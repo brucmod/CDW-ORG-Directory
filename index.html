@@ -13,8 +13,10 @@
   :root { --bg:#2D2A27; --surface:#3a3631; --surface2:#46423d; --border:#71584C; --accent:#FF7023; --accent2:#C5E4CC; --accent3:#8FA596; --accent4:#BD673D; --text:#FFF5E3; --muted:#D0C8BA; --tag-bg:#46423d; --card-hover:#504b46; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; min-height:100vh; }
-  header { background:linear-gradient(135deg,#252220 0%,#2D2A27 60%,#252220 100%); border-bottom:1px solid var(--border); padding:22px 40px 18px; display:flex; align-items:center; gap:24px; flex-wrap:wrap; position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); }
-  .header-title { flex:1; min-width:180px; }
+  header { background:linear-gradient(135deg,#252220 0%,#2D2A27 60%,#252220 100%); border-bottom:1px solid var(--border); padding:22px 40px 18px; display:flex; align-items:center; gap:24px; flex-wrap:nowrap; position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); justify-content:space-between; }
+  header { justify-content:space-between; }
+  .header-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:10px; }
+  .header-right { display:flex; align-items:center; gap:10px; margin-left:auto; }
   .header-eyebrow { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
   header h1 { font-family:'DM Serif Display',serif; font-size:24px; font-weight:400; letter-spacing:-.3px; line-height:1; }
   header h1 em { font-style:italic; color:var(--accent2); }
@@ -223,16 +225,24 @@
     <h1 id="header-h1">CDW Org <em>Directory</em></h1>
     <div class="header-meta" id="header-meta">Loading&hellip;</div>
   </div>
-  <div class="org-selector">
-    <button class="org-btn active" data-org="cdw">CDW</button>
-    <button class="org-btn" data-org="dcs">DCS</button>
-    <button class="org-btn" data-org="canada">Canada</button>
+  <div class="header-center">
+    <div class="org-selector">
+      <button class="org-btn active" data-org="cdw">CDW</button>
+      <button class="org-btn" data-org="dcs">DCS</button>
+      <button class="org-btn" data-org="canada">Canada</button>
+    </div>
   </div>
-  <button class="upd-btn" id="upd-btn" title="Update data for current org">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    Update Data
-  </button>
-  <input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none">
+  <div class="header-right">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search&hellip;">
+    </div>
+    <button class="upd-btn" id="upd-btn" title="Update data for current org">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Update Data
+    </button>
+    <input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none">
+  </div>
 </header>
 
 <!-- ── UPDATER MODAL ── -->
@@ -276,9 +286,6 @@
     </div>
   </div>
 </div>
-  <div class="search-wrap">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search" placeholder="Search&hellip;">
   </div>
 </header>
 

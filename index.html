@@ -71,12 +71,6 @@
   .upd-actions { display:flex; gap:8px; justify-content:flex-end; }
   .upd-cancel-btn { padding:8px 16px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--border); background:var(--surface2); color:var(--muted); cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
   .upd-cancel-btn:hover { border-color:var(--text); color:var(--text); }
-  .upd-apply-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent); background:var(--accent); color:white; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
-  .upd-apply-btn:hover:not(:disabled) { background:var(--accent4); border-color:var(--accent4); }
-  .upd-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
-  .upd-apply-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent); background:var(--accent); color:white; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
-  .upd-apply-btn:hover:not(:disabled) { background:var(--accent4); border-color:var(--accent4); }
-  .upd-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
   .upd-push-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent3); background:var(--accent3); color:#1a2419; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
   .upd-push-btn:hover:not(:disabled) { background:#7ab88a; border-color:#7ab88a; }
   .upd-push-btn:disabled { opacity:.4; cursor:not-allowed; }
@@ -329,8 +323,7 @@
 
         <div class="upd-actions">
           <button class="upd-cancel-btn" id="upd-cancel-btn">Cancel</button>
-          <button class="upd-apply-btn" id="upd-apply-btn">Apply (session only)</button>
-          <button class="upd-push-btn" id="upd-push-btn" disabled>&#x2197; Apply + Push to GitHub</button>
+          <button class="upd-push-btn" id="upd-push-btn" disabled>&#x2197; Apply Update</button>
         </div>
         <div class="upd-push-status" id="upd-push-status"></div>
       </div>
@@ -484,7 +477,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='1.6';
+var APP_VERSION='1.7';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1089,7 +1082,6 @@ function updReset(){
   document.getElementById('upd-summary').style.display='none';
   document.getElementById('upd-drop').classList.remove('dragover');
   document.getElementById('upd-file').value='';
-  document.getElementById('upd-apply-btn').disabled=true;
   updSetProgress(0,'Reading file\u2026');
 }
 
@@ -1182,7 +1174,6 @@ function updDoRead(file){
       setTimeout(function(){
         document.getElementById('upd-progress').style.display='none';
         document.getElementById('upd-summary').style.display='';
-        document.getElementById('upd-apply-btn').disabled=false;
         ghUpdatePushBtn();
       },300);
     }catch(err){
@@ -1213,17 +1204,6 @@ function updDoRead(file){
   };
   reader.readAsArrayBuffer(file);
 }
-
-// ── APPLY (session only) ─────────────────────────────────────────
-document.getElementById('upd-apply-btn').addEventListener('click',function(){
-  if(!pendingMerge)return;
-  CACHE[ORG]=pendingMerge.data;
-  DATA=pendingMerge.data;
-  refreshDropdowns(null);
-  render();
-  showToast(pendingMerge.updated+' updated \u00b7 '+pendingMerge.added+' added \u00b7 '+pendingMerge.removed+' removed','#8FA596');
-  updClose();
-});
 
 // ── GITHUB SETTINGS ───────────────────────────────────────────────
 function ghLoad(){

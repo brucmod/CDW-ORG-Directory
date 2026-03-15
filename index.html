@@ -272,33 +272,35 @@
     </div>
     <div class="upd-modal-body">
       <!-- Drop zone -->
-      <div id="upd-drop-step">
-        <div class="upd-drop" id="upd-drop">
-          <div class="upd-drop-icon">&#x1F4C2;</div>
-          <p><strong>Click to browse</strong> or drag &amp; drop your XLSX here</p>
-          <p class="upd-drop-hint">Updated org export spreadsheet (.xlsx)</p>
+      <div id="upd-drop-step" style="display:block;">
+        <div id="upd-drop" style="border:2px dashed #71584C;border-radius:10px;padding:40px 20px;min-height:150px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;box-sizing:border-box;">
+          <div style="font-size:32px;line-height:1;">&#x1F4C2;</div>
+          <p style="margin:0;font-size:13px;color:#FFF5E3;"><strong>Click to browse</strong> or drag &amp; drop your XLSX here</p>
+          <p style="margin:0;font-size:11px;color:#D0C8BA;">Updated org export spreadsheet (.xlsx or .xls)</p>
         </div>
       </div>
       <!-- Progress -->
-      <div class="upd-progress" id="upd-progress">
-        <p id="upd-progress-msg">Reading file&hellip;</p>
-        <div class="upd-prog-wrap"><div class="upd-prog-bar" id="upd-prog-bar"></div></div>
-        <div class="upd-prog-pct" id="upd-prog-pct">0%</div>
+      <div id="upd-progress" style="display:none;background:#46423d;border:1px solid #71584C;border-radius:8px;padding:18px 20px;margin-bottom:14px;">
+        <p id="upd-progress-msg" style="margin:0 0 12px;font-size:12px;color:#D0C8BA;font-family:'DM Mono',monospace;">Reading file&hellip;</p>
+        <div style="height:8px;background:#2D2A27;border:1px solid #71584C;border-radius:6px;overflow:hidden;">
+          <div id="upd-prog-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#BD673D,#FF7023);border-radius:6px;transition:width .35s ease;"></div>
+        </div>
+        <div id="upd-prog-pct" style="font-family:'DM Mono',monospace;font-size:11px;color:#FF7023;text-align:right;margin-top:6px;">0%</div>
       </div>
       <!-- Summary -->
-      <div class="upd-summary" id="upd-summary">
+      <div id="upd-summary" style="display:none;">
         <div class="upd-stats">
           <div class="upd-stat changed"><div class="sv" id="upd-stat-updated">0</div><div class="sl">Updated</div></div>
-          <div class="upd-stat added">  <div class="sv" id="upd-stat-added">0</div>  <div class="sl">New People</div></div>
+          <div class="upd-stat added"><div class="sv" id="upd-stat-added">0</div><div class="sl">New People</div></div>
           <div class="upd-stat removed"><div class="sv" id="upd-stat-removed">0</div><div class="sl">Removed</div></div>
         </div>
         <div class="upd-preview" id="upd-preview"></div>
-        <p class="upd-note">Changes are applied live. Existing fields not present in the new file are preserved for each person.</p>
+        <p class="upd-note">Changes are applied to the directory and pushed to GitHub Pages.</p>
 
         <!-- GitHub Push Settings -->
         <div class="gh-settings" id="gh-settings">
           <div class="gh-settings-title" id="gh-settings-toggle">
-            &#x26A1; Push to GitHub Pages
+            &#x26A1; GitHub Settings
             <span id="gh-chevron">&#x25BC;</span>
           </div>
           <div class="gh-settings-body" id="gh-settings-body">
@@ -477,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='1.7';
+var APP_VERSION='1.9';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1077,12 +1079,17 @@ function updSetProgress(pct,msg){
 
 function updReset(){
   pendingMerge=null;
-  document.getElementById('upd-drop-step').style.display='';
+  document.getElementById('upd-drop-step').style.display='block';
   document.getElementById('upd-progress').style.display='none';
   document.getElementById('upd-summary').style.display='none';
-  document.getElementById('upd-drop').classList.remove('dragover');
+  document.getElementById('upd-drop').style.borderColor='#71584C';
   document.getElementById('upd-file').value='';
-  updSetProgress(0,'Reading file\u2026');
+  var rb=document.getElementById('upd-retry-btn');if(rb)rb.style.display='none';
+  var msgEl=document.getElementById('upd-progress-msg');
+  msgEl.textContent='Reading file\u2026';msgEl.style.color='#D0C8BA';
+  document.getElementById('upd-prog-bar').style.cssText='height:100%;width:0%;background:linear-gradient(90deg,#BD673D,#FF7023);border-radius:6px;transition:width .35s ease;';
+  document.getElementById('upd-prog-pct').textContent='0%';
+  var ps=document.getElementById('upd-push-status');if(ps)ps.textContent='';
 }
 
 function updLoadSheetJS(cb){
@@ -1119,37 +1126,47 @@ document.getElementById('upd-modal-overlay').addEventListener('click',function(e
 
 var updDrop=document.getElementById('upd-drop');
 updDrop.addEventListener('click',function(){document.getElementById('upd-file').click();});
-updDrop.addEventListener('dragover',function(ev){ev.preventDefault();updDrop.classList.add('dragover');});
-updDrop.addEventListener('dragleave',function(){updDrop.classList.remove('dragover');});
-updDrop.addEventListener('drop',function(ev){ev.preventDefault();updDrop.classList.remove('dragover');var f=ev.dataTransfer.files[0];if(f)updProcessFile(f);});
+updDrop.addEventListener('mouseover',function(){updDrop.style.borderColor='#FF7023';updDrop.style.background='rgba(255,112,35,.06)';});
+updDrop.addEventListener('mouseout',function(){updDrop.style.borderColor='#71584C';updDrop.style.background='';});
+updDrop.addEventListener('dragover',function(ev){ev.preventDefault();updDrop.style.borderColor='#FF7023';updDrop.style.background='rgba(255,112,35,.06)';});
+updDrop.addEventListener('dragleave',function(){updDrop.style.borderColor='#71584C';updDrop.style.background='';});
+updDrop.addEventListener('drop',function(ev){ev.preventDefault();updDrop.style.borderColor='#71584C';updDrop.style.background='';var f=ev.dataTransfer.files[0];if(f)updProcessFile(f);});
 document.getElementById('upd-file').addEventListener('change',function(ev){var f=ev.target.files[0];if(f)updProcessFile(f);});
 
 function updProcessFile(file){
+  console.log('[UPD] file selected:',file.name,file.size+'bytes');
   var ext=file.name.split('.').pop().toLowerCase();
   if(ext!=='xlsx'&&ext!=='xls'){showToast('Please select an .xlsx or .xls file','#DEA193');return;}
   document.getElementById('upd-drop-step').style.display='none';
-  document.getElementById('upd-progress').style.display='';
+  document.getElementById('upd-progress').style.display='block';
   updSetProgress(10,'Loading spreadsheet library\u2026');
+  console.log('[UPD] loading SheetJS...');
   updLoadSheetJS(function(){
+    console.log('[UPD] SheetJS ready, XLSX=',typeof XLSX);
     updSetProgress(15,'Reading XLSX\u2026');
     updDoRead(file);
   });
 }
 
 function updDoRead(file){
+  console.log('[UPD] updDoRead called');
   var reader=new FileReader();
   reader.onload=function(ev){
+    console.log('[UPD] FileReader onload fired, bytes:',ev.target.result.byteLength);
     try{
       if(typeof XLSX==='undefined')throw new Error('SheetJS library failed to load \u2014 check your internet connection and refresh the page.');
       updSetProgress(35,'Parsing rows\u2026');
       var wb;
       try{ wb=XLSX.read(ev.target.result,{type:'array'}); }
       catch(xe){ throw new Error('Could not parse file: '+xe.message); }
+      console.log('[UPD] workbook sheets:',wb.SheetNames);
       var ws=wb.Sheets[wb.SheetNames[0]];
       var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+      console.log('[UPD] rows parsed:',rows.length);
       if(!rows.length)throw new Error('Spreadsheet appears to be empty');
       updSetProgress(60,'Normalising fields\u2026');
       var incoming=normaliseRows(rows);
+      console.log('[UPD] normalised rows:',incoming.length);
       if(!incoming.length)throw new Error('No valid records found. Verify the file has name/email columns, and if it has a Sector column, ensure rows are set to "Sales".');
       updSetProgress(80,'Comparing with current data\u2026');
       var existing=CACHE[ORG]||[];
@@ -1173,7 +1190,7 @@ function updDoRead(file){
       document.getElementById('upd-preview').innerHTML=prev;
       setTimeout(function(){
         document.getElementById('upd-progress').style.display='none';
-        document.getElementById('upd-summary').style.display='';
+        document.getElementById('upd-summary').style.display='block';
         ghUpdatePushBtn();
       },300);
     }catch(err){

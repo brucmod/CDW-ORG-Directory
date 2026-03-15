@@ -32,6 +32,45 @@
   .upd-btn { display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--border); border-radius:7px; color:var(--muted); cursor:pointer; padding:8px 14px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.07em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
   .upd-btn:hover { border-color:var(--accent3); color:var(--accent3); }
   .upd-btn.loading { opacity:.5; cursor:wait; }
+  .upd-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:800; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+  .upd-modal-overlay.open { display:flex; }
+  .upd-modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; width:100%; max-width:600px; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 24px 80px rgba(0,0,0,.5); animation:slideUp .2s ease; }
+  .upd-modal::before { content:''; display:block; width:32px; height:3px; background:var(--border); border-radius:2px; margin:10px auto 0; }
+  .upd-modal-header { padding:14px 22px 14px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:12px; flex-shrink:0; }
+  .upd-modal-title { font-family:'DM Serif Display',serif; font-size:18px; font-weight:400; }
+  .upd-modal-meta { font-size:11px; color:var(--muted); margin-top:3px; }
+  .upd-modal-close { margin-left:auto; background:none; border:1px solid var(--border); border-radius:6px; color:var(--muted); cursor:pointer; padding:4px 9px; font-size:15px; line-height:1; transition:all .15s; flex-shrink:0; }
+  .upd-modal-close:hover { border-color:var(--text); color:var(--text); }
+  .upd-modal-body { padding:20px 22px; overflow-y:auto; flex:1; }
+  .upd-drop { border:2px dashed var(--border); border-radius:10px; padding:36px 20px; text-align:center; cursor:pointer; transition:all .2s; margin-bottom:14px; }
+  .upd-drop:hover, .upd-drop.dragover { border-color:var(--accent); background:rgba(255,112,35,.06); }
+  .upd-drop-icon { font-size:28px; margin-bottom:8px; opacity:.6; }
+  .upd-drop p { font-size:12px; color:var(--muted); margin:4px 0; }
+  .upd-drop .upd-drop-hint { font-size:11px; color:var(--muted); opacity:.7; }
+  .upd-progress { background:var(--surface2); border-radius:8px; padding:14px 16px; margin-bottom:14px; display:none; }
+  .upd-progress p { font-size:12px; color:var(--muted); margin:4px 0; }
+  .upd-prog-wrap { height:3px; background:rgba(255,255,255,.06); border-radius:2px; margin-top:10px; overflow:hidden; }
+  .upd-prog-bar { height:100%; background:linear-gradient(90deg,var(--accent4),var(--accent)); border-radius:2px; width:0%; transition:width .3s; }
+  .upd-summary { display:none; margin-bottom:14px; }
+  .upd-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px; }
+  .upd-stat { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; text-align:center; }
+  .upd-stat .sv { font-family:'DM Mono',monospace; font-size:22px; font-weight:500; }
+  .upd-stat .sl { font-size:10px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.06em; }
+  .upd-stat.changed .sv { color:#DEA193; }
+  .upd-stat.added   .sv { color:var(--accent3); }
+  .upd-stat.removed .sv { color:var(--accent4); }
+  .upd-preview { max-height:200px; overflow-y:auto; background:var(--surface2); border:1px solid var(--border); border-radius:8px; margin-bottom:14px; }
+  .upd-preview table { width:100%; border-collapse:collapse; }
+  .upd-preview th { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:8px 14px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--surface2); font-family:'DM Mono',monospace; }
+  .upd-preview td { padding:7px 14px; border-bottom:1px solid var(--border); font-size:11px; }
+  .upd-preview tr:last-child td { border-bottom:none; }
+  .upd-note { font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+  .upd-actions { display:flex; gap:8px; justify-content:flex-end; }
+  .upd-cancel-btn { padding:8px 16px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--border); background:var(--surface2); color:var(--muted); cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
+  .upd-cancel-btn:hover { border-color:var(--text); color:var(--text); }
+  .upd-apply-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent); background:var(--accent); color:white; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
+  .upd-apply-btn:hover:not(:disabled) { background:var(--accent4); border-color:var(--accent4); }
+  .upd-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
   .search-wrap { flex:2; min-width:240px; max-width:420px; position:relative; }
   .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
@@ -194,6 +233,49 @@
     Update Data
   </button>
   <input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none">
+</header>
+
+<!-- ── UPDATER MODAL ── -->
+<div class="upd-modal-overlay" id="upd-modal-overlay">
+  <div class="upd-modal">
+    <div class="upd-modal-header">
+      <div>
+        <div class="upd-modal-title">Update <em>Directory</em></div>
+        <div class="upd-modal-meta" id="upd-modal-meta">Loading new data for current org</div>
+      </div>
+      <button class="upd-modal-close" id="upd-modal-close">&#x2715;</button>
+    </div>
+    <div class="upd-modal-body">
+      <!-- Drop zone -->
+      <div id="upd-drop-step">
+        <div class="upd-drop" id="upd-drop">
+          <div class="upd-drop-icon">&#x1F4C2;</div>
+          <p><strong>Click to browse</strong> or drag &amp; drop your XLSX here</p>
+          <p class="upd-drop-hint">Updated org export spreadsheet (.xlsx)</p>
+        </div>
+      </div>
+      <!-- Progress -->
+      <div class="upd-progress" id="upd-progress">
+        <p id="upd-progress-msg">Reading file&hellip;</p>
+        <div class="upd-prog-wrap"><div class="upd-prog-bar" id="upd-prog-bar"></div></div>
+      </div>
+      <!-- Summary -->
+      <div class="upd-summary" id="upd-summary">
+        <div class="upd-stats">
+          <div class="upd-stat changed"><div class="sv" id="upd-stat-updated">0</div><div class="sl">Updated</div></div>
+          <div class="upd-stat added">  <div class="sv" id="upd-stat-added">0</div>  <div class="sl">New People</div></div>
+          <div class="upd-stat removed"><div class="sv" id="upd-stat-removed">0</div><div class="sl">Removed</div></div>
+        </div>
+        <div class="upd-preview" id="upd-preview"></div>
+        <p class="upd-note">Changes are applied live. Existing fields not present in the new file are preserved for each person.</p>
+        <div class="upd-actions">
+          <button class="upd-cancel-btn" id="upd-cancel-btn">Cancel</button>
+          <button class="upd-apply-btn" id="upd-apply-btn">Apply Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   <div class="search-wrap">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search" placeholder="Search&hellip;">
@@ -816,108 +898,156 @@ function showToast(msg,col){
   toastTimer=setTimeout(function(){t.classList.remove('show');},3200);
 }
 
-// ── UPDATE / MERGE ───────────────────────────────────────────────
-// Merge key per org: unique field(s) that identify the same person across uploads
+// ── MERGE LOGIC ───────────────────────────────────────────────────
 var MERGE_KEY={
-  cdw:   function(r){return (r.email||'').toLowerCase()||r.name;},
-  dcs:   function(r){return (r.email||'').toLowerCase()||r.name;},
-  canada:function(r){return (r.email||'').toLowerCase()||r.name;}
+  cdw:   function(r){return(r.email||'').toLowerCase()||r.name;},
+  dcs:   function(r){return(r.email||'').toLowerCase()||r.name;},
+  canada:function(r){return(r.email||'').toLowerCase()||r.name;}
+};
+var KEY_MAP={
+  'coworkername':'name','emailaddress':'email','directphone':'phone',
+  'coworkerlocationdescription':'location','coworkertitledescription':'title',
+  'coworkertitlegroupdescription':'titleGroup','losmonth':'losMonths',
+  'losgroupdescription':'losGroup','academyamflagdescription':'academyFlag',
+  'managertitle':'managerTitle','managere-mail':'managerEmail',
+  'manageremail':'managerEmail','directoremail':'directorEmail',
+  'director email':'directorEmail','director title':'directorTitle',
+  'solutionarea':'solutionArea','homelocation':'homeLocation',
+  'statescovers':'statesCovers','officelocation':'officeLocation',
+  'srmanager':'srManager','dept':'dept','province':'province','role':'role'
 };
 
-// Fields that come from the directory (DCS-specific extras we want to preserve)
-// For all orgs: any field in the existing record that is NOT in the incoming record
-// will be carried over — this handles custom annotations automatically.
+function normaliseRows(rows){
+  var out=rows.map(function(row){
+    var rec={};
+    Object.keys(row).forEach(function(k){
+      var norm=k.trim().toLowerCase().replace(/\s+/g,'');
+      var mapped=KEY_MAP[norm]||KEY_MAP[k.trim().toLowerCase()]||k.trim();
+      rec[mapped]=String(row[k]).trim();
+    });
+    return rec;
+  });
+  return out.filter(function(r){return r.name||r.email;});
+}
+
 function mergeRecords(existing,incoming,org){
   var keyFn=MERGE_KEY[org];
-  // Build lookup of existing records by key
   var exMap={};
   existing.forEach(function(r){exMap[keyFn(r)]=r;});
-  // Walk incoming records, merge with existing where key matches
   var merged=incoming.map(function(r){
     var key=keyFn(r);
     var old=exMap[key];
     if(!old)return r;
-    // Start from incoming (new data wins on shared fields)
-    // then layer in any fields from old that are missing or blank in incoming
     var out=Object.assign({},r);
     Object.keys(old).forEach(function(k){
-      if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){
-        out[k]=old[k];
-      }
+      if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){out[k]=old[k];}
     });
     return out;
   });
-  // Report counts
   var added=0,updated=0;
   incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
   var removed=existing.length-updated;
   return{data:merged,added:added,updated:updated,removed:removed};
 }
 
-document.getElementById('upd-btn').addEventListener('click',function(){
-  document.getElementById('upd-file').value='';
-  document.getElementById('upd-file').click();
-});
+// ── UPDATER MODAL ─────────────────────────────────────────────────
+var pendingMerge=null;
 
-document.getElementById('upd-file').addEventListener('change',function(ev){
-  var file=ev.target.files[0];if(!file)return;
+function updSetProgress(pct,msg){
+  document.getElementById('upd-prog-bar').style.width=pct+'%';
+  document.getElementById('upd-progress-msg').textContent=msg;
+}
+
+function updReset(){
+  pendingMerge=null;
+  document.getElementById('upd-drop-step').style.display='';
+  document.getElementById('upd-progress').style.display='none';
+  document.getElementById('upd-summary').style.display='none';
+  document.getElementById('upd-drop').classList.remove('dragover');
+  document.getElementById('upd-file').value='';
+  document.getElementById('upd-apply-btn').disabled=true;
+  updSetProgress(0,'Reading file\u2026');
+}
+
+function updOpen(){
+  updReset();
+  document.getElementById('upd-modal-meta').textContent='Loading new data for '+CFG[ORG].eyebrow.replace(/\u00b7/g,'\u00b7');
+  document.getElementById('upd-modal-overlay').classList.add('open');
+}
+function updClose(){document.getElementById('upd-modal-overlay').classList.remove('open');}
+
+document.getElementById('upd-btn').addEventListener('click',updOpen);
+document.getElementById('upd-modal-close').addEventListener('click',updClose);
+document.getElementById('upd-cancel-btn').addEventListener('click',updReset);
+document.getElementById('upd-modal-overlay').addEventListener('click',function(ev){if(ev.target===this)updClose();});
+
+var updDrop=document.getElementById('upd-drop');
+updDrop.addEventListener('click',function(){document.getElementById('upd-file').click();});
+updDrop.addEventListener('dragover',function(ev){ev.preventDefault();updDrop.classList.add('dragover');});
+updDrop.addEventListener('dragleave',function(){updDrop.classList.remove('dragover');});
+updDrop.addEventListener('drop',function(ev){ev.preventDefault();updDrop.classList.remove('dragover');var f=ev.dataTransfer.files[0];if(f)updProcessFile(f);});
+document.getElementById('upd-file').addEventListener('change',function(ev){var f=ev.target.files[0];if(f)updProcessFile(f);});
+
+function updProcessFile(file){
   var ext=file.name.split('.').pop().toLowerCase();
   if(ext!=='xlsx'&&ext!=='xls'){showToast('Please select an .xlsx or .xls file','#DEA193');return;}
-  var btn=document.getElementById('upd-btn');
-  btn.classList.add('loading');btn.textContent='Processing…';
+  document.getElementById('upd-drop-step').style.display='none';
+  document.getElementById('upd-progress').style.display='';
+  updSetProgress(15,'Reading XLSX\u2026');
   var reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=function(ev){
     try{
-      if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded — check your internet connection');
-      var wb=XLSX.read(e.target.result,{type:'array'});
+      if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
+      updSetProgress(35,'Parsing rows\u2026');
+      var wb=XLSX.read(ev.target.result,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
       var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!rows.length)throw new Error('Spreadsheet appears to be empty');
-      // Normalise keys: trim whitespace, map common header variants to our field names
-      var KEY_MAP={
-        'coworkername':'name','emailaddress':'email','directphone':'phone',
-        'coworkerlocationdescription':'location','coworkertitledescription':'title',
-        'coworkertitlegroupdescription':'titleGroup','losmonth':'losMonths',
-        'losgroupdescription':'losGroup','academyamflagdescription':'academyFlag',
-        'managertitle':'managerTitle','managere-mail':'managerEmail',
-        'manageremail':'managerEmail','directorEmail':'directorEmail',
-        'director email':'directorEmail','director title':'directorTitle',
-        'solutionarea':'solutionArea','homelocation':'homeLocation',
-        'statescovers':'statesCovers','officelocation':'officeLocation',
-        'srmanager':'srManager','dept':'dept','province':'province','role':'role'
-      };
-      var incoming=rows.map(function(row){
-        var out={};
-        Object.keys(row).forEach(function(k){
-          var norm=k.trim().toLowerCase().replace(/\s+/g,'');
-          var mapped=KEY_MAP[norm]||KEY_MAP[k.trim().toLowerCase()]||k.trim();
-          out[mapped]=String(row[k]).trim();
-        });
-        return out;
-      });
-      // Filter out blank/junk rows (no name and no email)
-      incoming=incoming.filter(function(r){return r.name||r.email;});
-      if(!incoming.length)throw new Error('No valid records found in spreadsheet');
+      updSetProgress(60,'Normalising fields\u2026');
+      var incoming=normaliseRows(rows);
+      if(!incoming.length)throw new Error('No valid records found');
+      updSetProgress(80,'Comparing with current data\u2026');
       var existing=CACHE[ORG]||[];
       var result=mergeRecords(existing,incoming,ORG);
-      CACHE[ORG]=result.data;
-      DATA=result.data;
-      refreshDropdowns(null);
-      render();
-      showToast(result.updated+' updated · '+result.added+' added · '+result.removed+' removed','#8FA596');
+      pendingMerge=result;
+      updSetProgress(100,'Done!');
+      document.getElementById('upd-stat-updated').textContent=result.updated;
+      document.getElementById('upd-stat-added').textContent=result.added;
+      document.getElementById('upd-stat-removed').textContent=result.removed;
+      var keyFn=MERGE_KEY[ORG];
+      var exMap={};existing.forEach(function(x){exMap[keyFn(x)]=true;});
+      var newPeople=incoming.filter(function(r){return!exMap[keyFn(r)];}).slice(0,10);
+      var prev='';
+      if(newPeople.length){
+        prev='<table><thead><tr><th>New people</th><th>Title / Role</th></tr></thead><tbody>'+
+          newPeople.map(function(r){return'<tr><td>'+e(r.name||'')+'</td><td style="color:var(--muted)">'+e(r.title||r.titleGroup||r.role||'')+'</td></tr>';}).join('')+
+          '</tbody></table>';
+      }else{
+        prev='<div style="padding:16px;text-align:center;font-size:12px;color:var(--muted)">No new people \u2014 '+result.updated+' existing records updated</div>';
+      }
+      document.getElementById('upd-preview').innerHTML=prev;
+      setTimeout(function(){
+        document.getElementById('upd-progress').style.display='none';
+        document.getElementById('upd-summary').style.display='';
+        document.getElementById('upd-apply-btn').disabled=false;
+      },300);
     }catch(err){
+      updSetProgress(100,'Error: '+err.message);
       showToast('Error: '+err.message,'#DEA193');
-    }finally{
-      btn.classList.remove('loading');
-      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Update Data';
     }
   };
-  reader.onerror=function(){
-    showToast('Failed to read file','#DEA193');
-    btn.classList.remove('loading');
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Update Data';
-  };
+  reader.onerror=function(){updSetProgress(100,'Failed to read file');showToast('Failed to read file','#DEA193');};
   reader.readAsArrayBuffer(file);
+}
+
+document.getElementById('upd-apply-btn').addEventListener('click',function(){
+  if(!pendingMerge)return;
+  CACHE[ORG]=pendingMerge.data;
+  DATA=pendingMerge.data;
+  refreshDropdowns(null);
+  render();
+  showToast(pendingMerge.updated+' updated \u00b7 '+pendingMerge.added+' added \u00b7 '+pendingMerge.removed+' removed','#8FA596');
+  updClose();
 });
 </script>
 </body>

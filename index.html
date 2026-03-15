@@ -488,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='3.1';
+var APP_VERSION='3.2';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -838,6 +838,21 @@ function buildCard(d,cls){
 }
 
 function rCards(data){
+  // If a manager filter is active and the manager isn't in the filtered set,
+  // inject their record at the top so they appear above their direct reports
+  var cfg=CFG[ORG];
+  var mgrFilter=cfg.filters.find(function(f){return f.key==='manager'||f.key==='srManager';});
+  if(mgrFilter){
+    var mgrEl=document.getElementById(mgrFilter.id);
+    if(mgrEl&&mgrEl.value){
+      var mgrName=mgrEl.value;
+      var alreadyIn=data.some(function(d){return d.name===mgrName;});
+      if(!alreadyIn){
+        var mgrRecord=DATA.find(function(d){return d.name===mgrName;});
+        if(mgrRecord) data=[mgrRecord].concat(data);
+      }
+    }
+  }
   // Build lookup: name -> person, and reports map: manager name -> [reports]
   var byName={};
   data.forEach(function(d){ byName[d.name]=d; });

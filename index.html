@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.6';
+var APP_VERSION='2.7';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1062,6 +1062,9 @@ function normaliseRows(rows){
     if(JUNK_NAME.test(nm)||JUNK_START.test(nm))return false;
     // All-caps names longer than 20 chars are usually account placeholders
     if(nm===nm.toUpperCase()&&nm.replace(/\s/g,'').length>20)return false;
+    // Filter out contractors/affiliates/vendors (title ends with - EXT)
+    var ttl=r.title||'';
+    if(/[-–]\s*EXT\s*$/i.test(ttl))return false;
     return true;
   });
 }

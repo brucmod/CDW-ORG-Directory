@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.1';
+var APP_VERSION='2.3';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1039,7 +1039,12 @@ function normaliseRows(rows){
     }
     return rec;
   });
-  // Filter: Sales sector only (for CDW), skip blank/junk rows
+  // Replace 'Unknown' titleGroup with actual title; filter junk rows and non-sales
+  out.forEach(function(r){
+    if(r.titleGroup&&r.titleGroup.trim().toLowerCase()==='unknown'){
+      r.titleGroup=r.title&&r.title.trim()?r.title.trim():'Other';
+    }
+  });
   return out.filter(function(r){
     if(!r.name&&!r.email)return false;
     if(r.sector&&r.sector.toLowerCase()!=='sales')return false;

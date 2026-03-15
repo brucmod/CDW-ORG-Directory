@@ -145,6 +145,15 @@
   .card-footer { display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--border); }
   .card-mgr { font-size:11px; color:var(--muted); }
   .card-mgr strong { color:var(--text); font-weight:400; }
+  .org-block { margin-bottom:28px; }
+  .org-manager-card { background:var(--surface); border:1px solid var(--accent); border-radius:10px; padding:18px; cursor:pointer; transition:border-color .15s,transform .15s,background .15s; position:relative; }
+  .org-manager-card:hover { background:var(--card-hover); transform:translateY(-1px); }
+  .org-manager-label { font-family:'DM Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); margin-bottom:8px; }
+  .org-reports { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:10px; margin-top:10px; margin-left:24px; padding-left:16px; border-left:2px solid var(--border); }
+  .org-report-card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px; cursor:pointer; transition:border-color .15s,background .15s; }
+  .org-report-card:hover { border-color:var(--accent); background:var(--card-hover); }
+  .org-solo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; margin-bottom:28px; }
+  .org-section-label { font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid var(--border); }
   .group-section { margin-bottom:28px; }
   .group-header { display:flex; align-items:center; gap:12px; padding:12px 18px; background:var(--surface2); border:1px solid var(--border); border-radius:8px 8px 0 0; cursor:pointer; user-select:none; }
   .group-header:hover { background:var(--card-hover); }
@@ -479,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.7';
+var APP_VERSION='3.1';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -810,19 +819,77 @@ function rTable(data){
   document.querySelectorAll('tbody tr').forEach(function(tr){tr.addEventListener('click',function(){openModal(decodeURIComponent(tr.dataset.name));});});
 }
 
-function rCards(data){
+function cardTags(d){
   var cfg=CFG[ORG];
-  var html=data.map(function(d){
-    var tags=cfg.tags(d).map(function(t){return'<span class="'+t.c+'">'+e(t.v)+'</span>';}).join('');
-    var mgr=d[cfg.grpKey]||'';
-    return'<div class="card" data-name="'+encodeURIComponent(d.name)+'">'+
-      '<div class="card-header">'+av(d.name)+'<div><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(cfg.sub(d))+'</div></div></div>'+
-      '<div class="card-tags">'+tags+'</div>'+
-      '<div class="card-footer"><div class="card-mgr">'+(mgr?'Mgr: <strong>'+e(mgr)+'</strong>':'')+'</div>'+(d.email?'<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()">&#x2709;</a>':'')+'</div>'+
+  var seen={};
+  return cfg.tags(d).filter(function(t){if(seen[t.v])return false;seen[t.v]=true;return true;})
+    .map(function(t){return'<span class="'+t.c+'">'+e(t.v)+'</span>';}).join('');
+}
+
+function buildCard(d,cls){
+  cls=cls||'card';
+  var tags=cardTags(d);
+  var mgr=d[CFG[ORG].grpKey]||'';
+  return'<div class="'+cls+'" data-name="'+encodeURIComponent(d.name)+'">'+
+    '<div class="card-header">'+av(d.name)+'<div><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
+    '<div class="card-tags">'+tags+'</div>'+
+    '<div class="card-footer"><div class="card-mgr">'+(mgr?'Mgr: <strong>'+e(mgr)+'</strong>':'')+'</div>'+(d.email?'<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()">&#x2709;</a>':'')+'</div>'+
+    '</div>';
+}
+
+function rCards(data){
+  // Build lookup: name -> person, and reports map: manager name -> [reports]
+  var byName={};
+  data.forEach(function(d){ byName[d.name]=d; });
+  var reportsOf={};
+  data.forEach(function(d){
+    var m=d.manager||'';
+    if(!reportsOf[m])reportsOf[m]=[];
+    reportsOf[m].push(d);
+  });
+
+  // A person is a "manager node" if they have direct reports within the filtered set
+  var rendered={};
+  var html='';
+
+  // Sort managers: those with most reports first
+  var mgrNames=Object.keys(reportsOf).filter(function(m){return m&&byName[m];});
+  mgrNames.sort(function(a,b){return reportsOf[b].length-reportsOf[a].length;});
+
+  mgrNames.forEach(function(mgrName){
+    var mgr=byName[mgrName];
+    var reports=reportsOf[mgrName];
+    if(rendered[mgrName])return;
+    rendered[mgrName]=true;
+
+    var reportCards=reports.map(function(r){
+      rendered[r.name]=true;
+      return buildCard(r,'org-report-card');
+    }).join('');
+
+    html+='<div class="org-block">'+
+      '<div class="org-manager-label">Manager &amp; Team</div>'+
+      buildCard(mgr,'org-manager-card')+
+      '<div class="org-reports">'+reportCards+'</div>'+
       '</div>';
-  }).join('');
-  document.getElementById('app').innerHTML='<div style="padding:28px 40px"><div class="cards-grid">'+html+'</div></div>';
-  document.querySelectorAll('.card').forEach(function(c){c.addEventListener('click',function(){openModal(decodeURIComponent(c.dataset.name));});});
+  });
+
+  // Remaining people with no reports in this set (individual contributors)
+  var solos=data.filter(function(d){return!rendered[d.name];});
+  if(solos.length){
+    html+='<div class="org-section-label">'+solos.length+' Individual Contributors</div>'+
+      '<div class="org-solo-grid">'+
+      solos.map(function(d){return buildCard(d,'card');}).join('')+
+      '</div>';
+  }
+
+  document.getElementById('app').innerHTML='<div style="padding:28px 40px">'+html+'</div>';
+  document.querySelectorAll('[data-name]').forEach(function(el){
+    el.addEventListener('click',function(ev){
+      if(ev.target.closest('a'))return;
+      openModal(decodeURIComponent(el.dataset.name));
+    });
+  });
 }
 
 function rGroups(data){

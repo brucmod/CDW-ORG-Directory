@@ -19,8 +19,8 @@
   header h1 { font-family:'DM Serif Display',serif; font-size:24px; font-weight:400; letter-spacing:-.3px; line-height:1; }
   header h1 em { font-style:italic; color:var(--accent2); }
   .header-meta { font-size:11px; color:var(--muted); margin-top:3px; }
-  .org-selector { display:flex; gap:6px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:4px; }
-  .org-btn { background:none; border:none; color:var(--muted); cursor:pointer; border-radius:5px; padding:6px 14px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
+  .org-selector { display:flex; gap:6px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:5px; }
+  .org-btn { background:none; border:none; color:var(--muted); cursor:pointer; border-radius:7px; padding:9px 20px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; transition:all .15s; white-space:nowrap; font-weight:500; }
   .org-btn:hover { color:var(--text); background:rgba(255,255,255,.06); }
   .org-btn[data-org="cdw"]    { background:#2D2A27; color:var(--muted); }
   .org-btn[data-org="dcs"]    { background:#252B24; color:var(--muted); }
@@ -29,6 +29,9 @@
   .org-btn.active[data-org="dcs"]    { background:#252B24; color:#5A6359; }
   .org-btn.active[data-org="canada"] { background:#2B2220; color:#95685D; }
   .org-btn:disabled { opacity:.4; cursor:default; }
+  .upd-btn { display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--border); border-radius:7px; color:var(--muted); cursor:pointer; padding:8px 14px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.07em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
+  .upd-btn:hover { border-color:var(--accent3); color:var(--accent3); }
+  .upd-btn.loading { opacity:.5; cursor:wait; }
   .search-wrap { flex:2; min-width:240px; max-width:420px; position:relative; }
   .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
@@ -186,18 +189,136 @@
     <button class="org-btn" data-org="dcs">DCS</button>
     <button class="org-btn" data-org="canada">Canada</button>
   </div>
+  <button class="upd-btn" id="upd-btn" title="Update data for current org">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Update Data
+  </button>
+  <input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none">
   <div class="search-wrap">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search" placeholder="Search&hellip;">
   </div>
 </header>
 
-<div id="loading-screen" style="text-align:center;padding:100px 20px;color:var(--muted)">
-  <div style="display:inline-flex;flex-direction:column;align-items:center;gap:16px">
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF7023" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-    <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Loading directory&hellip;</p>
+<!-- ── SPLASH ── -->
+<div id="splash">
+  <div class="sp-bg"></div>
+  <div class="sp-grid"></div>
+  <div class="sp-content">
+    <div class="sp-eyebrow">CDW · Sales Organization</div>
+    <div class="sp-logo">
+      <span class="sp-cdw">CDW</span>
+      <span class="sp-org">Org <em>Directory</em></span>
+    </div>
+    <div class="sp-tagline">3 orgs · 3,500+ people · 1 directory</div>
+    <div class="sp-orbs">
+      <div class="sp-orb" style="--c:#FF7023;--d:0s;--x:-90px;--y:20px">CDW</div>
+      <div class="sp-orb" style="--c:#5A6359;--d:.15s;--x:0px;--y:-30px">DCS</div>
+      <div class="sp-orb" style="--c:#95685D;--d:.3s;--x:90px;--y:20px">CA</div>
+    </div>
+    <div class="sp-bar-wrap"><div class="sp-bar" id="sp-bar"></div></div>
+    <div class="sp-status" id="sp-status">Initializing&hellip;</div>
   </div>
+  <div class="sp-footer">February 2026 · REV2</div>
 </div>
+
+<style>
+#splash{
+  position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);transition:opacity .6s ease, transform .6s ease;
+}
+#splash.sp-out{opacity:0;pointer-events:none;transform:scale(1.03)}
+
+.sp-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,112,35,.07) 0%, transparent 70%),
+             radial-gradient(ellipse 50% 40% at 20% 80%, rgba(90,99,89,.1) 0%, transparent 60%),
+             radial-gradient(ellipse 40% 35% at 80% 20%, rgba(149,104,93,.08) 0%, transparent 55%);
+}
+
+.sp-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(113,88,76,.08) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(113,88,76,.08) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+.sp-content{
+  position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;
+}
+
+.sp-eyebrow{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:18px;
+  animation:spFadeUp .6s ease both;animation-delay:.1s;
+}
+
+.sp-logo{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:16px;
+  animation:spFadeUp .7s ease both;animation-delay:.2s;
+}
+.sp-cdw{
+  font-family:'DM Serif Display',serif;font-size:72px;font-weight:400;letter-spacing:-.5px;
+  color:var(--text);line-height:1;
+}
+.sp-org{
+  font-family:'DM Serif Display',serif;font-size:36px;font-weight:400;color:var(--muted);line-height:1;
+}
+.sp-org em{font-style:italic;color:var(--accent2)}
+
+.sp-tagline{
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--muted);
+  margin-bottom:40px;
+  animation:spFadeUp .7s ease both;animation-delay:.3s;
+}
+
+.sp-orbs{
+  display:flex;gap:16px;margin-bottom:44px;
+  animation:spFadeUp .7s ease both;animation-delay:.4s;
+}
+.sp-orb{
+  width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,var(--c)cc,var(--c)44);
+  border:1px solid var(--c);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:white;
+  animation:spOrb 2.4s ease-in-out infinite;animation-delay:var(--d);
+  box-shadow:0 0 24px var(--c)33;
+}
+@keyframes spOrb{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.sp-bar-wrap{
+  width:240px;height:2px;background:rgba(113,88,76,.3);border-radius:1px;margin-bottom:12px;overflow:hidden;
+  animation:spFadeUp .5s ease both;animation-delay:.5s;
+}
+.sp-bar{
+  height:100%;width:0%;background:linear-gradient(90deg,var(--accent4),var(--accent));
+  border-radius:1px;transition:width .4s ease;
+}
+
+.sp-status{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  animation:spFadeUp .5s ease both;animation-delay:.55s;
+}
+
+.sp-footer{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;color:rgba(208,200,186,.3);
+  white-space:nowrap;
+}
+
+@keyframes spFadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+
+<div id="loading-screen" style="display:none"></div>
+
 
 <div id="app-shell" style="display:none">
   <div class="filters">
@@ -224,6 +345,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 var LGEO = {'Toronto - West Mall - ON':{lat:43.6397,lng:-79.5531,label:'Toronto \u2013 West Mall',prov:'ON'},'Vancouver - BC':{lat:49.2827,lng:-123.1207,label:'Vancouver',prov:'BC'},'Edmonton - AB':{lat:53.5461,lng:-113.4938,label:'Edmonton',prov:'AB'},'Calgary - AB':{lat:51.0447,lng:-114.0719,label:'Calgary',prov:'AB'},'Virtual - Quebec':{lat:45.5019,lng:-73.5674,label:'Montreal/Quebec (Virtual)',prov:'QC'},'Ottawa - ON':{lat:45.4215,lng:-75.6972,label:'Ottawa',prov:'ON'},'Toronto Downtown - ON':{lat:43.651,lng:-79.347,label:'Toronto \u2013 Downtown',prov:'ON'},'Virtual - Alberta':{lat:52.268,lng:-113.811,label:'Alberta (Virtual)',prov:'AB'},'Virtual - Ontario':{lat:44.231,lng:-76.486,label:'Ontario (Virtual)',prov:'ON'},'Virtual - New Brunswick':{lat:46.565,lng:-66.462,label:'New Brunswick (Virtual)',prov:'NB'},'Virtual - Manitoba':{lat:49.895,lng:-97.138,label:'Manitoba (Virtual)',prov:'MB'},'Virtual - British Columbia':{lat:53.727,lng:-127.648,label:'BC (Virtual)',prov:'BC'}};
@@ -362,8 +484,21 @@ function e(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g
 function ds(title,fields){var items=fields.map(function(f){return'<div class="detail-item'+(f.f?' full':'')+'">'+'<div class="detail-label">'+f.l+'</div><div class="detail-value">'+f.v+'</div></div>';}).join('');return'<div class="detail-section"><div class="detail-section-title">'+title+'</div><div class="detail-grid">'+items+'</div></div>';}
 function cr(lbl,name,sub,email){return'<div class="chain-row">'+av(name,30,11)+'<div><div class="chain-label">'+lbl+'</div><div class="chain-name">'+e(name)+'</div>'+(sub?'<div class="chain-sub">'+e(sub)+'</div>':'')+'</div>'+(email?'<a class="email-link" href="mailto:'+e(email)+'" style="margin-left:auto">&#x2709;</a>':'')+'</div>';}
 
-function showLoading(msg){document.getElementById('loading-screen').style.display='';document.getElementById('app-shell').style.display='none';document.getElementById('loading-screen').innerHTML='<div style="display:inline-flex;flex-direction:column;align-items:center;gap:16px"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF7023" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><p style="font-family:\'DM Mono\',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase">'+msg+'</p></div>';}
-function showError(msg){document.getElementById('loading-screen').innerHTML='<div style="text-align:center;padding:60px 20px"><p style="color:#DEA193;font-size:15px;margin-bottom:8px">Failed to load data</p><p style="color:var(--muted);font-size:12px;font-family:monospace">'+e(msg)+'</p><p style="color:var(--muted);font-size:11px;margin-top:12px">Make sure all JSON files are in the same folder as index.html</p></div>';}
+function spProgress(pct,msg){
+  var bar=document.getElementById('sp-bar');
+  var status=document.getElementById('sp-status');
+  if(bar)bar.style.width=pct+'%';
+  if(status)status.textContent=msg;
+}
+function spDismiss(){
+  var splash=document.getElementById('splash');
+  if(!splash)return;
+  splash.classList.add('sp-out');
+  setTimeout(function(){splash.style.display='none';},650);
+}
+
+function showLoading(msg){document.getElementById('loading-screen').style.display='none';document.getElementById('app-shell').style.display='none';}
+function showError(msg){spDismiss();document.getElementById('loading-screen').style.display='';document.getElementById('loading-screen').innerHTML='<div style="text-align:center;padding:60px 20px"><p style="color:#DEA193;font-size:15px;margin-bottom:8px">Failed to load data</p><p style="color:var(--muted);font-size:12px;font-family:monospace">'+e(msg)+'</p><p style="color:var(--muted);font-size:11px;margin-top:12px">Make sure all JSON files are in the same folder as index.html</p></div>';}
 
 function loadOrg(org,cb){
   if(CACHE[org]){cb(null,CACHE[org]);return;}
@@ -383,11 +518,20 @@ function loadOrg(org,cb){
 var ORG_BG={cdw:'#2D2A27',dcs:'#252B24',canada:'#2B2220'};
 function switchOrg(org){
   document.documentElement.style.setProperty('--bg',ORG_BG[org]||'#2D2A27');
+  var isFirst=!CACHE[org];
+  if(isFirst){spProgress(20,'Loading '+org.toUpperCase()+'…');}
   document.querySelectorAll('.org-btn').forEach(function(b){b.disabled=true;b.classList.toggle('active',b.dataset.org===org);});
   showLoading('Loading '+org.toUpperCase()+'&hellip;');
   loadOrg(org,function(err,data){
     document.querySelectorAll('.org-btn').forEach(function(b){b.disabled=false;});
     if(err){showError(err);return;}
+    if(isFirst){
+      spProgress(80,'Building directory…');
+      setTimeout(function(){
+        spProgress(100,'Ready');
+        setTimeout(spDismiss,300);
+      },300);
+    }
     ORG=org;DATA=data;SCOL='name';SDIR=1;mq='';mf1='';mf2='';aloc=null;
     if(lmap){lmap.remove();lmap=null;lmarkers=[];}
     var cfg=CFG[org];
@@ -661,6 +805,120 @@ document.getElementById('search').addEventListener('input',function(){refreshFil
 document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
 
 switchOrg('cdw');
+
+// ── TOAST ────────────────────────────────────────────────────────
+var toastTimer=null;
+function showToast(msg,col){
+  var t=document.getElementById('toast'),dot=t.querySelector('div'),sp=document.getElementById('toast-msg');
+  dot.style.background=col||'#8FA596';sp.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},3200);
+}
+
+// ── UPDATE / MERGE ───────────────────────────────────────────────
+// Merge key per org: unique field(s) that identify the same person across uploads
+var MERGE_KEY={
+  cdw:   function(r){return (r.email||'').toLowerCase()||r.name;},
+  dcs:   function(r){return (r.email||'').toLowerCase()||r.name;},
+  canada:function(r){return (r.email||'').toLowerCase()||r.name;}
+};
+
+// Fields that come from the directory (DCS-specific extras we want to preserve)
+// For all orgs: any field in the existing record that is NOT in the incoming record
+// will be carried over — this handles custom annotations automatically.
+function mergeRecords(existing,incoming,org){
+  var keyFn=MERGE_KEY[org];
+  // Build lookup of existing records by key
+  var exMap={};
+  existing.forEach(function(r){exMap[keyFn(r)]=r;});
+  // Walk incoming records, merge with existing where key matches
+  var merged=incoming.map(function(r){
+    var key=keyFn(r);
+    var old=exMap[key];
+    if(!old)return r;
+    // Start from incoming (new data wins on shared fields)
+    // then layer in any fields from old that are missing or blank in incoming
+    var out=Object.assign({},r);
+    Object.keys(old).forEach(function(k){
+      if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){
+        out[k]=old[k];
+      }
+    });
+    return out;
+  });
+  // Report counts
+  var added=0,updated=0;
+  incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
+  var removed=existing.length-updated;
+  return{data:merged,added:added,updated:updated,removed:removed};
+}
+
+document.getElementById('upd-btn').addEventListener('click',function(){
+  document.getElementById('upd-file').value='';
+  document.getElementById('upd-file').click();
+});
+
+document.getElementById('upd-file').addEventListener('change',function(ev){
+  var file=ev.target.files[0];if(!file)return;
+  var ext=file.name.split('.').pop().toLowerCase();
+  if(ext!=='xlsx'&&ext!=='xls'){showToast('Please select an .xlsx or .xls file','#DEA193');return;}
+  var btn=document.getElementById('upd-btn');
+  btn.classList.add('loading');btn.textContent='Processing…';
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded — check your internet connection');
+      var wb=XLSX.read(e.target.result,{type:'array'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+      if(!rows.length)throw new Error('Spreadsheet appears to be empty');
+      // Normalise keys: trim whitespace, map common header variants to our field names
+      var KEY_MAP={
+        'coworkername':'name','emailaddress':'email','directphone':'phone',
+        'coworkerlocationdescription':'location','coworkertitledescription':'title',
+        'coworkertitlegroupdescription':'titleGroup','losmonth':'losMonths',
+        'losgroupdescription':'losGroup','academyamflagdescription':'academyFlag',
+        'managertitle':'managerTitle','managere-mail':'managerEmail',
+        'manageremail':'managerEmail','directorEmail':'directorEmail',
+        'director email':'directorEmail','director title':'directorTitle',
+        'solutionarea':'solutionArea','homelocation':'homeLocation',
+        'statescovers':'statesCovers','officelocation':'officeLocation',
+        'srmanager':'srManager','dept':'dept','province':'province','role':'role'
+      };
+      var incoming=rows.map(function(row){
+        var out={};
+        Object.keys(row).forEach(function(k){
+          var norm=k.trim().toLowerCase().replace(/\s+/g,'');
+          var mapped=KEY_MAP[norm]||KEY_MAP[k.trim().toLowerCase()]||k.trim();
+          out[mapped]=String(row[k]).trim();
+        });
+        return out;
+      });
+      // Filter out blank/junk rows (no name and no email)
+      incoming=incoming.filter(function(r){return r.name||r.email;});
+      if(!incoming.length)throw new Error('No valid records found in spreadsheet');
+      var existing=CACHE[ORG]||[];
+      var result=mergeRecords(existing,incoming,ORG);
+      CACHE[ORG]=result.data;
+      DATA=result.data;
+      refreshDropdowns(null);
+      render();
+      showToast(result.updated+' updated · '+result.added+' added · '+result.removed+' removed','#8FA596');
+    }catch(err){
+      showToast('Error: '+err.message,'#DEA193');
+    }finally{
+      btn.classList.remove('loading');
+      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Update Data';
+    }
+  };
+  reader.onerror=function(){
+    showToast('Failed to read file','#DEA193');
+    btn.classList.remove('loading');
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Update Data';
+  };
+  reader.readAsArrayBuffer(file);
+});
 </script>
 </body>
 </html>

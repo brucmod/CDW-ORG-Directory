@@ -74,6 +74,26 @@
   .upd-apply-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent); background:var(--accent); color:white; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
   .upd-apply-btn:hover:not(:disabled) { background:var(--accent4); border-color:var(--accent4); }
   .upd-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .upd-apply-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent); background:var(--accent); color:white; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
+  .upd-apply-btn:hover:not(:disabled) { background:var(--accent4); border-color:var(--accent4); }
+  .upd-apply-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .upd-push-btn { padding:8px 18px; border-radius:7px; font-size:13px; font-weight:500; border:1px solid var(--accent3); background:var(--accent3); color:#1a2419; cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
+  .upd-push-btn:hover:not(:disabled) { background:#7ab88a; border-color:#7ab88a; }
+  .upd-push-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .gh-settings { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-bottom:14px; }
+  .gh-settings-title { font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; }
+  .gh-settings-title span { margin-left:auto; font-size:14px; transition:transform .2s; }
+  .gh-settings-body { display:none; }
+  .gh-settings-body.open { display:block; }
+  .gh-field { margin-bottom:10px; }
+  .gh-field label { display:block; font-size:10px; font-family:'DM Mono',monospace; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .gh-field input { width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:7px 10px; font-size:12px; color:var(--text); font-family:'DM Mono',monospace; outline:none; transition:border-color .15s; }
+  .gh-field input:focus { border-color:var(--accent3); }
+  .gh-field input::placeholder { color:var(--muted); opacity:.5; }
+  .gh-save-btn { padding:5px 12px; border-radius:6px; font-size:11px; border:1px solid var(--accent3); background:none; color:var(--accent3); cursor:pointer; font-family:'DM Mono',monospace; letter-spacing:.04em; transition:all .15s; }
+  .gh-save-btn:hover { background:var(--accent3); color:#1a2419; }
+  .gh-status { font-size:11px; font-family:'DM Mono',monospace; margin-top:8px; min-height:16px; }
+  .upd-push-status { font-size:11px; font-family:'DM Mono',monospace; margin-top:6px; min-height:16px; text-align:center; }
   .search-wrap { flex:2; min-width:240px; max-width:420px; position:relative; }
   .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
@@ -280,10 +300,39 @@
         </div>
         <div class="upd-preview" id="upd-preview"></div>
         <p class="upd-note">Changes are applied live. Existing fields not present in the new file are preserved for each person.</p>
+
+        <!-- GitHub Push Settings -->
+        <div class="gh-settings" id="gh-settings">
+          <div class="gh-settings-title" id="gh-settings-toggle">
+            &#x26A1; Push to GitHub Pages
+            <span id="gh-chevron">&#x25BC;</span>
+          </div>
+          <div class="gh-settings-body" id="gh-settings-body">
+            <div class="gh-field">
+              <label>GitHub Username / Org</label>
+              <input type="text" id="gh-owner" placeholder="e.g. acme-corp" autocomplete="off">
+            </div>
+            <div class="gh-field">
+              <label>Repository Name</label>
+              <input type="text" id="gh-repo" placeholder="e.g. cdw-directory" autocomplete="off">
+            </div>
+            <div class="gh-field">
+              <label>Personal Access Token (PAT)</label>
+              <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button class="gh-save-btn" id="gh-save-btn">Save Settings</button>
+              <div class="gh-status" id="gh-status"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="upd-actions">
           <button class="upd-cancel-btn" id="upd-cancel-btn">Cancel</button>
-          <button class="upd-apply-btn" id="upd-apply-btn">Apply Update</button>
+          <button class="upd-apply-btn" id="upd-apply-btn">Apply (session only)</button>
+          <button class="upd-push-btn" id="upd-push-btn" disabled>&#x2197; Apply + Push to GitHub</button>
         </div>
+        <div class="upd-push-status" id="upd-push-status"></div>
       </div>
     </div>
   </div>
@@ -435,7 +484,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='1.5';
+var APP_VERSION='1.6';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1134,6 +1183,7 @@ function updDoRead(file){
         document.getElementById('upd-progress').style.display='none';
         document.getElementById('upd-summary').style.display='';
         document.getElementById('upd-apply-btn').disabled=false;
+        ghUpdatePushBtn();
       },300);
     }catch(err){
       // Surface the error clearly
@@ -1164,6 +1214,7 @@ function updDoRead(file){
   reader.readAsArrayBuffer(file);
 }
 
+// ── APPLY (session only) ─────────────────────────────────────────
 document.getElementById('upd-apply-btn').addEventListener('click',function(){
   if(!pendingMerge)return;
   CACHE[ORG]=pendingMerge.data;
@@ -1173,6 +1224,130 @@ document.getElementById('upd-apply-btn').addEventListener('click',function(){
   showToast(pendingMerge.updated+' updated \u00b7 '+pendingMerge.added+' added \u00b7 '+pendingMerge.removed+' removed','#8FA596');
   updClose();
 });
+
+// ── GITHUB SETTINGS ───────────────────────────────────────────────
+function ghLoad(){
+  var o=localStorage.getItem('gh_owner')||'';
+  var r=localStorage.getItem('gh_repo')||'';
+  var t=localStorage.getItem('gh_token')||'';
+  document.getElementById('gh-owner').value=o;
+  document.getElementById('gh-repo').value=r;
+  document.getElementById('gh-token').value=t;
+  ghUpdatePushBtn();
+  // Auto-open settings if not configured
+  if(!o||!r||!t){
+    document.getElementById('gh-settings-body').classList.add('open');
+    document.getElementById('gh-chevron').style.transform='rotate(180deg)';
+  }
+}
+
+function ghUpdatePushBtn(){
+  var ready=localStorage.getItem('gh_owner')&&localStorage.getItem('gh_repo')&&localStorage.getItem('gh_token')&&pendingMerge;
+  document.getElementById('upd-push-btn').disabled=!ready;
+}
+
+document.getElementById('gh-settings-toggle').addEventListener('click',function(){
+  var body=document.getElementById('gh-settings-body');
+  var chev=document.getElementById('gh-chevron');
+  body.classList.toggle('open');
+  chev.style.transform=body.classList.contains('open')?'rotate(180deg)':'';
+});
+
+document.getElementById('gh-save-btn').addEventListener('click',function(){
+  var o=document.getElementById('gh-owner').value.trim();
+  var r=document.getElementById('gh-repo').value.trim();
+  var t=document.getElementById('gh-token').value.trim();
+  if(!o||!r||!t){
+    document.getElementById('gh-status').textContent='\u26a0\ufe0f All three fields required.';
+    document.getElementById('gh-status').style.color='#DEA193';
+    return;
+  }
+  localStorage.setItem('gh_owner',o);
+  localStorage.setItem('gh_repo',r);
+  localStorage.setItem('gh_token',t);
+  document.getElementById('gh-status').textContent='\u2713 Saved';
+  document.getElementById('gh-status').style.color='var(--accent3)';
+  document.getElementById('gh-settings-body').classList.remove('open');
+  document.getElementById('gh-chevron').style.transform='';
+  ghUpdatePushBtn();
+});
+
+// ── PUSH TO GITHUB ────────────────────────────────────────────────
+async function ghPushFile(owner,repo,token,path,content,statusEl){
+  // Get current SHA (required for updates)
+  statusEl.textContent='Checking '+path+'\u2026';
+  var sha=null;
+  try{
+    var r=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path,{
+      headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}
+    });
+    if(r.ok){var j=await r.json();sha=j.sha;}
+    else if(r.status!==404){throw new Error('GitHub API error '+r.status+' on '+path);}
+  }catch(e){throw e;}
+
+  // Push updated file
+  statusEl.textContent='Pushing '+path+'\u2026';
+  var body={message:'Update '+path+' via CDW Directory updater',content:btoa(unescape(encodeURIComponent(content)))};
+  if(sha)body.sha=sha;
+  var resp=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+path,{
+    method:'PUT',
+    headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  if(!resp.ok){
+    var err=await resp.json();
+    throw new Error('Push failed: '+(err.message||resp.status));
+  }
+}
+
+document.getElementById('upd-push-btn').addEventListener('click',async function(){
+  if(!pendingMerge)return;
+  var owner=localStorage.getItem('gh_owner');
+  var repo=localStorage.getItem('gh_repo');
+  var token=localStorage.getItem('gh_token');
+  if(!owner||!repo||!token){
+    document.getElementById('gh-settings-body').classList.add('open');
+    document.getElementById('gh-chevron').style.transform='rotate(180deg)';
+    return;
+  }
+
+  var btn=this;
+  btn.disabled=true;
+  btn.textContent='Pushing\u2026';
+  var statusEl=document.getElementById('upd-push-status');
+  statusEl.style.color='var(--muted)';
+
+  try{
+    // Apply to session first
+    CACHE[ORG]=pendingMerge.data;
+    DATA=pendingMerge.data;
+    refreshDropdowns(null);
+    render();
+
+    // Push JSON to GitHub
+    var filename=CFG[ORG].file;
+    var json=JSON.stringify(pendingMerge.data,null,2);
+    await ghPushFile(owner,repo,token,filename,json,statusEl);
+
+    statusEl.textContent='\u2713 Pushed! GitHub Pages will update in ~60 seconds.';
+    statusEl.style.color='var(--accent3)';
+    showToast('Pushed to GitHub \u00b7 live in ~60s','#8FA596');
+    setTimeout(function(){updClose();},2000);
+  }catch(err){
+    statusEl.textContent='\u26a0\ufe0f '+err.message;
+    statusEl.style.color='#DEA193';
+    showToast('Push failed: '+err.message,'#DEA193');
+    btn.disabled=false;
+    btn.textContent='\u2197 Apply + Push to GitHub';
+  }
+});
+
+// Load saved GitHub settings when updater opens
+var _origUpdOpen=updOpen;
+updOpen=function(){
+  _origUpdOpen();
+  ghLoad();
+};
 </script>
 </body>
 </html>

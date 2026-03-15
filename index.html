@@ -434,7 +434,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
 var APP_VERSION='1.2';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
@@ -1073,15 +1073,17 @@ function updProcessFile(file){
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
-      if(typeof XLSX==='undefined')throw new Error('SheetJS not loaded');
+      if(typeof XLSX==='undefined')throw new Error('SheetJS library failed to load \u2014 check your internet connection and refresh the page.');
       updSetProgress(35,'Parsing rows\u2026');
-      var wb=XLSX.read(ev.target.result,{type:'array'});
+      var wb;
+      try{ wb=XLSX.read(ev.target.result,{type:'array'}); }
+      catch(xe){ throw new Error('Could not parse file: '+xe.message); }
       var ws=wb.Sheets[wb.SheetNames[0]];
       var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!rows.length)throw new Error('Spreadsheet appears to be empty');
       updSetProgress(60,'Normalising fields\u2026');
       var incoming=normaliseRows(rows);
-      if(!incoming.length)throw new Error('No valid records found');
+      if(!incoming.length)throw new Error('No valid records found. Verify the file has name/email columns, and if it has a Sector column, ensure rows are set to "Sales".');
       updSetProgress(80,'Comparing with current data\u2026');
       var existing=CACHE[ORG]||[];
       var result=mergeRecords(existing,incoming,ORG);
@@ -1108,11 +1110,31 @@ function updProcessFile(file){
         document.getElementById('upd-apply-btn').disabled=false;
       },300);
     }catch(err){
-      updSetProgress(100,'Error: '+err.message);
-      showToast('Error: '+err.message,'#DEA193');
+      // Surface the error clearly
+      var msgEl=document.getElementById('upd-progress-msg');
+      msgEl.textContent='\u26a0\ufe0f '+err.message;
+      msgEl.style.color='#DEA193';
+      msgEl.style.lineHeight='1.5';
+      document.getElementById('upd-prog-bar').style.cssText='width:100%;background:#DEA193;box-shadow:none;';
+      document.getElementById('upd-prog-pct').textContent='';
+      showToast(err.message,'#DEA193');
+      // Add retry button
+      if(!document.getElementById('upd-retry-btn')){
+        var btn=document.createElement('button');
+        btn.id='upd-retry-btn';
+        btn.textContent='Try another file';
+        btn.style.cssText='margin-top:14px;padding:7px 16px;border-radius:7px;font-size:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-family:"DM Mono",monospace;display:block;';
+        btn.addEventListener('click',updReset);
+        document.getElementById('upd-progress').appendChild(btn);
+      } else { document.getElementById('upd-retry-btn').style.display='block'; }
     }
   };
-  reader.onerror=function(){updSetProgress(100,'Failed to read file');showToast('Failed to read file','#DEA193');};
+  reader.onerror=function(){
+    var msgEl=document.getElementById('upd-progress-msg');
+    msgEl.textContent='\u26a0\ufe0f Failed to read file \u2014 the file may be corrupted or too large.';
+    msgEl.style.color='#DEA193';
+    showToast('Failed to read file','#DEA193');
+  };
   reader.readAsArrayBuffer(file);
 }
 

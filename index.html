@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='1.9';
+var APP_VERSION='2.0';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1318,7 +1318,7 @@ document.getElementById('upd-push-btn').addEventListener('click',async function(
     // Apply to session first
     CACHE[ORG]=pendingMerge.data;
     DATA=pendingMerge.data;
-    refreshDropdowns(null);
+    populateFilters();
     render();
 
     // Push JSON to GitHub

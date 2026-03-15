@@ -49,10 +49,11 @@
   .upd-drop-icon { font-size:28px; margin-bottom:8px; opacity:.6; }
   .upd-drop p { font-size:12px; color:var(--muted); margin:4px 0; }
   .upd-drop .upd-drop-hint { font-size:11px; color:var(--muted); opacity:.7; }
-  .upd-progress { background:var(--surface2); border-radius:8px; padding:14px 16px; margin-bottom:14px; display:none; }
-  .upd-progress p { font-size:12px; color:var(--muted); margin:4px 0; }
-  .upd-prog-wrap { height:3px; background:rgba(255,255,255,.06); border-radius:2px; margin-top:10px; overflow:hidden; }
-  .upd-prog-bar { height:100%; background:linear-gradient(90deg,var(--accent4),var(--accent)); border-radius:2px; width:0%; transition:width .3s; }
+  .upd-progress { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:18px 20px; margin-bottom:14px; display:none; }
+  .upd-progress p { font-size:12px; color:var(--muted); margin:0 0 12px 0; font-family:'DM Mono',monospace; letter-spacing:.04em; }
+  .upd-prog-wrap { height:8px; background:var(--bg); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  .upd-prog-bar { height:100%; background:linear-gradient(90deg,var(--accent4),var(--accent)); border-radius:6px; width:0%; transition:width .35s ease; box-shadow:0 0 8px rgba(255,112,35,.4); }
+  .upd-prog-pct { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); text-align:right; margin-top:6px; }
   .upd-summary { display:none; margin-bottom:14px; }
   .upd-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px; }
   .upd-stat { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; text-align:center; }
@@ -268,6 +269,7 @@
       <div class="upd-progress" id="upd-progress">
         <p id="upd-progress-msg">Reading file&hellip;</p>
         <div class="upd-prog-wrap"><div class="upd-prog-bar" id="upd-prog-bar"></div></div>
+        <div class="upd-prog-pct" id="upd-prog-pct">0%</div>
       </div>
       <!-- Summary -->
       <div class="upd-summary" id="upd-summary">
@@ -947,13 +949,31 @@ var KEY_MAP={
   'coworkerlocationdescription':'location','coworkertitledescription':'title',
   'coworkertitlegroupdescription':'titleGroup','losmonth':'losMonths',
   'losgroupdescription':'losGroup','academyamflagdescription':'academyFlag',
-  'managertitle':'managerTitle','managere-mail':'managerEmail',
-  'manageremail':'managerEmail','directoremail':'directorEmail',
-  'director email':'directorEmail','director title':'directorTitle',
+  'managertitle':'managerTitle',
+  'managere-mail':'managerEmail','manageremail':'managerEmail',
+  'manageremailaddress':'managerEmail',
+  'directoremail':'directorEmail','director email':'directorEmail',
+  'director title':'directorTitle','director':'directorRaw',
+  'manager':'managerRaw',
   'solutionarea':'solutionArea','homelocation':'homeLocation',
   'statescovers':'statesCovers','officelocation':'officeLocation',
-  'srmanager':'srManager','dept':'dept','province':'province','role':'role'
+  'srmanager':'srManager','dept':'dept','province':'province','role':'role',
+  'sector':'sector','segment':'segment','channel':'channel',
+  'tier':'tier','region':'region','area':'area','district':'district'
 };
+
+// Clean a name: title-case, strip trailing codes like "(9728)"
+function cleanName(s){
+  if(!s)return'';
+  return String(s).replace(/\s*\([^)]*\)\s*$','').trim()
+    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
+}
+// Clean a person's own name: strip leading "(MJ) " style prefixes
+function cleanPersonName(s){
+  if(!s)return'';
+  return String(s).replace(/^\([^)]*\)\s*/,'').trim()
+    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
+}
 
 function normaliseRows(rows){
   var out=rows.map(function(row){
@@ -961,11 +981,26 @@ function normaliseRows(rows){
     Object.keys(row).forEach(function(k){
       var norm=k.trim().toLowerCase().replace(/\s+/g,'');
       var mapped=KEY_MAP[norm]||KEY_MAP[k.trim().toLowerCase()]||k.trim();
-      rec[mapped]=String(row[k]).trim();
+      rec[mapped]=row[k]!=null?String(row[k]).trim():'';
     });
+    // Clean names
+    if(rec.name)rec.name=cleanPersonName(rec.name);
+    if(rec.managerRaw){rec.manager=cleanName(rec.managerRaw);delete rec.managerRaw;}
+    if(rec.directorRaw){rec.director=cleanName(rec.directorRaw);delete rec.directorRaw;}
+    // Extract state from location like "Virtual - Arizona (VIRTUAL - AZ)"
+    if(rec.location&&!rec.state){
+      var sm=rec.location.match(/\((?:VIRTUAL\s*-\s*)?([A-Z]{2})\)$/);
+      if(sm)rec.state=sm[1];
+      rec.location=rec.location.replace(/\s*\([^)]*\)\s*$/,'').trim();
+    }
     return rec;
   });
-  return out.filter(function(r){return r.name||r.email;});
+  // Filter: Sales sector only (for CDW), skip blank/junk rows
+  return out.filter(function(r){
+    if(!r.name&&!r.email)return false;
+    if(r.sector&&r.sector.toLowerCase()!=='sales')return false;
+    return true;
+  });
 }
 
 function mergeRecords(existing,incoming,org){
@@ -994,6 +1029,8 @@ var pendingMerge=null;
 function updSetProgress(pct,msg){
   document.getElementById('upd-prog-bar').style.width=pct+'%';
   document.getElementById('upd-progress-msg').textContent=msg;
+  var pctEl=document.getElementById('upd-prog-pct');
+  if(pctEl)pctEl.textContent=pct+'%';
 }
 
 function updReset(){

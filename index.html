@@ -230,8 +230,97 @@ var LGEO = {'Toronto - West Mall - ON':{lat:43.6397,lng:-79.5531,label:'Toronto 
 var PC = {ON:'#FF7023',BC:'#5B8FDE',AB:'#34d399',QC:'#a78bfa',MB:'#f472b6',NB:'#facc15',NS:'#fb923c',SK:'#38bdf8',def:'#D0C8BA'};
 function pc(p){return PC[p]||PC.def;}
 
+var CDWGEO = {
+  'Chicago / Adams - IL':          {lat:41.8781,lng:-87.6298,label:'Chicago \u2013 Adams, IL',v:false},
+  'Vernon Hills / 200 - IL':       {lat:42.2217,lng:-87.9670,label:'Vernon Hills, IL',v:false},
+  'Tempe - AZ':                    {lat:33.4255,lng:-111.9400,label:'Tempe, AZ',v:false},
+  'Shelton - CT':                  {lat:41.3165,lng:-73.0832,label:'Shelton, CT',v:false},
+  'Shelton':                       {lat:41.3165,lng:-73.0832,label:'Shelton, CT',v:false},
+  'Cherry Hill - NJ':              {lat:39.9312,lng:-75.0241,label:'Cherry Hill, NJ',v:false},
+  'Cherry Hill':                   {lat:39.9312,lng:-75.0241,label:'Cherry Hill, NJ',v:false},
+  'Bell Works (Holmdel)':          {lat:40.3773,lng:-74.1577,label:'Bell Works, Holmdel NJ',v:false},
+  'Tampa - FL':                    {lat:27.9506,lng:-82.4572,label:'Tampa, FL',v:false},
+  'Tampa':                         {lat:27.9506,lng:-82.4572,label:'Tampa, FL',v:false},
+  'Dallas - TX':                   {lat:32.7767,lng:-96.7970,label:'Dallas, TX',v:false},
+  'Washington D.C. - VA':          {lat:38.9072,lng:-77.0369,label:'Washington D.C.',v:false},
+  'New York City - NY':            {lat:40.7128,lng:-74.0060,label:'New York City, NY',v:false},
+  'Sirius - Rosemont - IL':        {lat:41.9956,lng:-87.8648,label:'Sirius \u2013 Rosemont, IL',v:false},
+  'Sirius - Omaha - NE':           {lat:41.2565,lng:-95.9345,label:'Sirius \u2013 Omaha, NE',v:false},
+  'Sirius - Bloomington - MN':     {lat:44.8408,lng:-93.4166,label:'Sirius \u2013 Bloomington, MN',v:false},
+  'Sirius - Overland Park - KS':   {lat:38.9822,lng:-94.6708,label:'Sirius \u2013 Overland Park, KS',v:false},
+  'Sirius - San Antonio - TX':     {lat:29.4241,lng:-98.4936,label:'Sirius \u2013 San Antonio, TX',v:false},
+  'Sirius - Boca Raton - FL':      {lat:26.3683,lng:-80.1289,label:'Sirius \u2013 Boca Raton, FL',v:false},
+  'Sirius - Houston - TX':         {lat:29.7604,lng:-95.3698,label:'Sirius \u2013 Houston, TX',v:false},
+  'Sirius - Raleigh - NC':         {lat:35.7796,lng:-78.6382,label:'Sirius \u2013 Raleigh, NC',v:false},
+  'Madison - WI':                  {lat:43.0731,lng:-89.4012,label:'Madison, WI',v:false},
+  'Nashville - TN':                {lat:36.1627,lng:-86.7816,label:'Nashville, TN',v:false},
+  'Detroit - MI':                  {lat:42.3314,lng:-83.0458,label:'Detroit, MI',v:false},
+  'Las Vegas - NV':                {lat:36.1699,lng:-115.1398,label:'Las Vegas, NV',v:false},
+  'Indianapolis - IN':             {lat:39.7684,lng:-86.1581,label:'Indianapolis, IN',v:false},
+  'Cleveland - OH':                {lat:41.4993,lng:-81.6944,label:'Cleveland, OH',v:false},
+  'Seattle - WA':                  {lat:47.6062,lng:-122.3321,label:'Seattle, WA',v:false},
+  'Appleton - WI':                 {lat:44.2619,lng:-88.4154,label:'Appleton, WI',v:false},
+  'Grand Rapids - MI':             {lat:42.9634,lng:-85.6681,label:'Grand Rapids, MI',v:false},
+  'Milwaukee - WI':                {lat:43.0389,lng:-87.9065,label:'Milwaukee, WI',v:false},
+  'Cincinnati - OH':               {lat:39.1031,lng:-84.5120,label:'Cincinnati, OH',v:false},
+  'Portland - OR':                 {lat:45.5231,lng:-122.6765,label:'Portland, OR',v:false},
+  'Chicago-Riverside':             {lat:41.8319,lng:-87.8120,label:'Riverside, IL',v:false},
+  'Greenwood Village - CO':        {lat:39.6136,lng:-104.8914,label:'Greenwood Village, CO',v:false},
+  'Salt Lake City \u2013 UT':      {lat:40.7608,lng:-111.8910,label:'Salt Lake City, UT',v:false},
+  'Equinix - Elk Grove Village':   {lat:42.0042,lng:-87.9970,label:'Elk Grove Village, IL',v:false},
+  'Virtual - Florida':             {lat:27.9944,lng:-81.7603,label:'Florida (Virtual)',v:true},
+  'Virtual - Illinois':            {lat:40.6331,lng:-89.3985,label:'Illinois (Virtual)',v:true},
+  'Virtual - California':          {lat:36.7783,lng:-119.4179,label:'California (Virtual)',v:true},
+  'Virtual - Texas':               {lat:31.9686,lng:-99.9018,label:'Texas (Virtual)',v:true},
+  'Virtual - Virginia':            {lat:37.4316,lng:-78.6569,label:'Virginia (Virtual)',v:true},
+  'Virtual - North Carolina':      {lat:35.7596,lng:-79.0193,label:'North Carolina (Virtual)',v:true},
+  'Virtual - Maryland':            {lat:39.0458,lng:-76.6413,label:'Maryland (Virtual)',v:true},
+  'Virtual - Wisconsin':           {lat:43.7844,lng:-88.7879,label:'Wisconsin (Virtual)',v:true},
+  'Virtual - Georgia':             {lat:32.1656,lng:-82.9001,label:'Georgia (Virtual)',v:true},
+  'Virtual - Colorado':            {lat:39.5501,lng:-105.7821,label:'Colorado (Virtual)',v:true},
+  'Virtual - Ohio':                {lat:40.4173,lng:-82.9071,label:'Ohio (Virtual)',v:true},
+  'Virtual - New York':            {lat:42.1657,lng:-74.9481,label:'New York (Virtual)',v:true},
+  'Virtual - Indiana':             {lat:40.2672,lng:-86.1349,label:'Indiana (Virtual)',v:true},
+  'Virtual - Arizona':             {lat:34.0489,lng:-111.0937,label:'Arizona (Virtual)',v:true},
+  'Virtual - Pennsylvania':        {lat:41.2033,lng:-77.1945,label:'Pennsylvania (Virtual)',v:true},
+  'Virtual - New Jersey':          {lat:40.0583,lng:-74.4057,label:'New Jersey (Virtual)',v:true},
+  'Virtual - Washington':          {lat:47.7511,lng:-120.7401,label:'Washington (Virtual)',v:true},
+  'Virtual - Tennessee':           {lat:35.5175,lng:-86.5804,label:'Tennessee (Virtual)',v:true},
+  'Virtual - Michigan':            {lat:44.3148,lng:-85.6024,label:'Michigan (Virtual)',v:true},
+  'Virtual - South Carolina':      {lat:33.8361,lng:-81.1637,label:'South Carolina (Virtual)',v:true},
+  'Virtual - Connecticut':         {lat:41.5978,lng:-72.7554,label:'Connecticut (Virtual)',v:true},
+  'Virtual - Missouri':            {lat:38.5767,lng:-92.1735,label:'Missouri (Virtual)',v:true},
+  'Virtual - Massachusetts':       {lat:42.4072,lng:-71.3824,label:'Massachusetts (Virtual)',v:true},
+  'Virtual - Iowa':                {lat:41.8780,lng:-93.0977,label:'Iowa (Virtual)',v:true},
+  'Virtual - Minnesota':           {lat:46.7296,lng:-94.6859,label:'Minnesota (Virtual)',v:true},
+  'Virtual - Oklahoma':            {lat:35.4676,lng:-97.5164,label:'Oklahoma (Virtual)',v:true},
+  'Virtual - Utah':                {lat:39.3210,lng:-111.0937,label:'Utah (Virtual)',v:true},
+  'Virtual - Oregon':              {lat:43.8041,lng:-120.5542,label:'Oregon (Virtual)',v:true},
+  'Virtual - District of Columbia':{lat:38.9072,lng:-77.0369,label:'Washington D.C. (Virtual)',v:true},
+  'Virtual - Nebraska':            {lat:41.4925,lng:-99.9018,label:'Nebraska (Virtual)',v:true},
+  'Virtual - Kentucky':            {lat:37.8393,lng:-84.2700,label:'Kentucky (Virtual)',v:true},
+  'Virtual - Nevada':              {lat:38.8026,lng:-116.4194,label:'Nevada (Virtual)',v:true},
+  'Virtual - West Virginia':       {lat:38.5976,lng:-80.4549,label:'West Virginia (Virtual)',v:true},
+  'Virtual - Hawaii':              {lat:19.8968,lng:-155.5828,label:'Hawaii (Virtual)',v:true},
+  'Virtual - New Hampshire':       {lat:43.1939,lng:-71.5724,label:'New Hampshire (Virtual)',v:true},
+  'Virtual - Alabama':             {lat:32.3182,lng:-86.9023,label:'Alabama (Virtual)',v:true},
+  'Virtual - Louisiana':           {lat:30.9843,lng:-91.9623,label:'Louisiana (Virtual)',v:true},
+  'Virtual - Idaho':               {lat:44.0682,lng:-114.7420,label:'Idaho (Virtual)',v:true},
+  'Virtual - Mississippi':         {lat:32.3547,lng:-89.3985,label:'Mississippi (Virtual)',v:true},
+  'Virtual - South Dakota':        {lat:43.9695,lng:-99.9018,label:'South Dakota (Virtual)',v:true},
+  'Virtual - Rhode Island':        {lat:41.6809,lng:-71.5118,label:'Rhode Island (Virtual)',v:true},
+  'Virtual - Arkansas':            {lat:34.7997,lng:-92.3731,label:'Arkansas (Virtual)',v:true},
+  'Virtual - Maine':               {lat:45.2538,lng:-69.4455,label:'Maine (Virtual)',v:true},
+  'Virtual - Montana':             {lat:46.8797,lng:-110.3626,label:'Montana (Virtual)',v:true},
+  'Virtual - Vermont':             {lat:44.5588,lng:-72.5778,label:'Vermont (Virtual)',v:true},
+  'Virtual - Kansas':              {lat:38.5266,lng:-96.7265,label:'Kansas (Virtual)',v:true},
+  'Virtual - New Mexico':          {lat:34.5199,lng:-105.8701,label:'New Mexico (Virtual)',v:true},
+  'Virtual - Alaska':              {lat:64.2008,lng:-153.4937,label:'Alaska (Virtual)',v:true},
+  'Virtual - Delaware':            {lat:38.9108,lng:-75.5277,label:'Delaware (Virtual)',v:true}
+};
+
 var CFG = {
-  cdw:{file:'CDW_data_.json',eyebrow:'CDW \u00b7 Sales Organization',title:'CDW Org <em>Directory</em>',hint:'Search name, title, email, manager\u2026',hasMap:false,
+  cdw:{file:'CDW_data_.json',eyebrow:'CDW \u00b7 Sales Organization',title:'CDW Org <em>Directory</em>',hint:'Search name, title, email, manager\u2026',hasMap:true,
     filters:[{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-ch',key:'channel',lbl:'All Channels'},{id:'f-tier',key:'tier',lbl:'All Tiers'},{id:'f-reg',key:'region',lbl:'All Regions'},{id:'f-dist',key:'district',lbl:'All Districts'},{id:'f-tg',key:'titleGroup',lbl:'All Roles'},{id:'f-mgr',key:'manager',lbl:'All Managers'}],
     cols:[{k:'name',l:'Name'},{k:'titleGroup',l:'Role'},{k:'segment',l:'Segment'},{k:'channel',l:'Channel'},{k:'tier',l:'Tier'},{k:'region',l:'Region'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
@@ -463,14 +552,20 @@ function renderMap(fd){
 
 function initMap(data){
   if(lmap){lmap.remove();lmap=null;lmarkers=[];}
-  lmap=L.map('leaflet-map',{center:[56.13,-106.35],zoom:4});
+  var isCA=ORG==='canada';
+  var defCenter=isCA?[56.13,-106.35]:[39.5,-98.35];
+  var defZoom=isCA?4:4;
+  lmap=L.map('leaflet-map',{center:defCenter,zoom:defZoom});
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap',maxZoom:18}).addTo(lmap);
   var bl={};
   data.forEach(function(d){var k=d.location||'?';if(!bl[k])bl[k]=[];bl[k].push(d);});
   Object.keys(bl).forEach(function(loc){
-    var ppl=bl[loc],geo=LGEO[loc];if(!geo)return;
-    var n=ppl.length,col=pc(geo.prov),sz=n>=100?56:n>=30?46:n>=10?38:n>=5?32:26;
-    var isV=loc.toLowerCase().indexOf('virtual')!==-1;
+    var ppl=bl[loc];
+    var geo=isCA?LGEO[loc]:CDWGEO[loc];
+    if(!geo)return;
+    var n=ppl.length,sz=n>=100?56:n>=30?46:n>=10?38:n>=5?32:26;
+    var isV=isCA?(loc.toLowerCase().indexOf('virtual')!==-1):geo.v;
+    var col=isCA?pc(geo.prov):'#FF7023';
     var ih='<div class="map-marker" style="width:'+sz+'px;height:'+sz+'px;font-size:'+(n>=100?13:12)+'px;background:linear-gradient(135deg,'+col+'dd,'+col+'88);border-style:'+(isV?'dashed':'solid')+';opacity:'+(isV?'0.8':'1')+'">'+n+'</div>';
     var m=L.marker([geo.lat,geo.lng],{icon:L.divIcon({html:ih,className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}).addTo(lmap);
     m._loc=loc;m._ppl=ppl;m._geo=geo;
@@ -484,7 +579,9 @@ function setLoc(loc,ppl,geo,all){
   lmarkers.forEach(function(m){var el=m.getElement();if(!el)return;var inn=el.querySelector('.map-marker');if(!inn)return;inn.classList.toggle('active',m._loc===loc);});
   lmap.setView([geo.lat,geo.lng],Math.max(lmap.getZoom(),6),{animate:true});
   document.getElementById('panel-title').textContent=geo.label;
-  document.getElementById('panel-sub').textContent=ppl.length+' people \u00b7 '+(PROV[geo.prov]||geo.prov);
+  var sub=ppl.length+' people';
+  if(ORG==='canada'&&geo.prov)sub+=' \u00b7 '+(PROV[geo.prov]||geo.prov);
+  document.getElementById('panel-sub').textContent=sub;
   refreshList(all,ppl);
 }
 
@@ -501,13 +598,13 @@ function refreshList(all,locPpl){
     var bl={};all.forEach(function(d){var k=d.location||'?';if(!bl[k])bl[k]=[];bl[k].push(d);});
     var secs=Object.keys(bl).map(function(loc){return[loc,fppl(bl[loc])];}).filter(function(x){return x[1].length;}).sort(function(a,b){return b[1].length-a[1].length;});
     list.innerHTML=secs.map(function(x){
-      var loc=x[0],ppl=x[1],geo=LGEO[loc];
-      var col=geo?pc(geo.prov):'#D0C8BA',lbl=geo?geo.label:loc,prov=geo?geo.prov:'';
+      var loc=x[0],ppl=x[1],geo=ORG==='canada'?LGEO[loc]:CDWGEO[loc];
+      var col=geo?(ORG==='canada'?pc(geo.prov):'#FF7023'):'#D0C8BA',lbl=geo?geo.label:loc,prov=geo&&geo.prov?geo.prov:'';
       return'<div class="map-loc-header" data-lockey="'+encodeURIComponent(loc)+'"><div class="map-loc-dot" style="background:'+col+'"></div><div class="map-loc-name">'+e(lbl)+'</div>'+(prov?'<div class="map-loc-prov">'+e(prov)+'</div>':'')+'<div class="map-loc-count">'+ppl.length+'</div></div>'+ppl.map(prow).join('');
     }).join('');
     list.querySelectorAll('.map-loc-header').forEach(function(h){
       h.addEventListener('click',function(){
-        var loc=decodeURIComponent(h.dataset.lockey),geo=LGEO[loc];
+        var loc=decodeURIComponent(h.dataset.lockey),geo=ORG==='canada'?LGEO[loc]:CDWGEO[loc];
         if(geo){var bl2={};all.forEach(function(d){var k=d.location||'?';if(!bl2[k])bl2[k]=[];bl2[k].push(d);});if(bl2[loc])setLoc(loc,bl2[loc],geo,all);}
       });
     });
@@ -517,16 +614,30 @@ function refreshList(all,locPpl){
 
 function buildStats(data){
   var el=document.getElementById('map-stats');if(!el)return;
-  var c={};data.forEach(function(d){if(d.province)c[d.province]=(c[d.province]||0)+1;});
-  var s=Object.keys(c).map(function(p){return[p,c[p]];}).sort(function(a,b){return b[1]-a[1];});
+  var c={};
+  if(ORG==='canada'){data.forEach(function(d){if(d.province)c[d.province]=(c[d.province]||0)+1;});}
+  else{data.forEach(function(d){if(d.state)c[d.state]=(c[d.state]||0)+1;});}
+  var s=Object.keys(c).map(function(p){return[p,c[p]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
   var mx=s.length?s[0][1]:1;
-  el.innerHTML='<div class="map-stats-title">By Province</div>'+s.map(function(x){return'<div class="map-stat-row"><div class="map-stat-label">'+x[0]+'</div><div class="map-stat-bar-wrap"><div class="map-stat-bar" style="width:'+Math.round(x[1]/mx*100)+'%;background:'+pc(x[0])+'"></div></div><div class="map-stat-num">'+x[1]+'</div></div>';}).join('');
+  var title=ORG==='canada'?'By Province':'Top States';
+  el.innerHTML='<div class="map-stats-title">'+title+'</div>'+s.map(function(x){
+    var col=ORG==='canada'?pc(x[0]):'#FF7023';
+    return'<div class="map-stat-row"><div class="map-stat-label">'+x[0]+'</div><div class="map-stat-bar-wrap"><div class="map-stat-bar" style="width:'+Math.round(x[1]/mx*100)+'%;background:'+col+'"></div></div><div class="map-stat-num">'+x[1]+'</div></div>';
+  }).join('');
 }
 
 function buildLegend(){
   var el=document.getElementById('map-legend');if(!el)return;
-  var provs=Object.keys(PC).filter(function(k){return k!=='def';});
-  el.innerHTML='<div class="map-legend-title">Province</div>'+provs.map(function(p){return'<div class="map-legend-item"><div class="map-legend-dot" style="background:'+PC[p]+'"></div><span>'+(PROV[p]||p)+'</span></div>';}).join('')+'<div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border)"><div class="map-legend-item"><div style="width:9px;height:9px;border:2px dashed rgba(255,255,255,.4);border-radius:50%;flex-shrink:0"></div><span>Virtual</span></div></div>';
+  if(ORG==='canada'){
+    var provs=Object.keys(PC).filter(function(k){return k!=='def';});
+    el.innerHTML='<div class="map-legend-title">Province</div>'+provs.map(function(p){return'<div class="map-legend-item"><div class="map-legend-dot" style="background:'+PC[p]+'"></div><span>'+(PROV[p]||p)+'</span></div>';}).join('')+'<div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border)"><div class="map-legend-item"><div style="width:9px;height:9px;border:2px dashed rgba(255,255,255,.4);border-radius:50%;flex-shrink:0"></div><span>Virtual</span></div></div>';
+  }else{
+    el.innerHTML='<div class="map-legend-title">Marker size</div>'
+      +'<div class="map-legend-item"><div class="map-legend-dot" style="width:14px;height:14px;background:#FF7023"></div><span>50+ people</span></div>'
+      +'<div class="map-legend-item"><div class="map-legend-dot" style="width:10px;height:10px;background:#FF7023"></div><span>10\u201349</span></div>'
+      +'<div class="map-legend-item"><div class="map-legend-dot" style="width:7px;height:7px;background:#FF7023"></div><span>1\u20139</span></div>'
+      +'<div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border)"><div class="map-legend-item"><div style="width:9px;height:9px;border:2px dashed rgba(255,255,255,.4);border-radius:50%;flex-shrink:0"></div><span>Virtual</span></div></div>';
+  }
 }
 
 function openModal(name){

@@ -965,7 +965,7 @@ var KEY_MAP={
 // Clean a name: title-case, strip trailing codes like "(9728)"
 function cleanName(s){
   if(!s)return'';
-  return String(s).replace(/\s*\([^)]*\)\s*$','').trim()
+  return String(s).replace(/\s*\([^)]*\)\s*$/,'').trim()
     .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
 }
 // Clean a person's own name: strip leading "(MJ) " style prefixes

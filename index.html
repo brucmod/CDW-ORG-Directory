@@ -260,7 +260,7 @@
 </header>
 
 <!-- ── UPDATER MODAL ── -->
-<input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none">
+<input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none" multiple>
 <div class="upd-modal-overlay" id="upd-modal-overlay">
   <div class="upd-modal">
     <div class="upd-modal-header">
@@ -276,7 +276,7 @@
         <div id="upd-drop" style="border:2px dashed #71584C;border-radius:10px;padding:40px 20px;min-height:150px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;box-sizing:border-box;">
           <div style="font-size:32px;line-height:1;">&#x1F4C2;</div>
           <p style="margin:0;font-size:13px;color:#FFF5E3;"><strong>Click to browse</strong> or drag &amp; drop your XLSX here</p>
-          <p style="margin:0;font-size:11px;color:#D0C8BA;">Updated org export spreadsheet (.xlsx or .xls)</p>
+          <p style="margin:0;font-size:11px;color:#D0C8BA;">CDW: single file &nbsp;·&nbsp; Canada: drop all 4 files at once</p>
         </div>
       </div>
       <!-- Progress -->
@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.3';
+var APP_VERSION='2.4';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1135,96 +1135,192 @@ updDrop.addEventListener('mouseover',function(){updDrop.style.borderColor='#FF70
 updDrop.addEventListener('mouseout',function(){updDrop.style.borderColor='#71584C';updDrop.style.background='';});
 updDrop.addEventListener('dragover',function(ev){ev.preventDefault();updDrop.style.borderColor='#FF7023';updDrop.style.background='rgba(255,112,35,.06)';});
 updDrop.addEventListener('dragleave',function(){updDrop.style.borderColor='#71584C';updDrop.style.background='';});
-updDrop.addEventListener('drop',function(ev){ev.preventDefault();updDrop.style.borderColor='#71584C';updDrop.style.background='';var f=ev.dataTransfer.files[0];if(f)updProcessFile(f);});
-document.getElementById('upd-file').addEventListener('change',function(ev){var f=ev.target.files[0];if(f)updProcessFile(f);});
+updDrop.addEventListener('drop',function(ev){ev.preventDefault();updDrop.style.borderColor='#71584C';updDrop.style.background='';var files=ev.dataTransfer.files;if(files.length)updProcessFiles(files);});
+document.getElementById('upd-file').addEventListener('change',function(ev){var files=ev.target.files;if(files.length)updProcessFiles(files);});
 
-function updProcessFile(file){
-  console.log('[UPD] file selected:',file.name,file.size+'bytes');
-  var ext=file.name.split('.').pop().toLowerCase();
-  if(ext!=='xlsx'&&ext!=='xls'){showToast('Please select an .xlsx or .xls file','#DEA193');return;}
+function updProcessFiles(fileList){
+  var files=Array.from(fileList).filter(function(f){
+    var ext=f.name.split('.').pop().toLowerCase();
+    return ext==='xlsx'||ext==='xls';
+  });
+  if(!files.length){showToast('Please select .xlsx or .xls files','#DEA193');return;}
+  console.log('[UPD] files:',files.map(function(f){return f.name;}));
   document.getElementById('upd-drop-step').style.display='none';
   document.getElementById('upd-progress').style.display='block';
-  updSetProgress(10,'Loading spreadsheet library\u2026');
-  console.log('[UPD] loading SheetJS...');
+  updSetProgress(10,'Loading spreadsheet library…');
   updLoadSheetJS(function(){
-    console.log('[UPD] SheetJS ready, XLSX=',typeof XLSX);
-    updSetProgress(15,'Reading XLSX\u2026');
-    updDoRead(file);
+    console.log('[UPD] SheetJS ready');
+    updSetProgress(15,'Reading files…');
+    updDoReadAll(files);
   });
 }
 
-function updDoRead(file){
-  console.log('[UPD] updDoRead called');
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    console.log('[UPD] FileReader onload fired, bytes:',ev.target.result.byteLength);
-    try{
-      if(typeof XLSX==='undefined')throw new Error('SheetJS library failed to load \u2014 check your internet connection and refresh the page.');
-      updSetProgress(35,'Parsing rows\u2026');
-      var wb;
-      try{ wb=XLSX.read(ev.target.result,{type:'array'}); }
-      catch(xe){ throw new Error('Could not parse file: '+xe.message); }
-      console.log('[UPD] workbook sheets:',wb.SheetNames);
+function updDoReadAll(files){
+  // Read all files, then combine and process
+  var results=[], done=0;
+  files.forEach(function(file, idx){
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      results[idx]={name:file.name, data:ev.target.result};
+      done++;
+      updSetProgress(15+Math.round(25*done/files.length),'Reading '+done+' of '+files.length+' files\u2026');
+      if(done===files.length) updCombineAndProcess(results);
+    };
+    reader.onerror=function(){
+      document.getElementById('upd-progress-msg').textContent='\u26a0\ufe0f Failed to read '+file.name;
+      document.getElementById('upd-progress-msg').style.color='#DEA193';
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// Derive Canada role from filename: _AMs_ -> Account Manager, etc.
+function canadaRoleFromFilename(name){
+  var n=name.toLowerCase();
+  if(n.indexOf('_ams_')>-1||n.indexOf('_am_')>-1) return 'Account Manager';
+  if(n.indexOf('_ataes_')>-1||n.indexOf('_atae_')>-1) return 'ATAE';
+  if(n.indexOf('_faes_')>-1||n.indexOf('_fae_')>-1) return 'FAE';
+  if(n.indexOf('_mgrs_')>-1||n.indexOf('_mgr_')>-1) return 'Manager';
+  return '';
+}
+
+// Derive segment from deptDesc
+function canadaSegmentFromDept(dept){
+  if(!dept) return '';
+  var d=dept.toUpperCase();
+  if(d.indexOf('EDU')>-1) return 'Education';
+  if(d.indexOf('GOV')>-1||d.indexOf('MUN')>-1) return 'Government';
+  if(d.indexOf('HEALTH')>-1) return 'Healthcare';
+  if(d.indexOf('SB')>-1) return 'Small Business';
+  if(d.indexOf('ENT')>-1) return 'Enterprise';
+  if(d.indexOf('EAST')>-1) return 'Commercial East';
+  if(d.indexOf('WEST')>-1) return 'Commercial West';
+  if(d.indexOf('QC')>-1||d.indexOf('MTL')>-1||d.indexOf('QUEBEC')>-1) return 'Commercial Quebec';
+  return 'Commercial';
+}
+
+// Extract province code from location string e.g. "Toronto - West Mall - ON" -> "ON"
+function canadaProvinceFromLocation(loc){
+  if(!loc) return '';
+  var m=loc.match(/[-\s]([A-Z]{2})\s*$/);
+  return m ? m[1] : '';
+}
+
+// Normalise a single Canada file's rows
+function normaliseCanadaRows(rows, filename){
+  var role=canadaRoleFromFilename(filename);
+  return rows.map(function(row){
+    // Build name from firstName + lastName
+    var first=String(row['firstName']||row['FirstName']||'').trim();
+    var last=String(row['lastName']||row['LastName']||'').trim();
+    // Title-case each part
+    function tc(s){return s?s[0].toUpperCase()+s.slice(1).toLowerCase():'';}
+    var name=[tc(first),tc(last)].filter(Boolean).join(' ');
+
+    var mgrf=String(row['MGR_First']||'').trim();
+    var mgrl=String(row['MGR_Last']||'').trim();
+    var manager=[tc(mgrf),tc(mgrl)].filter(Boolean).join(' ');
+
+    var srf=String(row['SrMGR_First']||'').trim();
+    var srl=String(row['SrMGR_Last']||'').trim();
+    var srManager=[tc(srf),tc(srl)].filter(Boolean).join(' ');
+
+    var email=String(row['emailAddr']||row['email']||'').trim();
+    var location=String(row['Location Descr']||row['location']||'').trim();
+    var dept=String(row['deptDesc']||row['dept']||'').trim();
+    var los=row['LOS']||row['losMonths']||'';
+    var province=canadaProvinceFromLocation(location);
+    var segment=canadaSegmentFromDept(dept);
+    var roleVal=role||String(row['role']||'').trim();
+
+    return {
+      name:name,
+      email:email,
+      role:roleVal,
+      title:roleVal,
+      location:location,
+      province:province,
+      dept:dept,
+      segment:segment,
+      losMonths:los?String(los)+' months':'',
+      manager:manager,
+      managerEmail:'',
+      srManager:srManager
+    };
+  }).filter(function(r){ return r.name||r.email; });
+}
+
+function updCombineAndProcess(results){
+  try{
+    updSetProgress(45,'Parsing spreadsheets\u2026');
+    var allRows=[];
+    var isCanada=(ORG==='canada');
+
+    results.forEach(function(res){
+      var wb=XLSX.read(res.data,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
       var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
-      console.log('[UPD] rows parsed:',rows.length);
-      if(!rows.length)throw new Error('Spreadsheet appears to be empty');
-      updSetProgress(60,'Normalising fields\u2026');
-      var incoming=normaliseRows(rows);
-      console.log('[UPD] normalised rows:',incoming.length);
-      if(!incoming.length)throw new Error('No valid records found. Verify the file has name/email columns, and if it has a Sector column, ensure rows are set to "Sales".');
-      updSetProgress(80,'Comparing with current data\u2026');
-      var existing=CACHE[ORG]||[];
-      var result=mergeRecords(existing,incoming,ORG);
-      pendingMerge=result;
-      updSetProgress(100,'Done!');
-      document.getElementById('upd-stat-updated').textContent=result.updated;
-      document.getElementById('upd-stat-added').textContent=result.added;
-      document.getElementById('upd-stat-removed').textContent=result.removed;
-      var keyFn=MERGE_KEY[ORG];
-      var exMap={};existing.forEach(function(x){exMap[keyFn(x)]=true;});
-      var newPeople=incoming.filter(function(r){return!exMap[keyFn(r)];}).slice(0,10);
-      var prev='';
-      if(newPeople.length){
-        prev='<table><thead><tr><th>New people</th><th>Title / Role</th></tr></thead><tbody>'+
-          newPeople.map(function(r){return'<tr><td>'+e(r.name||'')+'</td><td style="color:var(--muted)">'+e(r.title||r.titleGroup||r.role||'')+'</td></tr>';}).join('')+
-          '</tbody></table>';
-      }else{
-        prev='<div style="padding:16px;text-align:center;font-size:12px;color:var(--muted)">No new people \u2014 '+result.updated+' existing records updated</div>';
+      console.log('[UPD]',res.name,rows.length,'rows');
+      if(isCanada){
+        allRows=allRows.concat(normaliseCanadaRows(rows, res.name));
+      } else {
+        allRows=allRows.concat(rows);
       }
-      document.getElementById('upd-preview').innerHTML=prev;
-      setTimeout(function(){
-        document.getElementById('upd-progress').style.display='none';
-        document.getElementById('upd-summary').style.display='block';
-        ghUpdatePushBtn();
-      },300);
-    }catch(err){
-      // Surface the error clearly
-      var msgEl=document.getElementById('upd-progress-msg');
-      msgEl.textContent='\u26a0\ufe0f '+err.message;
-      msgEl.style.color='#DEA193';
-      msgEl.style.lineHeight='1.5';
-      document.getElementById('upd-prog-bar').style.cssText='width:100%;background:#DEA193;box-shadow:none;';
-      document.getElementById('upd-prog-pct').textContent='';
-      showToast(err.message,'#DEA193');
-      // Add retry button
-      if(!document.getElementById('upd-retry-btn')){
-        var btn=document.createElement('button');
-        btn.id='upd-retry-btn';
-        btn.textContent='Try another file';
-        btn.style.cssText='margin-top:14px;padding:7px 16px;border-radius:7px;font-size:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-family:"DM Mono",monospace;display:block;';
-        btn.addEventListener('click',updReset);
-        document.getElementById('upd-progress').appendChild(btn);
-      } else { document.getElementById('upd-retry-btn').style.display='block'; }
+    });
+
+    updSetProgress(60,'Normalising fields\u2026');
+    var incoming = isCanada ? allRows : normaliseRows(allRows);
+    console.log('[UPD] total incoming:',incoming.length);
+
+    if(!incoming.length) throw new Error('No valid records found after processing.');
+
+    updSetProgress(80,'Comparing with current data\u2026');
+    var existing=CACHE[ORG]||[];
+    var result=mergeRecords(existing,incoming,ORG);
+    pendingMerge=result;
+    updSetProgress(100,'Done!');
+
+    document.getElementById('upd-stat-updated').textContent=result.updated;
+    document.getElementById('upd-stat-added').textContent=result.added;
+    document.getElementById('upd-stat-removed').textContent=result.removed;
+
+    var keyFn=MERGE_KEY[ORG];
+    var exMap={};existing.forEach(function(x){exMap[keyFn(x)]=true;});
+    var newPeople=incoming.filter(function(r){return!exMap[keyFn(r)];}).slice(0,10);
+    var prev='';
+    if(newPeople.length){
+      prev='<table><thead><tr><th>New people</th><th>Role</th></tr></thead><tbody>'+
+        newPeople.map(function(r){return'<tr><td>'+e(r.name||'')+'</td><td style="color:var(--muted)">'+e(r.role||r.titleGroup||r.title||'')+'</td></tr>';}).join('')+
+        '</tbody></table>';
+    } else {
+      prev='<div style="padding:16px;text-align:center;font-size:12px;color:var(--muted)">No new people \u2014 '+result.updated+' existing records updated</div>';
     }
-  };
-  reader.onerror=function(){
+    document.getElementById('upd-preview').innerHTML=prev;
+
+    setTimeout(function(){
+      document.getElementById('upd-progress').style.display='none';
+      document.getElementById('upd-summary').style.display='block';
+      ghUpdatePushBtn();
+    },300);
+
+  } catch(err){
     var msgEl=document.getElementById('upd-progress-msg');
-    msgEl.textContent='\u26a0\ufe0f Failed to read file \u2014 the file may be corrupted or too large.';
+    msgEl.textContent='\u26a0\ufe0f '+err.message;
     msgEl.style.color='#DEA193';
-    showToast('Failed to read file','#DEA193');
-  };
-  reader.readAsArrayBuffer(file);
+    msgEl.style.lineHeight='1.5';
+    document.getElementById('upd-prog-bar').style.cssText='height:100%;width:100%;background:#DEA193;box-shadow:none;';
+    document.getElementById('upd-prog-pct').textContent='';
+    showToast(err.message,'#DEA193');
+    var rb=document.getElementById('upd-retry-btn');
+    if(!rb){
+      rb=document.createElement('button');
+      rb.id='upd-retry-btn';
+      rb.textContent='Try another file';
+      rb.style.cssText='margin-top:14px;padding:7px 16px;border-radius:7px;font-size:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-family:"DM Mono",monospace;display:block;';
+      rb.addEventListener('click',updReset);
+      document.getElementById('upd-progress').appendChild(rb);
+    } else { rb.style.display='block'; }
+  }
 }
 
 // ── GITHUB SETTINGS ───────────────────────────────────────────────

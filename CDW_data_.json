@@ -12292,18 +12292,20 @@
     "losGroup": "LOS Unknown",
     "losMonths": "",
     "managerRaw": "",
-    "managerEmail": "",
+    "managerEmail": "meriqui@cdw.com",
     "managerTitle": "Unknown",
     "directorRaw": "",
-    "directorEmail": "",
-    "directorTitle": "",
+    "directorEmail": "petekre@cdw.com",
+    "directorTitle": "Director Area Sales",
     "sector": "Sales",
     "segment": "Commercial",
     "channel": "Commercial",
     "tier": "Sales Executives",
     "region": "Sales Executives",
     "area": "Sales Executives",
-    "district": "Sales Executives"
+    "district": "Sales Executives",
+    "manager": "Merissa Quigley",
+    "director": "J.r. Krebill"
   },
   {
     "name": "Cadie Devous",
@@ -13604,7 +13606,9 @@
     "area": "Sales Executives",
     "district": "Sales Executives",
     "manager": "Julie Kriedemann",
-    "director": "Julie Kriedemann"
+    "director": "Julie Kriedemann",
+    "managerRaw": "",
+    "directorRaw": ""
   },
   {
     "name": "Cdw House Leasing Accts",
@@ -13654,7 +13658,9 @@
     "area": "Sales Executives",
     "district": "Sales Executives",
     "manager": "Julie Kriedemann",
-    "director": "Julie Kriedemann"
+    "director": "Julie Kriedemann",
+    "managerRaw": "",
+    "directorRaw": ""
   },
   {
     "name": "Cdw House Medium Large",
@@ -24389,7 +24395,9 @@
     "area": "K-12",
     "district": "K-12",
     "manager": "Susan Schmidt",
-    "director": "Jessica Breich"
+    "director": "Jessica Breich",
+    "managerRaw": "",
+    "directorRaw": ""
   },
   {
     "name": "Donotdelete Salestrainee",
@@ -24414,7 +24422,9 @@
     "area": "K-12",
     "district": "K-12",
     "manager": "Susan Schmidt",
-    "director": "Jessica Breich"
+    "director": "Jessica Breich",
+    "managerRaw": "",
+    "directorRaw": ""
   },
   {
     "name": "Donotdelete Salestrainee",

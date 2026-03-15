@@ -236,7 +236,7 @@ var CFG = {
     cols:[{k:'name',l:'Name'},{k:'titleGroup',l:'Role'},{k:'segment',l:'Segment'},{k:'channel',l:'Channel'},{k:'tier',l:'Tier'},{k:'region',l:'Region'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
     sub:function(d){return d.title||d.titleGroup||'';},
-    tags:function(d){var t=[];if(d.titleGroup)t.push({c:'tag seg',v:d.titleGroup});if(d.channel)t.push({c:'tag ch',v:d.channel});if(d.tier)t.push({c:'tag tier',v:d.tier});return t;},
+    tags:function(d){var t=[];if(d.titleGroup)t.push({c:'tag seg',v:d.titleGroup});if(d.channel)t.push({c:'tag ch',v:d.channel});if(d.tier)t.push({c:'tag tier',v:d.tier});if(d.region)t.push({c:'tag',v:d.region});if(d.district)t.push({c:'tag',v:d.district});return t;},
     mhdr:function(d){var t='';if(d.titleGroup)t+='<span class="tag seg">'+e(d.titleGroup)+'</span> ';if(d.segment)t+='<span class="tag ch">'+e(d.segment)+'</span> ';if(d.channel)t+='<span class="tag tier">'+e(d.channel)+'</span>';return{s:d.title||d.titleGroup||'',t:t};},
     mbody:function(d){
       var s1=ds('Contact &amp; Location',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Phone',v:e(d.phone)||'&mdash;'},{l:'Location',v:e(d.location)||'&mdash;'},{l:'State',v:e(d.state)||'&mdash;'},{l:'LOS',v:e(d.losMonths)||'&mdash;'},{l:'LOS Group',v:e(d.losGroup)||'&mdash;'},{l:'Academy',v:e(d.academyFlag)||'&mdash;'}]);

@@ -479,7 +479,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='2.0';
+var APP_VERSION='2.1';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1253,7 +1253,9 @@ document.getElementById('gh-settings-toggle').addEventListener('click',function(
 document.getElementById('gh-save-btn').addEventListener('click',function(){
   var o=document.getElementById('gh-owner').value.trim();
   var r=document.getElementById('gh-repo').value.trim();
-  var t=document.getElementById('gh-token').value.trim();
+  // Strip any non-ASCII / invisible characters from the token
+  var t=document.getElementById('gh-token').value.trim().replace(/[^ -~]/g,'');
+  document.getElementById('gh-token').value=t; // show cleaned value
   if(!o||!r||!t){
     document.getElementById('gh-status').textContent='\u26a0\ufe0f All three fields required.';
     document.getElementById('gh-status').style.color='#DEA193';
@@ -1271,6 +1273,8 @@ document.getElementById('gh-save-btn').addEventListener('click',function(){
 
 // ── PUSH TO GITHUB ────────────────────────────────────────────────
 async function ghPushFile(owner,repo,token,path,content,statusEl){
+  // Ensure token is clean ASCII - localStorage can sometimes store mangled strings
+  token=token.replace(/[^ -~]/g,'');
   // Get current SHA (required for updates)
   statusEl.textContent='Checking '+path+'\u2026';
   var sha=null;

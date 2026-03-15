@@ -288,8 +288,6 @@
     </div>
   </div>
 </div>
-  </div>
-</header>
 
 <!-- ── SPLASH ── -->
 <div id="splash">
@@ -310,7 +308,7 @@
     <div class="sp-bar-wrap"><div class="sp-bar" id="sp-bar"></div></div>
     <div class="sp-status" id="sp-status">Initializing&hellip;</div>
   </div>
-  <div class="sp-footer">February 2026 · REV2</div>
+  <div class="sp-footer" id="sp-footer">February 2026 &middot; v1.0</div>
 </div>
 
 <style>
@@ -438,7 +436,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+var APP_VERSION='1.0';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
+document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 var LGEO = {'Toronto - West Mall - ON':{lat:43.6397,lng:-79.5531,label:'Toronto \u2013 West Mall',prov:'ON'},'Vancouver - BC':{lat:49.2827,lng:-123.1207,label:'Vancouver',prov:'BC'},'Edmonton - AB':{lat:53.5461,lng:-113.4938,label:'Edmonton',prov:'AB'},'Calgary - AB':{lat:51.0447,lng:-114.0719,label:'Calgary',prov:'AB'},'Virtual - Quebec':{lat:45.5019,lng:-73.5674,label:'Montreal/Quebec (Virtual)',prov:'QC'},'Ottawa - ON':{lat:45.4215,lng:-75.6972,label:'Ottawa',prov:'ON'},'Toronto Downtown - ON':{lat:43.651,lng:-79.347,label:'Toronto \u2013 Downtown',prov:'ON'},'Virtual - Alberta':{lat:52.268,lng:-113.811,label:'Alberta (Virtual)',prov:'AB'},'Virtual - Ontario':{lat:44.231,lng:-76.486,label:'Ontario (Virtual)',prov:'ON'},'Virtual - New Brunswick':{lat:46.565,lng:-66.462,label:'New Brunswick (Virtual)',prov:'NB'},'Virtual - Manitoba':{lat:49.895,lng:-97.138,label:'Manitoba (Virtual)',prov:'MB'},'Virtual - British Columbia':{lat:53.727,lng:-127.648,label:'BC (Virtual)',prov:'BC'}};
 var PC = {ON:'#FF7023',BC:'#5B8FDE',AB:'#34d399',QC:'#a78bfa',MB:'#f472b6',NB:'#facc15',NS:'#fb923c',SK:'#38bdf8',def:'#D0C8BA'};
 function pc(p){return PC[p]||PC.def;}
@@ -644,7 +644,7 @@ function switchOrg(org){
     var cfg=CFG[org];
     document.getElementById('header-eyebrow').innerHTML=cfg.eyebrow;
     document.getElementById('header-h1').innerHTML=cfg.title;
-    document.getElementById('header-meta').textContent='February 2026 \u00b7 '+data.length.toLocaleString()+' people';
+    document.getElementById('header-meta').textContent='February 2026 \u00b7 v'+APP_VERSION+' \u00b7 '+data.length.toLocaleString()+' people';
     document.getElementById('search').placeholder=cfg.hint;
     document.getElementById('search').value='';
     var mb=document.getElementById('btn-map');

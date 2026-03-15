@@ -379,7 +379,7 @@
 }
 .sp-bar{
   height:100%;width:0%;background:linear-gradient(90deg,var(--accent4),var(--accent));
-  border-radius:1px;transition:width .4s ease;
+  border-radius:1px;transition:width .5s ease;
 }
 
 .sp-status{
@@ -579,6 +579,22 @@ function spDismiss(){
   setTimeout(function(){splash.style.display='none';},650);
 }
 
+// Fake a crawling progress bar over ~3s then fire a callback
+function spFakeLoad(cb){
+  var steps=[
+    {pct:15, msg:'Connecting\u2026',     delay:0},
+    {pct:35, msg:'Loading directory\u2026', delay:500},
+    {pct:58, msg:'Fetching people\u2026',  delay:1100},
+    {pct:78, msg:'Building index\u2026',   delay:1900},
+    {pct:92, msg:'Almost there\u2026',     delay:2500},
+    {pct:100,msg:'Ready',               delay:3000}
+  ];
+  steps.forEach(function(s){
+    setTimeout(function(){spProgress(s.pct,s.msg);},s.delay);
+  });
+  setTimeout(cb,3200);
+}
+
 function showLoading(msg){document.getElementById('loading-screen').style.display='none';document.getElementById('app-shell').style.display='none';}
 function showError(msg){spDismiss();document.getElementById('loading-screen').style.display='';document.getElementById('loading-screen').innerHTML='<div style="text-align:center;padding:60px 20px"><p style="color:#DEA193;font-size:15px;margin-bottom:8px">Failed to load data</p><p style="color:var(--muted);font-size:12px;font-family:monospace">'+e(msg)+'</p><p style="color:var(--muted);font-size:11px;margin-top:12px">Make sure all JSON files are in the same folder as index.html</p></div>';}
 
@@ -601,19 +617,19 @@ var ORG_BG={cdw:'#2D2A27',dcs:'#252B24',canada:'#2B2220'};
 function switchOrg(org){
   document.documentElement.style.setProperty('--bg',ORG_BG[org]||'#2D2A27');
   var isFirst=!CACHE[org];
-  if(isFirst){spProgress(20,'Loading '+org.toUpperCase()+'…');}
   document.querySelectorAll('.org-btn').forEach(function(b){b.disabled=true;b.classList.toggle('active',b.dataset.org===org);});
   showLoading('Loading '+org.toUpperCase()+'&hellip;');
-  loadOrg(org,function(err,data){
+
+  // Track whether both data AND the fake timer are done
+  var dataReady=false, timerReady=false, pendingData=null, pendingErr=null;
+
+  function tryFinish(){
+    if(!dataReady||!timerReady)return;
     document.querySelectorAll('.org-btn').forEach(function(b){b.disabled=false;});
-    if(err){showError(err);return;}
-    if(isFirst){
-      spProgress(80,'Building directory…');
-      setTimeout(function(){
-        spProgress(100,'Ready');
-        setTimeout(spDismiss,300);
-      },300);
-    }
+    if(pendingErr){showError(pendingErr);return;}
+    if(isFirst)spDismiss();
+    // Continue with normal org switch
+    var data=pendingData;
     ORG=org;DATA=data;SCOL='name';SDIR=1;mq='';mf1='';mf2='';aloc=null;
     if(lmap){lmap.remove();lmap=null;lmarkers=[];}
     var cfg=CFG[org];
@@ -629,6 +645,21 @@ function switchOrg(org){
     document.getElementById('loading-screen').style.display='none';
     document.getElementById('app-shell').style.display='';
     render();
+  }
+
+  // Start fake progress bar (only on first load of this org)
+  if(isFirst){
+    spFakeLoad(function(){timerReady=true;tryFinish();});
+  } else {
+    timerReady=true;
+  }
+
+  // Kick off actual data load
+  loadOrg(org,function(err,data){
+    pendingErr=err;
+    pendingData=data;
+    dataReady=true;
+    tryFinish();
   });
 }
 

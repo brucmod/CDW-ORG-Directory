@@ -433,10 +433,9 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='1.4';
+var APP_VERSION='1.5';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1045,10 +1044,30 @@ function updReset(){
   updSetProgress(0,'Reading file\u2026');
 }
 
+function updLoadSheetJS(cb){
+  if(typeof XLSX!=='undefined'){cb();return;}
+  var s=document.createElement('script');
+  s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+  s.onload=function(){cb();};
+  s.onerror=function(){
+    // fallback to cdnjs
+    var s2=document.createElement('script');
+    s2.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s2.onload=function(){cb();};
+    s2.onerror=function(){
+      alert('Could not load the spreadsheet library. Check your internet connection and try again.');
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s);
+}
+
 function updOpen(){
   updReset();
   document.getElementById('upd-modal-meta').textContent='Loading new data for '+CFG[ORG].eyebrow.replace(/\u00b7/g,'\u00b7');
   document.getElementById('upd-modal-overlay').classList.add('open');
+  // Pre-load SheetJS in background so it's ready when the user picks a file
+  updLoadSheetJS(function(){});
 }
 function updClose(){document.getElementById('upd-modal-overlay').classList.remove('open');}
 
@@ -1069,7 +1088,14 @@ function updProcessFile(file){
   if(ext!=='xlsx'&&ext!=='xls'){showToast('Please select an .xlsx or .xls file','#DEA193');return;}
   document.getElementById('upd-drop-step').style.display='none';
   document.getElementById('upd-progress').style.display='';
-  updSetProgress(15,'Reading XLSX\u2026');
+  updSetProgress(10,'Loading spreadsheet library\u2026');
+  updLoadSheetJS(function(){
+    updSetProgress(15,'Reading XLSX\u2026');
+    updDoRead(file);
+  });
+}
+
+function updDoRead(file){
   var reader=new FileReader();
   reader.onload=function(ev){
     try{

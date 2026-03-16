@@ -599,12 +599,12 @@ var CFG = {
       var ch='';if(d.manager)ch+=cr('Manager',d.manager,d.managerTitle,d.managerEmail);if(d.director)ch+=cr('Director',d.director,d.directorTitle,d.directorEmail);
       if(ch)ch='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+ch+'</div>';
       return s1+s2+ch;}},
-  dcs:{file:'dcs_data.json',eyebrow:'CDW \u00b7 Hybrid Infrastructure',title:'DCS Org <em>Directory</em>',hint:'Search name, title, email, location\u2026',hasMap:false,
+  dcs:{file:'dcs_data.json',eyebrow:'CDW \u00b7 Hybrid Infrastructure',title:'DCS Org <em>Directory</em>',hint:'Search name, title, email, location\u2026',hasMap:false,defaultView:'cards',
     filters:[{id:'f-mgr',key:'manager',lbl:'All Managers',vfn:function(d){var m=d.manager;return(!m||m==='-'||m.charAt(0)==='_')?null:m;}},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-sol',key:'solutionArea',lbl:'All Solution Areas'}],
     cols:[{k:'name',l:'Name'},{k:'title',l:'Title'},{k:'segment',l:'Segment'},{k:'solutionArea',l:'Solution Area'},{k:'homeLocation',l:'Home'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
     sub:function(d){return d.title||'';},
-    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.solutionArea)t.push({c:'tag sol',v:d.solutionArea});if(d.homeLocation)t.push({c:'tag',v:'Home Location \u2013 '+d.homeLocation});return t;},
+    tags:function(d){var t=[];if(d.segment)t.push({c:'tag seg',v:d.segment});if(d.solutionArea)t.push({c:'tag sol',v:d.solutionArea});if(d.homeLocation)t.push({c:'tag',v:'Home Location \u2013 '+d.homeLocation});if(d.statesCovers)t.push({c:'tag',v:'Coverage \u2013 '+d.statesCovers});return t;},
     mhdr:function(d){var t='';if(d.segment)t+='<span class="tag seg">'+e(d.segment)+'</span> ';if(d.solutionArea)t+='<span class="tag sol">'+e(d.solutionArea)+'</span>';return{s:d.title||'',t:t};},
     mbody:function(d){var m=(!d.manager||d.manager==='-'||d.manager.charAt(0)==='_')?'Leadership':e(d.manager);return ds('Details',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Manager',v:m},{l:'Solution Area',v:e(d.solutionArea)||'&mdash;'},{l:'Segment',v:e(d.segment)||'&mdash;',f:1},{l:'Home Location',v:e(d.homeLocation)||'&mdash;'},{l:'CDW Office',v:e(d.officeLocation)||'&mdash;'},{l:'States Covered',v:e(d.statesCovers)||'&mdash;',f:1}]);}},
   canada:{file:'canada_data.json',eyebrow:'CDW \u00b7 Canada',title:'Canada Org <em>Directory</em>',hint:'Search name, email, location, manager\u2026',hasMap:true,
@@ -703,6 +703,7 @@ function switchOrg(org){
     var mb=document.getElementById('btn-map');
     mb.style.display=cfg.hasMap?'':'none';
     if(!cfg.hasMap&&VIEW==='map'){VIEW='table';document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('btn-table').classList.add('active');}
+    if(cfg.defaultView&&VIEW!==cfg.defaultView){VIEW=cfg.defaultView;document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});var dvb=document.getElementById('btn-'+cfg.defaultView);if(dvb)dvb.classList.add('active');}
     populateFilters();
     document.getElementById('loading-screen').style.display='none';
     document.getElementById('app-shell').style.display='';

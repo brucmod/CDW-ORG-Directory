@@ -488,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='3.2';
+var APP_VERSION='3.3';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1093,7 +1093,16 @@ var KEY_MAP={
   'statescovers':'statesCovers','officelocation':'officeLocation',
   'srmanager':'srManager','dept':'dept','province':'province','role':'role',
   'sector':'sector','segment':'segment','channel':'channel',
-  'tier':'tier','region':'region','area':'area','district':'district'
+  'tier':'tier','region':'region','area':'area','district':'district',
+  // DCS org spreadsheet column aliases (DCS_Org_March_2026.xlsx format)
+  'hicoworker':'name',
+  'email':'email',
+  'role/title':'title',
+  'primarysolutionarea':'solutionArea',
+  'primarysegmentcoverage/areaofresponsibility(aor)':'segment',
+  'statescoworkerscovers':'statesCovers',
+  'statescoworkercovers':'statesCovers',
+  'cdwofficelocation':'officeLocation'
 };
 
 // Clean a name: title-case, strip trailing codes like "(9728)"

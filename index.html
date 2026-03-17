@@ -298,11 +298,10 @@
       </div>
       <!-- Summary -->
       <div id="upd-summary" style="display:none;">
-        <div class="upd-stats" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+        <div class="upd-stats">
           <div class="upd-stat changed"><div class="sv" id="upd-stat-updated">0</div><div class="sl">Updated</div></div>
           <div class="upd-stat added"><div class="sv" id="upd-stat-added">0</div><div class="sl">New People</div></div>
           <div class="upd-stat removed"><div class="sv" id="upd-stat-removed">0</div><div class="sl">Removed</div></div>
-          <div class="upd-stat" style="border-color:rgba(208,200,186,.2);"><div class="sv" id="upd-stat-skipped" style="color:var(--muted);">0</div><div class="sl">Skipped</div></div>
         </div>
         <div class="upd-preview" id="upd-preview"></div>
         <p class="upd-note">Changes are applied to the directory and pushed to GitHub Pages.</p>
@@ -839,7 +838,7 @@ function cardTags(d){
 function buildCard(d,cls){
   cls=cls||'card';
   var tags=cardTags(d);
-  var mgr=d[CFG[ORG].grpKey]||'';
+  var mgr=cleanName(d[CFG[ORG].grpKey]||'');
   return'<div class="'+cls+'" data-name="'+encodeURIComponent(d.name)+'">'+
     '<div class="card-header">'+av(d.name)+'<div><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
     '<div class="card-tags">'+tags+'</div>'+
@@ -1119,16 +1118,39 @@ var KEY_MAP={
 };
 
 // Clean a name: title-case, strip trailing codes like "(9728)"
+// Shared word-level title-caser that handles Mc/Mac, O', D', hyphenated names
+function titleCaseWord(w){
+  if(!w) return '';
+  // Preserve all-caps abbreviations (2-3 chars like "CJ", "DJ")
+  if(w.length<=3 && w===w.toUpperCase() && /^[A-Z]+$/.test(w)) return w;
+  var lower=w.toLowerCase();
+  // Mc/Mac prefixes
+  if(/^mc[a-z]/.test(lower)) return 'Mc'+lower[2].toUpperCase()+lower.slice(3);
+  if(/^mac[a-z]/.test(lower)) return 'Mac'+lower[3].toUpperCase()+lower.slice(4);
+  // O'/D'/L' prefixes
+  if(/^[odl]'[a-z]/i.test(w)) return w[0].toUpperCase()+"'"+w[2].toUpperCase()+lower.slice(3);
+  // Hyphenated: title-case each part
+  if(w.indexOf('-')>0) return w.split('-').map(function(p){return titleCaseWord(p);}).join('-');
+  return lower[0].toUpperCase()+lower.slice(1);
+}
 function cleanName(s){
-  if(!s)return'';
-  return String(s).replace(/\s*\([^)]*\)\s*$/,'').trim()
-    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
+  if(!s) return '';
+  return String(s)
+    .replace(/^_+|_+$/g,'')          // strip leading/trailing underscores
+    .replace(/_+/g,' ')              // replace any remaining underscores with spaces
+    .replace(/\s*\([^)]*\)\s*$/,'') // strip trailing (nickname) suffixes
+    .trim()
+    .split(/\s+/).map(titleCaseWord).join(' ');
 }
 // Clean a person's own name: strip leading "(MJ) " style prefixes
 function cleanPersonName(s){
-  if(!s)return'';
-  return String(s).replace(/^\([^)]*\)\s*/,'').trim()
-    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
+  if(!s) return '';
+  return String(s)
+    .replace(/^_+|_+$/g,'')          // strip leading/trailing underscores
+    .replace(/_+/g,' ')
+    .replace(/^\([^)]*\)\s*/,'')     // strip leading (nickname) prefix
+    .trim()
+    .split(/\s+/).map(titleCaseWord).join(' ');
 }
 
 function normaliseRows(rows){
@@ -1157,37 +1179,26 @@ function normaliseRows(rows){
       r.titleGroup=r.title&&r.title.trim()?r.title.trim():'Other';
     }
   });
-  // ── Junk / non-person filter ──────────────────────────────────────────────
-  // Patterns anywhere in the name that indicate placeholder/system accounts
-  var JUNK_NAME=/\b(house\s*ac(?:ct|count)|hse\s*acct?|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|salestrainee|sales\s*trainee|placeholder|vacant|open\s*req|temp\d*\s*temp\d*|temporary\s*sales|qa\s*sales|system\s*engineer\s*grp|fncl\s*svcs|hc\s*ent\s*(?:east|west)|nonprofit\s*ne|navy\s*hogan|k-12\s*(?:small|tad|enterp)|k-12\s*enterpr?\s*ise|edca|edch|edpr|edxs|scck|scce|sccg|scch|sccw|schc|sche|soh1|soho|sh80|sxrx|rslr|bbg1|bsk1|ignw|dono|uscb|usps\s*adept|us\s*(?:air\s*force|army|navy)|dod(?:\s*advapgm)?|rippling\s*house|gifting\s*house|landover\s*-\s*house|leesburg\s*-\s*house|dc\s*metro\s*-\s*house|congresional\s*-\s*house|consumer\s*house|sys\s*integrat|hc\s*payor)\b/i;
-  // Patterns that must appear at the start of the name
+  // Patterns that indicate non-person/house/bot accounts
+  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|salestrainee|placeholder|vacant|open\s*req|tbd|n\/a)\b/i;
   var JUNK_START=/^(core\s+hse|all\s+|total\s+|group\s+|houseacct|rpabot|donotdelete)/i;
-  // Nickname format like "John (jack) Smith" — clean to preferred name
-  function cleanNickname(nm){
-    return nm.replace(/\s*\([^)]{1,20}\)\s*/g,' ').replace(/\s{2,}/g,' ').trim();
-  }
-  var skipped=0;
-  var filtered=out.filter(function(r){
-    if(!r.name&&!r.email){skipped++;return false;}
-    if(r.sector&&r.sector.toLowerCase()!=='sales'){skipped++;return false;}
+  return out.filter(function(r){
+    if(!r.name&&!r.email)return false;
+    if(r.sector&&r.sector.toLowerCase()!=='sales')return false;
     var nm=r.name||'';
-    if(JUNK_NAME.test(nm)||JUNK_START.test(nm)){skipped++;return false;}
-    // All-caps names longer than 20 chars are account placeholders
-    if(nm===nm.toUpperCase()&&nm.replace(/\s/g,'').length>20){skipped++;return false;}
+    if(JUNK_NAME.test(nm)||JUNK_START.test(nm))return false;
+    // All-caps names longer than 20 chars are usually account placeholders
+    if(nm===nm.toUpperCase()&&nm.replace(/\s/g,'').length>20)return false;
     // Filter out contractors/affiliates/vendors (title ends with - EXT)
     var ttl=r.title||'';
-    if(/[-–]\s*EXT\s*$/i.test(ttl)){skipped++;return false;}
-    // No email AND unknown/blank title = placeholder row
+    if(/[-–]\s*EXT\s*$/i.test(ttl))return false;
+    // Filter out cards with no email AND (no title OR unknown/other title)
     if(!r.email){
       var tg=(r.titleGroup||'').trim().toLowerCase();
-      if(!ttl||!tg||tg==='unknown'||tg==='other'||tg==='n/a'||tg==='tbd'){skipped++;return false;}
+      if(!ttl||!tg||tg==='unknown'||tg==='other'||tg==='n/a'||tg==='tbd')return false;
     }
-    // Clean nickname formats in-place
-    if(/\([^)]{1,20}\)/.test(nm)) r.name=cleanNickname(nm);
     return true;
   });
-  filtered._skipped=skipped;
-  return filtered;
 }
 
 function mergeRecords(existing,incoming,org){
@@ -1357,11 +1368,11 @@ function normaliseCanadaRows(rows, filename){
 
     var mgrf=String(row['MGR_First']||'').trim();
     var mgrl=String(row['MGR_Last']||'').trim();
-    var manager=[tc(mgrf),tc(mgrl)].filter(Boolean).join(' ');
+    var manager=cleanName([mgrf,mgrl].filter(Boolean).join(' '));
 
     var srf=String(row['SrMGR_First']||'').trim();
     var srl=String(row['SrMGR_Last']||'').trim();
-    var srManager=[tc(srf),tc(srl)].filter(Boolean).join(' ');
+    var srManager=cleanName([srf,srl].filter(Boolean).join(' '));
 
     var email=String(row['emailAddr']||row['email']||'').trim();
     var location=String(row['Location Descr']||row['location']||'').trim();
@@ -1385,14 +1396,7 @@ function normaliseCanadaRows(rows, filename){
       managerEmail:'',
       srManager:srManager
     };
-  }).filter(function(r){
-    if(!r.name&&!r.email) return false;
-    var nm=(r.name||'').toLowerCase();
-    // Same junk patterns applied to Canada rows
-    if(/\b(house\s*ac(?:ct|count)|salestrainee|sales\s*trainee|placeholder|vacant|temp\d*\s*temp\d*|temporary\s*sales|qa\s*sales|system\s*engineer\s*grp|fncl\s*svcs|hc\s*ent)\b/i.test(nm)) return false;
-    if(/\([^)]{1,20}\)/.test(r.name)) r.name=r.name.replace(/\s*\([^)]{1,20}\)\s*/g,' ').replace(/\s{2,}/g,' ').trim();
-    return true;
-  });
+  }).filter(function(r){ return r.name||r.email; });
 }
 
 function updCombineAndProcess(results){
@@ -1401,7 +1405,6 @@ function updCombineAndProcess(results){
     var allRows=[];
     var isCanada=(ORG==='canada');
 
-    var rawTotal=0;
     results.forEach(function(res){
       var wb=XLSX.read(res.data,{type:'array'});
       var ws=wb.Sheets[wb.SheetNames[0]];
@@ -1412,13 +1415,11 @@ function updCombineAndProcess(results){
       } else {
         allRows=allRows.concat(rows);
       }
-      rawTotal+=rows.length;
     });
 
     updSetProgress(60,'Normalising fields\u2026');
     var incoming = isCanada ? allRows : normaliseRows(allRows);
-    var skippedCount = isCanada ? (rawTotal - incoming.length) : (incoming._skipped||0);
-    console.log('[UPD] total incoming:',incoming.length,'skipped:',skippedCount);
+    console.log('[UPD] total incoming:',incoming.length);
 
     if(!incoming.length) throw new Error('No valid records found after processing.');
 
@@ -1431,7 +1432,6 @@ function updCombineAndProcess(results){
     document.getElementById('upd-stat-updated').textContent=result.updated;
     document.getElementById('upd-stat-added').textContent=result.added;
     document.getElementById('upd-stat-removed').textContent=result.removed;
-    document.getElementById('upd-stat-skipped').textContent=skippedCount;
 
     var keyFn=MERGE_KEY[ORG];
     var exMap={};existing.forEach(function(x){exMap[keyFn(x)]=true;});

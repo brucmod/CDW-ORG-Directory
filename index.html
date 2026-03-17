@@ -644,18 +644,10 @@ function spDismiss(){
 
 // Fake a crawling progress bar over ~3s then fire a callback
 function spFakeLoad(cb){
-  var steps=[
-    {pct:15, msg:'Connecting\u2026',     delay:0},
-    {pct:35, msg:'Loading directory\u2026', delay:500},
-    {pct:58, msg:'Fetching people\u2026',  delay:1100},
-    {pct:78, msg:'Building index\u2026',   delay:1900},
-    {pct:92, msg:'Almost there\u2026',     delay:2500},
-    {pct:100,msg:'Ready',               delay:3000}
-  ];
-  steps.forEach(function(s){
-    setTimeout(function(){spProgress(s.pct,s.msg);},s.delay);
-  });
-  setTimeout(cb,3200);
+  // Show quick progress animation then yield immediately to real data
+  spProgress(40,'Loading directory…');
+  setTimeout(function(){spProgress(80,'Building index…');},250);
+  cb();
 }
 
 function showLoading(msg){document.getElementById('loading-screen').style.display='none';document.getElementById('app-shell').style.display='none';}
@@ -663,7 +655,7 @@ function showError(msg){spDismiss();document.getElementById('loading-screen').st
 
 function loadOrg(org,cb){
   if(CACHE[org]){cb(null,CACHE[org]);return;}
-  var url=CFG[org].file+'?v='+Date.now();
+  var url=CFG[org].file;
   var x=new XMLHttpRequest();
   x.open('GET',url);
   x.onload=function(){
@@ -714,7 +706,7 @@ function switchOrg(org){
 
   // Start fake progress bar (only on first load of this org)
   if(isFirst){
-    spFakeLoad(function(){timerReady=true;tryFinish();});
+    spFakeLoad(function(){setTimeout(function(){timerReady=true;tryFinish();},300);});
   } else {
     timerReady=true;
   }
@@ -725,6 +717,14 @@ function switchOrg(org){
     pendingData=data;
     dataReady=true;
     tryFinish();
+    // Pre-warm the other orgs in the background so switching is instant next time
+    if(!err){
+      Object.keys(CFG).forEach(function(o){
+        if(o!==org&&!CACHE[o]){
+          setTimeout(function(){loadOrg(o,function(){});},1500);
+        }
+      });
+    }
   });
 }
 
@@ -1178,20 +1178,10 @@ function normaliseRows(rows){
   });
 }
 
-function mergeRecords(existing,incoming,org,incomingRoles){
+function mergeRecords(existing,incoming,org){
   var keyFn=MERGE_KEY[org];
   var exMap={};
   existing.forEach(function(r){exMap[keyFn(r)]=r;});
-
-  // For Canada partial uploads: preserve existing records whose role
-  // was not present in the dropped files (e.g. dropping only MDC keeps AMs/FAEs/etc.)
-  var preserved=[];
-  if(org==='canada'&&incomingRoles&&incomingRoles.length){
-    existing.forEach(function(r){
-      if(incomingRoles.indexOf(r.role)===-1) preserved.push(r);
-    });
-  }
-
   var merged=incoming.map(function(r){
     var key=keyFn(r);
     var old=exMap[key];
@@ -1201,14 +1191,10 @@ function mergeRecords(existing,incoming,org,incomingRoles){
       if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){out[k]=old[k];}
     });
     return out;
-  }).concat(preserved);
-
+  });
   var added=0,updated=0;
   incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
-  var removed=existing.filter(function(r){
-    if(org==='canada'&&incomingRoles&&incomingRoles.length&&incomingRoles.indexOf(r.role)===-1) return false;
-    return !incoming.some(function(i){return keyFn(i)===keyFn(r);});
-  }).length;
+  var removed=existing.length-updated;
   return{data:merged,added:added,updated:updated,removed:removed};
 }
 
@@ -1416,14 +1402,7 @@ function updCombineAndProcess(results){
 
     updSetProgress(80,'Comparing with current data\u2026');
     var existing=CACHE[ORG]||[];
-    // Collect the distinct roles present in the incoming files so mergeRecords
-    // knows which roles were touched and which should be preserved untouched.
-    var incomingRoles=[];
-    if(isCanada){
-      incoming.forEach(function(r){if(r.role&&incomingRoles.indexOf(r.role)===-1)incomingRoles.push(r.role);});
-      console.log('[UPD] incoming roles:',incomingRoles);
-    }
-    var result=mergeRecords(existing,incoming,ORG,incomingRoles);
+    var result=mergeRecords(existing,incoming,ORG);
     pendingMerge=result;
     updSetProgress(100,'Done!');
 

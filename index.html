@@ -488,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='3.9';
+var APP_VERSION='4.00';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -838,7 +838,7 @@ function cardTags(d){
 function buildCard(d,cls){
   cls=cls||'card';
   var tags=cardTags(d);
-  var mgr=cleanName(d[CFG[ORG].grpKey]||'');
+  var mgr=d[CFG[ORG].grpKey]||'';
   return'<div class="'+cls+'" data-name="'+encodeURIComponent(d.name)+'">'+
     '<div class="card-header">'+av(d.name)+'<div><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
     '<div class="card-tags">'+tags+'</div>'+
@@ -1118,39 +1118,16 @@ var KEY_MAP={
 };
 
 // Clean a name: title-case, strip trailing codes like "(9728)"
-// Shared word-level title-caser that handles Mc/Mac, O', D', hyphenated names
-function titleCaseWord(w){
-  if(!w) return '';
-  // Preserve all-caps abbreviations (2-3 chars like "CJ", "DJ")
-  if(w.length<=3 && w===w.toUpperCase() && /^[A-Z]+$/.test(w)) return w;
-  var lower=w.toLowerCase();
-  // Mc/Mac prefixes
-  if(/^mc[a-z]/.test(lower)) return 'Mc'+lower[2].toUpperCase()+lower.slice(3);
-  if(/^mac[a-z]/.test(lower)) return 'Mac'+lower[3].toUpperCase()+lower.slice(4);
-  // O'/D'/L' prefixes
-  if(/^[odl]'[a-z]/i.test(w)) return w[0].toUpperCase()+"'"+w[2].toUpperCase()+lower.slice(3);
-  // Hyphenated: title-case each part
-  if(w.indexOf('-')>0) return w.split('-').map(function(p){return titleCaseWord(p);}).join('-');
-  return lower[0].toUpperCase()+lower.slice(1);
-}
 function cleanName(s){
-  if(!s) return '';
-  return String(s)
-    .replace(/^_+|_+$/g,'')          // strip leading/trailing underscores
-    .replace(/_+/g,' ')              // replace any remaining underscores with spaces
-    .replace(/\s*\([^)]*\)\s*$/,'') // strip trailing (nickname) suffixes
-    .trim()
-    .split(/\s+/).map(titleCaseWord).join(' ');
+  if(!s)return'';
+  return String(s).replace(/\s*\([^)]*\)\s*$/,'').trim()
+    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
 }
 // Clean a person's own name: strip leading "(MJ) " style prefixes
 function cleanPersonName(s){
-  if(!s) return '';
-  return String(s)
-    .replace(/^_+|_+$/g,'')          // strip leading/trailing underscores
-    .replace(/_+/g,' ')
-    .replace(/^\([^)]*\)\s*/,'')     // strip leading (nickname) prefix
-    .trim()
-    .split(/\s+/).map(titleCaseWord).join(' ');
+  if(!s)return'';
+  return String(s).replace(/^\([^)]*\)\s*/,'').trim()
+    .split(' ').map(function(w){return w?w[0].toUpperCase()+w.slice(1).toLowerCase():'';}).join(' ');
 }
 
 function normaliseRows(rows){
@@ -1368,11 +1345,11 @@ function normaliseCanadaRows(rows, filename){
 
     var mgrf=String(row['MGR_First']||'').trim();
     var mgrl=String(row['MGR_Last']||'').trim();
-    var manager=cleanName([mgrf,mgrl].filter(Boolean).join(' '));
+    var manager=[tc(mgrf),tc(mgrl)].filter(Boolean).join(' ');
 
     var srf=String(row['SrMGR_First']||'').trim();
     var srl=String(row['SrMGR_Last']||'').trim();
-    var srManager=cleanName([srf,srl].filter(Boolean).join(' '));
+    var srManager=[tc(srf),tc(srl)].filter(Boolean).join(' ');
 
     var email=String(row['emailAddr']||row['email']||'').trim();
     var location=String(row['Location Descr']||row['location']||'').trim();

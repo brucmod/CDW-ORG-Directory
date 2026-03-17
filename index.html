@@ -1178,10 +1178,20 @@ function normaliseRows(rows){
   });
 }
 
-function mergeRecords(existing,incoming,org){
+function mergeRecords(existing,incoming,org,incomingRoles){
   var keyFn=MERGE_KEY[org];
   var exMap={};
   existing.forEach(function(r){exMap[keyFn(r)]=r;});
+
+  // For Canada partial uploads: preserve existing records whose role
+  // was not present in the dropped files (e.g. dropping only MDC keeps AMs/FAEs/etc.)
+  var preserved=[];
+  if(org==='canada'&&incomingRoles&&incomingRoles.length){
+    existing.forEach(function(r){
+      if(incomingRoles.indexOf(r.role)===-1) preserved.push(r);
+    });
+  }
+
   var merged=incoming.map(function(r){
     var key=keyFn(r);
     var old=exMap[key];
@@ -1191,10 +1201,14 @@ function mergeRecords(existing,incoming,org){
       if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){out[k]=old[k];}
     });
     return out;
-  });
+  }).concat(preserved);
+
   var added=0,updated=0;
   incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
-  var removed=existing.length-updated;
+  var removed=existing.filter(function(r){
+    if(org==='canada'&&incomingRoles&&incomingRoles.length&&incomingRoles.indexOf(r.role)===-1) return false;
+    return !incoming.some(function(i){return keyFn(i)===keyFn(r);});
+  }).length;
   return{data:merged,added:added,updated:updated,removed:removed};
 }
 
@@ -1402,7 +1416,14 @@ function updCombineAndProcess(results){
 
     updSetProgress(80,'Comparing with current data\u2026');
     var existing=CACHE[ORG]||[];
-    var result=mergeRecords(existing,incoming,ORG);
+    // Collect the distinct roles present in the incoming files so mergeRecords
+    // knows which roles were touched and which should be preserved untouched.
+    var incomingRoles=[];
+    if(isCanada){
+      incoming.forEach(function(r){if(r.role&&incomingRoles.indexOf(r.role)===-1)incomingRoles.push(r.role);});
+      console.log('[UPD] incoming roles:',incomingRoles);
+    }
+    var result=mergeRecords(existing,incoming,ORG,incomingRoles);
     pendingMerge=result;
     updSetProgress(100,'Done!');
 

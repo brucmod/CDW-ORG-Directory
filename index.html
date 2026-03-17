@@ -488,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='3.5';
+var APP_VERSION='3.8';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -643,11 +643,26 @@ function spDismiss(){
 }
 
 // Fake a crawling progress bar over ~3s then fire a callback
-function spFakeLoad(cb){
-  // Show quick progress animation then yield immediately to real data
-  spProgress(40,'Loading directory…');
-  setTimeout(function(){spProgress(80,'Building index…');},250);
-  cb();
+function spFakeLoad(cb, full){
+  if(full){
+    // First ever page load - run the full branded splash sequence
+    var steps=[
+      {pct:15, msg:'Connecting…',        delay:0},
+      {pct:35, msg:'Loading directory…', delay:500},
+      {pct:58, msg:'Fetching people…',   delay:1100},
+      {pct:78, msg:'Building index…',    delay:1900},
+      {pct:92, msg:'Almost there…',      delay:2500},
+      {pct:100,msg:'Ready',                   delay:3000}
+    ];
+    steps.forEach(function(s){
+      setTimeout(function(){spProgress(s.pct,s.msg);},s.delay);
+    });
+    setTimeout(cb,3200);
+  } else {
+    // Subsequent org switches - quick flash then done
+    spProgress(40,'Loading…');
+    setTimeout(function(){spProgress(100,'Ready');cb();},300);
+  }
 }
 
 function showLoading(msg){document.getElementById('loading-screen').style.display='none';document.getElementById('app-shell').style.display='none';}
@@ -706,7 +721,8 @@ function switchOrg(org){
 
   // Start fake progress bar (only on first load of this org)
   if(isFirst){
-    spFakeLoad(function(){setTimeout(function(){timerReady=true;tryFinish();},300);});
+    var _isPageLoad=Object.keys(CACHE).length===0;
+    spFakeLoad(function(){timerReady=true;tryFinish();},_isPageLoad);
   } else {
     timerReady=true;
   }
@@ -717,7 +733,7 @@ function switchOrg(org){
     pendingData=data;
     dataReady=true;
     tryFinish();
-    // Pre-warm the other orgs in the background so switching is instant next time
+    // Pre-warm other orgs silently so switching to them is instant
     if(!err){
       Object.keys(CFG).forEach(function(o){
         if(o!==org&&!CACHE[o]){

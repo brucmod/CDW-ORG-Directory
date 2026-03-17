@@ -488,7 +488,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='3.3';
+var APP_VERSION='3.4';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1145,8 +1145,8 @@ function normaliseRows(rows){
     }
   });
   // Patterns that indicate non-person/house/bot accounts
-  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|trainee|placeholder|vacant|open\s*req|tbd|n\/a)\b/i;
-  var JUNK_START=/^(core\s+hse|all\s+|total\s+|group\s+|houseacct|rpabot|donotdelete)/i;
+  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|trainee|placeholder|vacant|open\s*req|tbd|n\/a|house\s*account|dummy|salestrainee|bid\s*desk|signon|web\s*test|duplicate\s*accts?|liquidator|leasing\s*accts?|medium\s*large)\b/i;
+  var JUNK_START=/^(core\s+hse|all\s+|total\s+|group\s+|houseacct|rpabot|donotdelete|scc[a-z]?\s|salescontact\s|scsl\s|scvc\s|schc\s|sche\s|schi\s|system\s+engineer\s+grp|commercial\s+ent|commercial\s+ter|commercial\s+small|corp\s+enterpr|corp\s+territo|fncl\s+svcs|hc\s+(ent|mjr|territory|payor|strategic)|he\s+strategic|higher\s+educa|healthcare\s+(small|strategic|duplicate)|nonprofit\s|k-12\s+(enterp|small|tad)|edca\s|edch\s|edpr\s|edxs\s|temp[0-9]+\s+temp[0-9]+|temporary\s+salesmgr|qa\s+sales\s+manager|dflt\s+rep|sls\s+contact\s+center|spsautoprd|mwiprod|tandata|showcase|purchasing\s+bid\s+desk|acquisition\s+(east|west|central)|federal\s+aerospace\s*$|field\s+sales\s+great\s+lakes|mir-area|beaumont\s+team|berbee\s+cdw|downtown\s+mis|ignw\s+house|navy\s+hogan|rippling\s+house|gifting\s+house|rslr\s+house|btc\s+account\s+manager|consumer\s+house|dono\s+house|dod\s+(advapgm|-)\s|bame-boeing|bsk1|bbg1|sh80|soh1|soho|sxrx|uscb|congresional|com-ent\s)/i;
   return out.filter(function(r){
     if(!r.name&&!r.email)return false;
     if(r.sector&&r.sector.toLowerCase()!=='sales')return false;

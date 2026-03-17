@@ -1157,7 +1157,7 @@ function normaliseRows(rows){
     }
   });
   // Patterns that indicate non-person/house/bot accounts
-  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|trainee|placeholder|vacant|open\s*req|tbd|n\/a)\b/i;
+  var JUNK_NAME=/\b(hse|house\s*acct|houseacct|donotdelete|do\s*not\s*delete|rpa\s*bot|rpabot|salestrainee|placeholder|vacant|open\s*req|tbd|n\/a)\b/i;
   var JUNK_START=/^(core\s+hse|all\s+|total\s+|group\s+|houseacct|rpabot|donotdelete)/i;
   return out.filter(function(r){
     if(!r.name&&!r.email)return false;
@@ -1169,6 +1169,11 @@ function normaliseRows(rows){
     // Filter out contractors/affiliates/vendors (title ends with - EXT)
     var ttl=r.title||'';
     if(/[-–]\s*EXT\s*$/i.test(ttl))return false;
+    // Filter out cards with no email AND (no title OR unknown/other title)
+    if(!r.email){
+      var tg=(r.titleGroup||'').trim().toLowerCase();
+      if(!ttl||!tg||tg==='unknown'||tg==='other'||tg==='n/a'||tg==='tbd')return false;
+    }
     return true;
   });
 }

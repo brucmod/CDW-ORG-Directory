@@ -6,7 +6,6 @@
     "title": "Account Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-<<<<<<< HEAD
     "dept": "CAN-AM EDU 599",
     "segment": "Education",
     "losMonths": "286 months",
@@ -3803,9 +3802,6 @@
     "location": "Toronto - West Mall - ON",
     "province": "ON",
     "dept": "CAN-Mgr Residency 688",
-=======
-    "dept": "CAN-MDC Sr Manager",
->>>>>>> 70d7c66161fa93cb0741d460bbc9b7d423a74fd5
     "segment": "Commercial",
     "losMonths": "",
     "manager": "Kale Johnson",
@@ -3829,7 +3825,6 @@
     "phone": ""
   },
   {
-<<<<<<< HEAD
     "name": "Mickael Couderc",
     "email": "Mickael.Couderc@cdw.ca",
     "role": "Manager",
@@ -3924,12 +3919,6 @@
     "email": "rowena.samuel@cdw.ca",
     "role": "MDC",
     "title": "Manager",
-=======
-    "name": "Chris Maki",
-    "email": "chris.maki@cdw.ca",
-    "role": "",
-    "title": "",
->>>>>>> 70d7c66161fa93cb0741d460bbc9b7d423a74fd5
     "location": "Toronto - West Mall - ON",
     "province": "ON",
     "dept": "CAN-MDC Manager",

@@ -33,6 +33,9 @@
   .org-btn:disabled { opacity:.4; cursor:default; }
   .upd-btn { display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--border); border-radius:7px; color:var(--muted); cursor:pointer; padding:8px 14px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.07em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
   .upd-btn:hover { border-color:var(--accent3); color:var(--accent3); }
+  .smit-btn { display:none; align-items:center; gap:6px; background:none; border:1px solid var(--border); border-radius:6px; color:var(--muted); cursor:pointer; padding:5px 10px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.07em; text-transform:uppercase; transition:all .15s; white-space:nowrap; }
+  .smit-btn:hover { border-color:var(--accent4); color:var(--accent4); }
+  .smit-btn.active { border-color:var(--accent4); color:var(--accent4); background:rgba(189,103,61,.1); }
   .upd-btn.loading { opacity:.5; cursor:wait; }
   .upd-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:800; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
   .upd-modal-overlay.open { display:flex; }
@@ -468,6 +471,7 @@
   <div class="filters">
     <span class="filter-label">Filter</span>
     <div id="filter-container"></div>
+    <button class="smit-btn" id="smit-btn" onclick="toggleSMIT()" title="Sales Managers in Training">SMIT</button>
     <div class="view-toggle">
       <button class="view-btn" id="btn-table" title="Table"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></button>
       <button class="view-btn active" id="btn-cards" title="Cards"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
@@ -619,7 +623,7 @@ var CFG = {
     mbody:function(d){var s1=ds('Contact &amp; Location',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Location',v:e(d.location)||'&mdash;',f:1},{l:'Province',v:d.province?e(PROV[d.province]||d.province):'&mdash;'},{l:'Tenure',v:e(d.losMonths)||'&mdash;'},{l:'Dept',v:e(d.dept)||'&mdash;',f:1}]);var ch='';if(d.manager)ch+=cr('Manager',d.manager,'','');if(d.srManager)ch+=cr('Sr Manager',d.srManager,'','');if(ch)ch='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+ch+'</div>';return s1+ch;}}
 };
 
-var CACHE={}, ORG='cdw', DATA=[], VIEW='cards', SCOL='name', SDIR=1;
+var CACHE={}, ORG='cdw', DATA=[], VIEW='cards', SCOL='name', SDIR=1, SHOW_SMIT=false;
 var SEARCH_INDEX=[]; // pre-built search strings, parallel to DATA
 var lmap=null, lmarkers=[], aloc=null, mq='', mf1='', mf2='';
 var COLORS=['#71584C','#5A6359','#95685D','#8FA596','#BD673D','#DEA193','#C5E4CC','#F2CDC4','#D0C8BA','#7a6255','#6b7a6a','#a07060'];
@@ -714,6 +718,7 @@ function switchOrg(org){
     if(!cfg.hasMap&&VIEW==='map'){VIEW='table';document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('btn-table').classList.add('active');}
     if(cfg.defaultView&&VIEW!==cfg.defaultView){VIEW=cfg.defaultView;document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});var dvb=document.getElementById('btn-'+cfg.defaultView);if(dvb)dvb.classList.add('active');}
     populateFilters();
+    var smitBtn=document.getElementById('smit-btn');if(smitBtn){smitBtn.style.display=org==='cdw'?'flex':'none';smitBtn.classList.remove('active');}SHOW_SMIT=false;
     document.getElementById('loading-screen').style.display='none';
     document.getElementById('app-shell').style.display='';
     render();
@@ -762,6 +767,7 @@ function buildSearchIndex(){
 function getFilteredBy(excludeId){
   var cfg=CFG[ORG],q=document.getElementById('search').value.toLowerCase();
   return DATA.filter(function(d,i){
+    if(ORG==='cdw'&&!SHOW_SMIT){var roleEl=document.getElementById('f-tg');if(!(roleEl&&roleEl.value&&/smit/i.test(roleEl.value))&&isSMIT(d))return false;}
     for(var j=0;j<cfg.filters.length;j++){
       var f=cfg.filters[j];
       if(f.id===excludeId)continue;
@@ -808,6 +814,13 @@ function getFiltered(){
   });
 }
 
+function toggleSMIT(){
+  SHOW_SMIT=!SHOW_SMIT;
+  var btn=document.getElementById('smit-btn');
+  if(btn){btn.classList.toggle('active',SHOW_SMIT);btn.title=SHOW_SMIT?'Hide SMIT records':'Show SMIT records';}
+  render();
+}
+function isSMIT(d){return /smit/i.test(d.titleGroup||'')||/smit/i.test(d.title||'');}
 function render(){
   var fil=getFiltered();
   document.getElementById('count').textContent=fil.length.toLocaleString();
@@ -885,18 +898,28 @@ function rCards(data){
   var rendered={};
   var html='';
 
-  // Sort managers: those with most reports first
+  // Topological sort — deepest managers first so sub-managers get their own
+  // block before their parent renders them as a report card.
   var mgrNames=Object.keys(reportsOf).filter(function(m){return m&&byName[m];});
-  mgrNames.sort(function(a,b){return reportsOf[b].length-reportsOf[a].length;});
+  var mgrSet={};mgrNames.forEach(function(m){mgrSet[m]=true;});
+  function mgrDepth(name,seen){
+    if(!seen)seen={};if(seen[name])return 0;seen[name]=true;
+    var up=byName[name]?byName[name].manager:'';
+    return(up&&mgrSet[up])?1+mgrDepth(up,seen):0;
+  }
+  mgrNames.sort(function(a,b){
+    var da=mgrDepth(a),db=mgrDepth(b);
+    if(da!==db)return db-da;
+    return reportsOf[b].length-reportsOf[a].length;
+  });
 
   mgrNames.forEach(function(mgrName){
     var mgr=byName[mgrName];
     var reports=reportsOf[mgrName];
-    if(rendered[mgrName])return;
     rendered[mgrName]=true;
 
     var reportCards=reports.map(function(r){
-      rendered[r.name]=true;
+      if(!mgrSet[r.name])rendered[r.name]=true;
       return buildCard(r,'org-report-card');
     }).join('');
 

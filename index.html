@@ -490,7 +490,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='4.1';
+var APP_VERSION='4.2';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -885,18 +885,30 @@ function rCards(data){
   var rendered={};
   var html='';
 
-  // Sort managers: those with most reports first
+  // Sort managers: those with most reports first.
+  // Use topological order so mid-level managers (e.g. Rowena) are rendered
+  // before their own manager block tries to mark them as a report.
   var mgrNames=Object.keys(reportsOf).filter(function(m){return m&&byName[m];});
-  mgrNames.sort(function(a,b){return reportsOf[b].length-reportsOf[a].length;});
+  // Sort: managers whose own manager is ALSO a manager node go first (deepest first)
+  mgrNames.sort(function(a,b){
+    var aIsSub=mgrNames.indexOf(byName[a]?byName[a].manager:'')>-1?1:0;
+    var bIsSub=mgrNames.indexOf(byName[b]?byName[b].manager:'')>-1?1:0;
+    if(aIsSub!==bIsSub) return bIsSub-aIsSub; // sub-managers first
+    return reportsOf[b].length-reportsOf[a].length;
+  });
 
   mgrNames.forEach(function(mgrName){
     var mgr=byName[mgrName];
     var reports=reportsOf[mgrName];
-    if(rendered[mgrName])return;
+    // Always render manager blocks — even if the manager was already
+    // rendered as a report under their own manager's block
     rendered[mgrName]=true;
 
     var reportCards=reports.map(function(r){
-      rendered[r.name]=true;
+      // Only mark as rendered if this person is NOT also a manager node
+      if(!byName[r.name]||!reportsOf[r.name]||!reportsOf[r.name].length){
+        rendered[r.name]=true;
+      }
       return buildCard(r,'org-report-card');
     }).join('');
 

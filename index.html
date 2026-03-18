@@ -863,7 +863,7 @@ function buildCard(d,cls){
   // Check if this person has direct reports in the current DATA set
   var hasReports=DATA.some(function(r){return r.manager===d.name;});
   var expandBtn=hasReports?'<button class="card-expand-btn" onclick="toggleCardReports(event,this)" title="Show direct reports" style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-size:11px;line-height:1;transition:all .15s;flex-shrink:0;font-family:DM Mono,monospace;">&#x25BE;</button>':'';
-  var profileBtn='<button class="card-profile-btn" onclick="openModalBtn(event,''+encodeURIComponent(d.name)+'')" title="Open profile">↗</button>';
+  var profileBtn='<button class="card-profile-btn" onclick="openModalBtn(event,this)" title="Open profile">↗</button>';
   return'<div class="card-wrap"><div class="'+cls+'" data-name="'+encodeURIComponent(d.name)+'">'+
     '<div class="card-header">'+av(d.name)+'<div style="flex:1"><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
     '<div class="card-tags">'+tags+'</div>'+
@@ -1083,9 +1083,10 @@ function buildLegend(){
   }
 }
 
-function openModalBtn(ev,encodedName){
+function openModalBtn(ev,btn){
   ev.stopPropagation();
-  openModal(decodeURIComponent(encodedName));
+  var card=btn.closest('[data-name]');
+  if(card) openModal(decodeURIComponent(card.dataset.name));
 }
 
 function toggleCardReports(ev,btn){

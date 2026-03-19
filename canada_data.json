@@ -10,7 +10,7 @@
     "segment": "Education",
     "losMonths": "286 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -40,8 +40,8 @@
     "segment": "Commercial East",
     "losMonths": "276 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -55,8 +55,8 @@
     "segment": "Commercial East",
     "losMonths": "276 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -70,8 +70,8 @@
     "segment": "Commercial East",
     "losMonths": "276 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -85,7 +85,7 @@
     "segment": "Commercial West",
     "losMonths": "246 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -100,7 +100,7 @@
     "segment": "Government",
     "losMonths": "116 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -115,7 +115,7 @@
     "segment": "Commercial West",
     "losMonths": "114 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -130,8 +130,8 @@
     "segment": "Commercial East",
     "losMonths": "114 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -145,7 +145,7 @@
     "segment": "Government",
     "losMonths": "93 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -160,8 +160,8 @@
     "segment": "Commercial East",
     "losMonths": "112 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -175,8 +175,8 @@
     "segment": "Commercial East",
     "losMonths": "112 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -190,8 +190,8 @@
     "segment": "Commercial East",
     "losMonths": "14 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -205,7 +205,7 @@
     "segment": "Small Business",
     "losMonths": "14 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -220,8 +220,8 @@
     "segment": "Commercial East",
     "losMonths": "14 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -235,7 +235,7 @@
     "segment": "Small Business",
     "losMonths": "14 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -250,7 +250,7 @@
     "segment": "Commercial East",
     "losMonths": "12 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -265,7 +265,7 @@
     "segment": "Small Business",
     "losMonths": "12 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -280,7 +280,7 @@
     "segment": "Enterprise",
     "losMonths": "12 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -295,7 +295,7 @@
     "segment": "Small Business",
     "losMonths": "110 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -310,7 +310,7 @@
     "segment": "Small Business",
     "losMonths": "12 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -325,7 +325,7 @@
     "segment": "Commercial East",
     "losMonths": "9 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -340,7 +340,7 @@
     "segment": "Small Business",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -355,7 +355,7 @@
     "segment": "Small Business",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -370,7 +370,7 @@
     "segment": "Commercial East",
     "losMonths": "9 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -385,7 +385,7 @@
     "segment": "Small Business",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -400,7 +400,7 @@
     "segment": "Small Business",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -415,7 +415,7 @@
     "segment": "Government",
     "losMonths": "9 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -430,7 +430,7 @@
     "segment": "Enterprise",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -445,7 +445,7 @@
     "segment": "Commercial East",
     "losMonths": "9 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -460,7 +460,7 @@
     "segment": "Small Business",
     "losMonths": "8 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -475,7 +475,7 @@
     "segment": "Commercial West",
     "losMonths": "8 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -490,7 +490,7 @@
     "segment": "Government",
     "losMonths": "8 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -505,7 +505,7 @@
     "segment": "Small Business",
     "losMonths": "6 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -520,7 +520,7 @@
     "segment": "Commercial West",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -535,7 +535,7 @@
     "segment": "Small Business",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -550,7 +550,7 @@
     "segment": "Commercial West",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -565,7 +565,7 @@
     "segment": "Government",
     "losMonths": "6 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -580,7 +580,7 @@
     "segment": "Enterprise",
     "losMonths": "104 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -595,7 +595,7 @@
     "segment": "Enterprise",
     "losMonths": "6 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -610,7 +610,7 @@
     "segment": "Small Business",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -625,7 +625,7 @@
     "segment": "Small Business",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -640,7 +640,7 @@
     "segment": "Small Business",
     "losMonths": "6 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -655,7 +655,7 @@
     "segment": "Commercial East",
     "losMonths": "6 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -670,8 +670,8 @@
     "segment": "Commercial East",
     "losMonths": "229 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -700,8 +700,8 @@
     "segment": "Commercial East",
     "losMonths": "224 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -715,7 +715,7 @@
     "segment": "Small Business",
     "losMonths": "15 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -730,7 +730,7 @@
     "segment": "Commercial West",
     "losMonths": "102 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -745,8 +745,8 @@
     "segment": "Commercial East",
     "losMonths": "18 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -760,7 +760,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -775,7 +775,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -790,7 +790,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -805,7 +805,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -820,7 +820,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -835,7 +835,7 @@
     "segment": "Commercial West",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -850,7 +850,7 @@
     "segment": "Commercial East",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -880,7 +880,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -895,7 +895,7 @@
     "segment": "Small Business",
     "losMonths": "3 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -910,7 +910,7 @@
     "segment": "Commercial East",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -925,7 +925,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -940,7 +940,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -970,7 +970,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -985,7 +985,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1000,7 +1000,7 @@
     "segment": "Commercial East",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1015,7 +1015,7 @@
     "segment": "Commercial East",
     "losMonths": "1 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1030,7 +1030,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1045,7 +1045,7 @@
     "segment": "Small Business",
     "losMonths": "1 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1060,7 +1060,7 @@
     "segment": "Government",
     "losMonths": "94 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1075,7 +1075,7 @@
     "segment": "Government",
     "losMonths": "219 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1090,7 +1090,7 @@
     "segment": "Enterprise",
     "losMonths": "93 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -1105,8 +1105,8 @@
     "segment": "Commercial East",
     "losMonths": "90 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1120,7 +1120,7 @@
     "segment": "Government",
     "losMonths": "90 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1165,7 +1165,7 @@
     "segment": "Government",
     "losMonths": "90 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1180,7 +1180,7 @@
     "segment": "Small Business",
     "losMonths": "88 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1195,8 +1195,8 @@
     "segment": "Commercial East",
     "losMonths": "88 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1210,8 +1210,8 @@
     "segment": "Commercial East",
     "losMonths": "213 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1225,7 +1225,7 @@
     "segment": "Enterprise",
     "losMonths": "86 months",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "Glenn Kaul",
     "phone": ""
   },
@@ -1240,7 +1240,7 @@
     "segment": "Government",
     "losMonths": "86 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1255,8 +1255,8 @@
     "segment": "Commercial East",
     "losMonths": "82 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1270,7 +1270,7 @@
     "segment": "Commercial West",
     "losMonths": "209 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1285,8 +1285,8 @@
     "segment": "Commercial East",
     "losMonths": "209 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1300,7 +1300,7 @@
     "segment": "Commercial West",
     "losMonths": "121 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1315,7 +1315,7 @@
     "segment": "Government",
     "losMonths": "79 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1330,8 +1330,8 @@
     "segment": "Commercial East",
     "losMonths": "79 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1345,8 +1345,8 @@
     "segment": "Commercial East",
     "losMonths": "26 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1360,8 +1360,8 @@
     "segment": "Commercial East",
     "losMonths": "78 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1375,8 +1375,8 @@
     "segment": "Commercial East",
     "losMonths": "76 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1390,7 +1390,7 @@
     "segment": "Enterprise",
     "losMonths": "76 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -1405,8 +1405,8 @@
     "segment": "Commercial East",
     "losMonths": "76 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1420,7 +1420,7 @@
     "segment": "Enterprise",
     "losMonths": "203 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -1435,8 +1435,8 @@
     "segment": "Commercial East",
     "losMonths": "20 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1450,7 +1450,7 @@
     "segment": "Enterprise",
     "losMonths": "74 months",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "Glenn Kaul",
     "phone": ""
   },
@@ -1465,7 +1465,7 @@
     "segment": "Small Business",
     "losMonths": "74 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1480,7 +1480,7 @@
     "segment": "Education",
     "losMonths": "192 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1495,7 +1495,7 @@
     "segment": "Commercial West",
     "losMonths": "192 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1510,7 +1510,7 @@
     "segment": "Education",
     "losMonths": "185 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1525,8 +1525,8 @@
     "segment": "Commercial East",
     "losMonths": "185 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1540,8 +1540,8 @@
     "segment": "Commercial East",
     "losMonths": "183 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1555,8 +1555,8 @@
     "segment": "Commercial East",
     "losMonths": "183 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1570,7 +1570,7 @@
     "segment": "Small Business",
     "losMonths": "70 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1585,7 +1585,7 @@
     "segment": "Government",
     "losMonths": "15 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1600,7 +1600,7 @@
     "segment": "Government",
     "losMonths": "181 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1615,8 +1615,8 @@
     "segment": "Commercial East",
     "losMonths": "179 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1630,8 +1630,8 @@
     "segment": "Commercial East",
     "losMonths": "177 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1645,7 +1645,7 @@
     "segment": "Government",
     "losMonths": "170 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1660,7 +1660,7 @@
     "segment": "Commercial West",
     "losMonths": "59 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1675,7 +1675,7 @@
     "segment": "Commercial West",
     "losMonths": "59 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1690,7 +1690,7 @@
     "segment": "Education",
     "losMonths": "59 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1705,7 +1705,7 @@
     "segment": "Enterprise",
     "losMonths": "57 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -1720,8 +1720,8 @@
     "segment": "Commercial East",
     "losMonths": "170 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1735,7 +1735,7 @@
     "segment": "Commercial West",
     "losMonths": "168 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1750,8 +1750,8 @@
     "segment": "Commercial East",
     "losMonths": "168 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1765,7 +1765,7 @@
     "segment": "Government",
     "losMonths": "57 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1795,7 +1795,7 @@
     "segment": "Government",
     "losMonths": "57 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1810,8 +1810,8 @@
     "segment": "Commercial East",
     "losMonths": "55 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1825,7 +1825,7 @@
     "segment": "Enterprise",
     "losMonths": "55 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -1840,7 +1840,7 @@
     "segment": "Education",
     "losMonths": "15 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1855,7 +1855,7 @@
     "segment": "Small Business",
     "losMonths": "53 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1870,7 +1870,7 @@
     "segment": "Small Business",
     "losMonths": "53 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -1885,7 +1885,7 @@
     "segment": "Government",
     "losMonths": "18 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1900,7 +1900,7 @@
     "segment": "Commercial West",
     "losMonths": "165 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1915,7 +1915,7 @@
     "segment": "Commercial West",
     "losMonths": "165 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -1930,8 +1930,8 @@
     "segment": "Commercial East",
     "losMonths": "165 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1945,8 +1945,8 @@
     "segment": "Commercial East",
     "losMonths": "165 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -1960,7 +1960,7 @@
     "segment": "Government",
     "losMonths": "163 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1975,7 +1975,7 @@
     "segment": "Government",
     "losMonths": "163 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -1990,7 +1990,7 @@
     "segment": "Government",
     "losMonths": "163 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2005,8 +2005,8 @@
     "segment": "Commercial East",
     "losMonths": "159 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2020,7 +2020,7 @@
     "segment": "Commercial West",
     "losMonths": "159 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2035,7 +2035,7 @@
     "segment": "Small Business",
     "losMonths": "51 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2050,7 +2050,7 @@
     "segment": "Small Business",
     "losMonths": "51 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2080,7 +2080,7 @@
     "segment": "Government",
     "losMonths": "50 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2095,7 +2095,7 @@
     "segment": "Commercial West",
     "losMonths": "38 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2110,7 +2110,7 @@
     "segment": "Small Business",
     "losMonths": "50 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2140,7 +2140,7 @@
     "segment": "Government",
     "losMonths": "157 months",
     "manager": "Sana Saleem",
-    "managerEmail": "",
+    "managerEmail": "sana.saleem@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2155,8 +2155,8 @@
     "segment": "Commercial East",
     "losMonths": "153 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2170,7 +2170,7 @@
     "segment": "Government",
     "losMonths": "151 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2185,7 +2185,7 @@
     "segment": "Commercial West",
     "losMonths": "56 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2200,7 +2200,7 @@
     "segment": "Commercial West",
     "losMonths": "147 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2215,8 +2215,8 @@
     "segment": "Commercial East",
     "losMonths": "45 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2230,8 +2230,8 @@
     "segment": "Commercial East",
     "losMonths": "45 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2245,7 +2245,7 @@
     "segment": "Education",
     "losMonths": "32 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2260,8 +2260,8 @@
     "segment": "Commercial East",
     "losMonths": "43 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2275,8 +2275,8 @@
     "segment": "Commercial East",
     "losMonths": "43 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2290,7 +2290,7 @@
     "segment": "Enterprise",
     "losMonths": "144 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2305,7 +2305,7 @@
     "segment": "Commercial West",
     "losMonths": "144 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2320,7 +2320,7 @@
     "segment": "Enterprise",
     "losMonths": "42 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2335,7 +2335,7 @@
     "segment": "Commercial West",
     "losMonths": "40 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2350,8 +2350,8 @@
     "segment": "Commercial East",
     "losMonths": "38 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2365,7 +2365,7 @@
     "segment": "Small Business",
     "losMonths": "38 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2380,7 +2380,7 @@
     "segment": "Small Business",
     "losMonths": "38 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2410,7 +2410,7 @@
     "segment": "Small Business",
     "losMonths": "38 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2425,7 +2425,7 @@
     "segment": "Education",
     "losMonths": "36 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2440,7 +2440,7 @@
     "segment": "Education",
     "losMonths": "135 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2455,7 +2455,7 @@
     "segment": "Commercial West",
     "losMonths": "134 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2470,7 +2470,7 @@
     "segment": "Enterprise",
     "losMonths": "36 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2485,8 +2485,8 @@
     "segment": "Commercial East",
     "losMonths": "33 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2500,7 +2500,7 @@
     "segment": "Small Business",
     "losMonths": "33 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2515,7 +2515,7 @@
     "segment": "Commercial West",
     "losMonths": "33 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2530,7 +2530,7 @@
     "segment": "Commercial West",
     "losMonths": "132 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2545,7 +2545,7 @@
     "segment": "Commercial West",
     "losMonths": "132 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2560,7 +2560,7 @@
     "segment": "Commercial West",
     "losMonths": "31 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2575,7 +2575,7 @@
     "segment": "Small Business",
     "losMonths": "29 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2590,8 +2590,8 @@
     "segment": "Commercial East",
     "losMonths": "29 months",
     "manager": "Michael Wasiewicz",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "michael.wasiewicz@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2605,8 +2605,8 @@
     "segment": "Commercial East",
     "losMonths": "29 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2620,7 +2620,7 @@
     "segment": "Government",
     "losMonths": "127 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2635,7 +2635,7 @@
     "segment": "Enterprise",
     "losMonths": "26 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2650,7 +2650,7 @@
     "segment": "Commercial West",
     "losMonths": "26 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2665,7 +2665,7 @@
     "segment": "Commercial West",
     "losMonths": "26 months",
     "manager": "Jason Boles",
-    "managerEmail": "",
+    "managerEmail": "jason.boles@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2680,7 +2680,7 @@
     "segment": "Small Business",
     "losMonths": "24 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2695,8 +2695,8 @@
     "segment": "Commercial East",
     "losMonths": "24 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2710,7 +2710,7 @@
     "segment": "Education",
     "losMonths": "24 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2725,8 +2725,8 @@
     "segment": "Commercial East",
     "losMonths": "21 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2740,7 +2740,7 @@
     "segment": "Commercial West",
     "losMonths": "21 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2755,7 +2755,7 @@
     "segment": "Government",
     "losMonths": "21 months",
     "manager": "Michael Karavos",
-    "managerEmail": "",
+    "managerEmail": "michael.karavos@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -2770,8 +2770,8 @@
     "segment": "Commercial East",
     "losMonths": "21 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2785,8 +2785,8 @@
     "segment": "Commercial East",
     "losMonths": "21 months",
     "manager": "Danielle Jefferys",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "danielle.jefferys@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2800,7 +2800,7 @@
     "segment": "Commercial East",
     "losMonths": "20 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2815,7 +2815,7 @@
     "segment": "Enterprise",
     "losMonths": "123 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2830,7 +2830,7 @@
     "segment": "Commercial West",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2845,7 +2845,7 @@
     "segment": "Enterprise",
     "losMonths": "18 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2860,7 +2860,7 @@
     "segment": "Enterprise",
     "losMonths": "18 months",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "Isaac Ling",
     "phone": ""
   },
@@ -2875,7 +2875,7 @@
     "segment": "Commercial East",
     "losMonths": "3 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2890,7 +2890,7 @@
     "segment": "Small Business",
     "losMonths": "8 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2905,7 +2905,7 @@
     "segment": "Small Business",
     "losMonths": "9 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2920,7 +2920,7 @@
     "segment": "Commercial East",
     "losMonths": "9 months",
     "manager": "Premi Easwaramoorthy",
-    "managerEmail": "",
+    "managerEmail": "premi.easwaramoorthy@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2935,7 +2935,7 @@
     "segment": "Commercial West",
     "losMonths": "16 months",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2950,8 +2950,8 @@
     "segment": "Commercial East",
     "losMonths": "16 months",
     "manager": "Shoaib Naqvi",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "shoaib.naqvi@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -2965,7 +2965,7 @@
     "segment": "Commercial West",
     "losMonths": "16 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -2980,7 +2980,7 @@
     "segment": "Small Business",
     "losMonths": "16 months",
     "manager": "Suphot Khurana",
-    "managerEmail": "",
+    "managerEmail": "Suphot.Khurana@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -2995,7 +2995,7 @@
     "segment": "Small Business",
     "losMonths": "16 months",
     "manager": "Tushar Dhawan",
-    "managerEmail": "",
+    "managerEmail": "tushar.dhawan@cdw.ca",
     "srManager": "Kale Johnson",
     "phone": ""
   },
@@ -3010,8 +3010,8 @@
     "segment": "Commercial East",
     "losMonths": "16 months",
     "manager": "Theodore Manglal-Lan",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Theo.Manglallan@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -3025,8 +3025,8 @@
     "segment": "Commercial East",
     "losMonths": "14 months",
     "manager": "Steffie Iannetta",
-    "managerEmail": "",
-    "srManager": "Avinda Jayasuriya",
+    "managerEmail": "Steffie.Mendaglio@cdw.ca",
+    "srManager": "Avi Jayasuriya",
     "phone": ""
   },
   {
@@ -3040,7 +3040,7 @@
     "segment": "Education",
     "losMonths": "121 months",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "Matthew Edwards",
     "phone": ""
   },
@@ -3055,7 +3055,7 @@
     "segment": "Commercial West",
     "losMonths": "121 months",
     "manager": "Adrian D'Andrea",
-    "managerEmail": "",
+    "managerEmail": "adrian.dandrea@cdw.ca",
     "srManager": "Andrew Froese",
     "phone": ""
   },
@@ -3070,7 +3070,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Ralph Ramkerrysingh",
-    "managerEmail": "",
+    "managerEmail": "ralph.ramkerrysingh@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3085,7 +3085,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3100,7 +3100,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3115,7 +3115,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Ralph Ramkerrysingh",
-    "managerEmail": "",
+    "managerEmail": "ralph.ramkerrysingh@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3130,7 +3130,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Ralph Ramkerrysingh",
-    "managerEmail": "",
+    "managerEmail": "ralph.ramkerrysingh@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3144,8 +3144,8 @@
     "dept": "CAN-Ent FAE",
     "segment": "Enterprise",
     "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
+    "manager": "Avi Jayasuriya",
+    "managerEmail": "avi.jayasuriya@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3160,7 +3160,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3175,7 +3175,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3190,7 +3190,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Judy Ah-Fat",
-    "managerEmail": "",
+    "managerEmail": "judy.ah-fat@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3205,7 +3205,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3220,7 +3220,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3235,7 +3235,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3250,7 +3250,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3265,7 +3265,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "David Williams",
-    "managerEmail": "",
+    "managerEmail": "nick.williams@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3280,7 +3280,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "David Williams",
-    "managerEmail": "",
+    "managerEmail": "nick.williams@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3295,7 +3295,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "David Williams",
-    "managerEmail": "",
+    "managerEmail": "nick.williams@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3310,7 +3310,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "David Williams",
-    "managerEmail": "",
+    "managerEmail": "nick.williams@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3325,7 +3325,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "David Williams",
-    "managerEmail": "",
+    "managerEmail": "nick.williams@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3340,7 +3340,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3355,7 +3355,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Ralph Ramkerrysingh",
-    "managerEmail": "",
+    "managerEmail": "ralph.ramkerrysingh@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3370,7 +3370,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3385,7 +3385,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3400,7 +3400,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Mickael Couderc",
-    "managerEmail": "",
+    "managerEmail": "mickael.couderc@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3414,8 +3414,8 @@
     "dept": "CAN-Ent FAE",
     "segment": "Enterprise",
     "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
+    "manager": "Avi Jayasuriya",
+    "managerEmail": "avi.jayasuriya@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3430,7 +3430,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3445,7 +3445,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3460,7 +3460,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3475,7 +3475,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3490,7 +3490,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Kevin Santos",
-    "managerEmail": "",
+    "managerEmail": "kevin.santos@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3505,7 +3505,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3520,7 +3520,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3535,7 +3535,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3550,7 +3550,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3565,7 +3565,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3580,7 +3580,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3595,7 +3595,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Brian Joseph",
-    "managerEmail": "",
+    "managerEmail": "brian.joseph@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3610,113 +3610,83 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Rob Handlovsky",
-    "managerEmail": "",
-    "srManager": "",
-    "phone": ""
-  },
-  {
-    "name": "Steffie Iannetta",
-    "email": "Steffie.Mendaglio@cdw.ca",
-    "role": "Manager",
-    "title": "Manager",
-    "location": "Toronto - West Mall - ON",
-    "province": "ON",
-    "dept": "CAN-Mgr East 698",
-    "segment": "Commercial East",
-    "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
+    "managerEmail": "rob.handlovsky@cdw.ca",
     "srManager": "",
     "phone": ""
   },
   {
     "name": "Danielle Jefferys",
-    "email": "DaniJef@cdw.com",
+    "email": "danielle.jefferys@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr East 697",
+    "dept": "CAN-MGR GTA Downtown",
     "segment": "Commercial East",
     "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
-    "srManager": "",
-    "phone": ""
-  },
-  {
-    "name": "Theodore Manglal-Lan",
-    "email": "Theo.Manglallan@cdw.ca",
-    "role": "Manager",
-    "title": "Manager",
-    "location": "Toronto - West Mall - ON",
-    "province": "ON",
-    "dept": "CAN-Mgr East 691",
-    "segment": "Commercial East",
-    "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
-    "srManager": "",
+    "manager": "Avi Jayasuriya",
+    "managerEmail": "avi.jayasuriya@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Michael Wasiewicz",
-    "email": "Michael.Wasiewicz@cdw.ca",
+    "email": "michael.wasiewicz@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr East 690",
+    "dept": "CAN-MGR GTA West",
     "segment": "Commercial East",
     "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
-    "srManager": "",
+    "manager": "Avi Jayasuriya",
+    "managerEmail": "avi.jayasuriya@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Shoaib Naqvi",
-    "email": "Shoaib.Naqvi@cdw.ca",
+    "email": "shoaib.naqvi@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr East 710",
+    "dept": "CAN-MGR GTA Northeast",
     "segment": "Commercial East",
     "losMonths": "",
-    "manager": "Avinda Jayasuriya",
-    "managerEmail": "",
-    "srManager": "",
+    "manager": "Avi Jayasuriya",
+    "managerEmail": "avi.jayasuriya@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Jason Boles",
-    "email": "Jason.Boles@cdw.ca",
+    "email": "jason.boles@cdw.ca",
     "role": "Manager",
     "title": "Manager",
-    "location": "Toronto - West Mall - ON",
+    "location": "Edmonton - AB",
     "province": "ON",
-    "dept": "CAN-Mgr West 695",
+    "dept": "CAN-MGR N AB Prairies",
     "segment": "Commercial West",
     "losMonths": "",
     "manager": "Andrew Froese",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "andrew.froese@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Adrian D'Andrea",
-    "email": "adriada@cdw.ca",
+    "email": "adrian.dandrea@cdw.ca",
     "role": "Manager",
     "title": "Manager",
-    "location": "Toronto - West Mall - ON",
+    "location": "Vancouver - BC",
     "province": "ON",
-    "dept": "CAN-Mgr West 696",
+    "dept": "CAN-MGR BC",
     "segment": "Commercial West",
     "losMonths": "",
     "manager": "Andrew Froese",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "andrew.froese@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
@@ -3730,83 +3700,68 @@
     "segment": "Commercial West",
     "losMonths": "",
     "manager": "Andrew Froese",
-    "managerEmail": "",
+    "managerEmail": "andrew.froese@cdw.ca",
     "srManager": "",
     "phone": ""
   },
   {
     "name": "Sana Saleem",
-    "email": "Sana.Saleem@cdw.ca",
+    "email": "sana.saleem@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr HEALTH 692",
+    "dept": "CAN-MGR HEALTH",
     "segment": "Healthcare",
     "losMonths": "",
     "manager": "Matthew Edwards",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "matthew.edwards@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Judy Ah-Fat",
-    "email": "Judy.Ah-Fat@cdw.ca",
+    "email": "judy.ah-fat@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr EDU 599",
+    "dept": "CAN-MGR EDU Field",
     "segment": "Education",
     "losMonths": "",
     "manager": "Matthew Edwards",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "matthew.edwards@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Michael Karavos",
-    "email": "Mike.Karavos@cdw.ca",
+    "email": "michael.karavos@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr MUN 702",
+    "dept": "CAN-MGR Government",
     "segment": "Government",
     "losMonths": "",
     "manager": "Matthew Edwards",
-    "managerEmail": "",
-    "srManager": "",
-    "phone": ""
-  },
-  {
-    "name": "Suphot Khurana",
-    "email": "Suphot.Khurana@cdw.ca",
-    "role": "Manager",
-    "title": "Manager",
-    "location": "Toronto - West Mall - ON",
-    "province": "ON",
-    "dept": "CAN-Mgr SB 736",
-    "segment": "Small Business",
-    "losMonths": "",
-    "manager": "Kale Johnson",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "matthew.edwards@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Premi Easwaramoorthy",
-    "email": "premi.easa@cdw.ca",
+    "email": "premi.easwaramoorthy@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr Residency 688",
+    "dept": "CAN-MGR Residency",
     "segment": "Commercial",
     "losMonths": "",
     "manager": "Kale Johnson",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "kale.johnson@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
@@ -3816,57 +3771,57 @@
     "title": "Manager",
     "location": "Toronto - West Mall - ON",
     "province": "ON",
-    "dept": "CAN-Mgr Residency 689",
+    "dept": "CAN-MGR Residency",
     "segment": "Commercial",
     "losMonths": "",
     "manager": "Kale Johnson",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "kale.johnson@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Mickael Couderc",
-    "email": "Mickael.Couderc@cdw.ca",
+    "email": "mickael.couderc@cdw.ca",
     "role": "Manager",
     "title": "Manager",
-    "location": "Virtual - Quebec",
+    "location": "Montreal - QC",
     "province": "",
-    "dept": "CAN-Mgr Ent Mtl_ENT",
+    "dept": "CAN-ENT Quebec Branch",
     "segment": "Enterprise",
     "losMonths": "",
-    "manager": "Isaac Ling",
-    "managerEmail": "",
-    "srManager": "",
+    "manager": "Glenn Kaul",
+    "managerEmail": "glenn.kaul@cdw.ca",
+    "srManager": "Nan Nan",
     "phone": ""
   },
   {
     "name": "Kevin Santos",
-    "email": "kevisan@cdw.com",
+    "email": "kevin.santos@cdw.ca",
     "role": "Manager",
     "title": "Manager",
     "location": "Calgary - AB",
     "province": "AB",
-    "dept": "CAN-Mgr Ent Cal_ENT",
+    "dept": "CAN-MGR S AB Calgary",
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Andrew Froese",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "andrew.froese@cdw.ca",
+    "srManager": "Isaac Ling",
     "phone": ""
   },
   {
     "name": "Brian Joseph",
-    "email": "briajos@cdw.com",
+    "email": "brian.joseph@cdw.ca",
     "role": "Manager",
     "title": "Manager",
-    "location": "Toronto - West Mall - ON",
+    "location": "Toronto - Etobicoke - ON",
     "province": "ON",
-    "dept": "CAN-Mgr Ent Tor_ENT",
+    "dept": "CAN-ENT GTA Branch",
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Glenn Kaul",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "glenn.kaul@cdw.ca",
+    "srManager": "Nan Nan",
     "phone": ""
   },
   {
@@ -3880,7 +3835,7 @@
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Andrew Froese",
-    "managerEmail": "",
+    "managerEmail": "andrew.froese@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3889,14 +3844,14 @@
     "email": "rob.handlovsky@cdw.ca",
     "role": "Manager",
     "title": "Manager",
-    "location": "Edmonton - AB",
+    "location": "Vancouver - BC",
     "province": "AB",
-    "dept": "CAN-Mgr Ent_Van _ENT",
+    "dept": "CAN-ENT BC Branch",
     "segment": "Enterprise",
     "losMonths": "",
     "manager": "Glenn Kaul",
-    "managerEmail": "",
-    "srManager": "",
+    "managerEmail": "glenn.kaul@cdw.ca",
+    "srManager": "Nan Nan",
     "phone": ""
   },
   {
@@ -3925,7 +3880,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3940,7 +3895,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3955,7 +3910,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3970,7 +3925,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -3985,7 +3940,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -4000,7 +3955,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -4015,7 +3970,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
   },
@@ -4030,7 +3985,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4045,7 +4000,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4060,7 +4015,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4075,7 +4030,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4090,7 +4045,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4105,7 +4060,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4120,7 +4075,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4135,7 +4090,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4150,7 +4105,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Chris Maki",
-    "managerEmail": "",
+    "managerEmail": "chris.maki@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4165,7 +4120,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4180,7 +4135,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4195,7 +4150,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4210,7 +4165,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4225,7 +4180,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4240,7 +4195,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4255,7 +4210,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4270,7 +4225,7 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Rowena Samuel",
-    "managerEmail": "",
+    "managerEmail": "rowena.samuel@cdw.ca",
     "srManager": "Peter Hunter",
     "phone": ""
   },
@@ -4285,8 +4240,233 @@
     "segment": "Modern Data Center",
     "losMonths": "",
     "manager": "Peter Hunter",
-    "managerEmail": "",
+    "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
+  },
+  {
+    "name": "Glenn Kaul",
+    "email": "glenn.kaul@cdw.ca",
+    "manager": "",
+    "srManager": "",
+    "location": "Toronto - ON",
+    "dept": "CAN Leadership",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": ""
+  },
+  {
+    "name": "Isaac Ling",
+    "email": "isaac.ling@cdw.ca",
+    "manager": "Glenn Kaul",
+    "srManager": "Nan Nan",
+    "location": "Toronto - ON",
+    "dept": "CAN Territory Sales",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "glenn.kaul@cdw.ca"
+  },
+  {
+    "name": "Colin Rose",
+    "email": "colin.rose@cdw.ca",
+    "manager": "Isaac Ling",
+    "srManager": "Glenn Kaul",
+    "location": "Toronto - ON",
+    "dept": "CAN Sales Operations",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "isaac.ling@cdw.ca"
+  },
+  {
+    "name": "Matthew Edwards",
+    "email": "matthew.edwards@cdw.ca",
+    "manager": "Isaac Ling",
+    "srManager": "Nan Nan",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR PS GOV",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "isaac.ling@cdw.ca"
+  },
+  {
+    "name": "Andrew Froese",
+    "email": "andrew.froese@cdw.ca",
+    "manager": "Isaac Ling",
+    "srManager": "Nan Nan",
+    "location": "Edmonton - AB",
+    "dept": "CAN-MGR Corporate West",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "AB",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "isaac.ling@cdw.ca"
+  },
+  {
+    "name": "Avi Jayasuriya",
+    "email": "avi.jayasuriya@cdw.ca",
+    "manager": "Isaac Ling",
+    "srManager": "Nan Nan",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR Corporate GTA East",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "isaac.ling@cdw.ca"
+  },
+  {
+    "name": "Kale Johnson",
+    "email": "kale.johnson@cdw.ca",
+    "manager": "Isaac Ling",
+    "srManager": "Nan Nan",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR SMB Renewals Academy",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "isaac.ling@cdw.ca"
+  },
+  {
+    "name": "Brian Anderson",
+    "email": "brian.anderson@cdw.ca",
+    "manager": "Glenn Kaul",
+    "srManager": "Nan Nan",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-ENT ISR National",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "glenn.kaul@cdw.ca"
+  },
+  {
+    "name": "Ralph Ramkerrysingh",
+    "email": "ralph.ramkerrysingh@cdw.ca",
+    "manager": "Matthew Edwards",
+    "srManager": "Isaac Ling",
+    "location": "Ottawa - ON",
+    "dept": "CAN-MGR GOV Ottawa",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "matthew.edwards@cdw.ca"
+  },
+  {
+    "name": "Theo Manglal-lan",
+    "email": "theo.manglallan@cdw.ca",
+    "manager": "Avi Jayasuriya",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR Southwestern Ontario",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "avi.jayasuriya@cdw.ca"
+  },
+  {
+    "name": "Steffie Mendaglio-iannetta",
+    "email": "steffie.mendaglio@cdw.ca",
+    "manager": "Avi Jayasuriya",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR East Ontario Maritimes",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "avi.jayasuriya@cdw.ca"
+  },
+  {
+    "name": "Sb Khurana",
+    "email": "sb.khurana@cdw.ca",
+    "manager": "Kale Johnson",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR SB",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "kale.johnson@cdw.ca"
+  },
+  {
+    "name": "Curtis Robertson",
+    "email": "curtis.robertson@cdw.ca",
+    "manager": "Kale Johnson",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR Sales Contact Centre",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "kale.johnson@cdw.ca"
+  },
+  {
+    "name": "Karina Warnick",
+    "email": "karina.warnick@cdw.ca",
+    "manager": "Kale Johnson",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR Renewals Territory",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "kale.johnson@cdw.ca"
+  },
+  {
+    "name": "Leona Popoff",
+    "email": "leona.popoff@cdw.ca",
+    "manager": "Kale Johnson",
+    "srManager": "Isaac Ling",
+    "location": "Toronto - West Mall - ON",
+    "dept": "CAN-MGR Renewals Enterprise",
+    "role": "Manager",
+    "title": "Manager",
+    "province": "ON",
+    "segment": "",
+    "losMonths": "",
+    "phone": "",
+    "managerEmail": "kale.johnson@cdw.ca"
   }
 ]

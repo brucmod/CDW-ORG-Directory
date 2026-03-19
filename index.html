@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='5.0';
+var APP_VERSION='5.1';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1231,15 +1231,9 @@ function mergeRecords(existing,incoming,org,incomingRoles){
   var keyFn=MERGE_KEY[org];
   var exMap={};
   existing.forEach(function(r){exMap[keyFn(r)]=r;});
-  // For Canada partial uploads: preserve all existing records whose role
-  // was NOT present in the uploaded file — they are untouched, not removed
-  var isPartialCanada=org==='canada'&&incomingRoles&&incomingRoles.length;
-  var preserved=[];
-  if(isPartialCanada){
-    existing.forEach(function(r){
-      if(incomingRoles.indexOf(r.role)===-1) preserved.push(r);
-    });
-  }
+  // For Canada: preserve ALL existing records not matched by key —
+  // partial uploads (e.g. managers only) must never delete other records
+  var isCanada=org==='canada';
   var touched={};
   var merged=incoming.map(function(r){
     var key=keyFn(r);
@@ -1251,16 +1245,20 @@ function mergeRecords(existing,incoming,org,incomingRoles){
       if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){out[k]=old[k];}
     });
     return out;
-  }).concat(preserved);
+  });
+  // Always preserve existing records not matched by the incoming file
+  // For Canada this covers all unmatched records regardless of role
+  // For CDW/DCS a full export is expected so unmatched = truly removed
+  if(isCanada){
+    existing.forEach(function(r){
+      if(!touched[keyFn(r)]) merged.push(r);
+    });
+  }
   var added=0,updated=0;
   incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
-  // Removed = only records actually absent from the final merged result
-  // For partial Canada uploads, same-role records not in the file are replaced
-  // (intentional) but other roles are fully preserved (not removed)
-  var removed=existing.filter(function(r){
-    if(isPartialCanada&&incomingRoles.indexOf(r.role)===-1) return false;
-    return !touched[keyFn(r)];
-  }).length;
+  // Removed: for Canada always 0 (unmatched records are preserved above)
+  // For CDW/DCS count records genuinely absent from the incoming file
+  var removed=isCanada?0:existing.filter(function(r){return!touched[keyFn(r)];}).length;
   return{data:merged,added:added,updated:updated,removed:removed};
 }
 

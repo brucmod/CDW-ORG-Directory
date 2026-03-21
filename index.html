@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.6';
+var APP_VERSION='6.7';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1334,6 +1334,11 @@ function normaliseDCSRows(rows){
     };
     var nameLower=name.toLowerCase();
     if(DCS_NAME_ALIASES[nameLower])name=DCS_NAME_ALIASES[nameLower];
+
+    // Also apply aliases to manager/srManager/director name references
+    if(DCS_NAME_ALIASES[manager.toLowerCase()])manager=DCS_NAME_ALIASES[manager.toLowerCase()];
+    if(DCS_NAME_ALIASES[srMgr.toLowerCase()])srMgr=DCS_NAME_ALIASES[srMgr.toLowerCase()];
+    if(DCS_NAME_ALIASES[director.toLowerCase()])director=DCS_NAME_ALIASES[director.toLowerCase()];
 
     // Normalise manager fields
     if(!manager||manager==='-')manager='-';

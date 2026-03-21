@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='5.8';
+var APP_VERSION='5.9';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -894,6 +894,16 @@ function rCards(data){
     });
     var mgrNames=Object.keys(reportsOf).filter(function(m){return byName[m];});
     var mgrSet={};mgrNames.forEach(function(m){mgrSet[m]=true;});
+
+    // For DCS: use role-based tier to break depth ties
+    // director(0) > sr manager(1) > manager(2) so directors always render first
+    function dcsTier(name){
+      var p=byName[name];if(!p)return 9;
+      var t=p.title||'';
+      if(/director/i.test(t))return 0;
+      if(/sr.{0,4}manager|senior.{0,4}manager/i.test(t))return 1;
+      return 2;
+    }
     function mgrDepth(name,seen){
       if(!seen)seen={};if(seen[name])return 0;seen[name]=true;
       var up=byName[name]?byName[name].manager:'';
@@ -902,6 +912,9 @@ function rCards(data){
     mgrNames.sort(function(a,b){
       var da=mgrDepth(a),db=mgrDepth(b);
       if(da!==db)return db-da;
+      // same depth — sort by DCS title tier so directors beat sr managers beat managers
+      var ta=dcsTier(a),tb=dcsTier(b);
+      if(ta!==tb)return tb-ta;
       return reportsOf[b].length-reportsOf[a].length;
     });
     mgrNames.forEach(function(mgrName){

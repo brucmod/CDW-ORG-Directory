@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='5.5';
+var APP_VERSION='5.7';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -869,9 +869,111 @@ function buildCard(d,cls){
 }
 
 function rCards(data){
-  // If a manager filter is active and the manager isn't in the filtered set,
-  // inject their record at the top so they appear above their direct reports
   var cfg=CFG[ORG];
+
+  // ── DCS: 4-level hierarchy renderer (Director > Sr Manager > Manager > IC) ──
+  if(ORG==='dcs'){
+    var byName={};
+    data.forEach(function(d){byName[d.name]=d;});
+    var rendered={};
+    var html='';
+
+    // Group by director
+    var dirGroups={};
+    data.forEach(function(d){
+      var dir=d.director&&d.director.trim()&&d.director.charAt(0)!=='_'?d.director:'— No Director —';
+      if(!dirGroups[dir])dirGroups[dir]=[];
+      dirGroups[dir].push(d);
+    });
+
+    Object.keys(dirGroups).sort().forEach(function(dirName){
+      var dirMembers=dirGroups[dirName];
+      var dirRecord=byName[dirName];
+      rendered[dirName]=true;
+
+      // Within director: group by sr manager
+      var srGroups={};
+      dirMembers.forEach(function(d){
+        if(d.name===dirName)return; // skip director's own card here
+        var sr=d.srManager&&d.srManager.trim()&&d.srManager!=='-'?d.srManager:'— Direct to Director —';
+        if(!srGroups[sr])srGroups[sr]=[];
+        srGroups[sr].push(d);
+      });
+
+      var srHtml='';
+      Object.keys(srGroups).sort().forEach(function(srName){
+        var srMembers=srGroups[srName];
+        var srRecord=byName[srName];
+        rendered[srName]=true;
+
+        // Within sr manager: group by manager
+        var mgrGroups={};
+        srMembers.forEach(function(d){
+          if(d.name===srName)return; // skip sr manager's own card
+          var mgr=(!d.manager||d.manager==='-'||d.manager===srName)?'— Direct Reports —':d.manager;
+          if(!mgrGroups[mgr])mgrGroups[mgr]=[];
+          mgrGroups[mgr].push(d);
+        });
+
+        var mgrHtml='';
+        Object.keys(mgrGroups).sort().forEach(function(mgrName){
+          var mgrMembers=mgrGroups[mgrName];
+          var mgrRecord=byName[mgrName];
+          rendered[mgrName]=true;
+
+          var reportCards=mgrMembers.map(function(r){
+            rendered[r.name]=true;
+            return buildCard(r,'org-report-card');
+          }).join('');
+
+          if(mgrName==='— Direct Reports —'){
+            // ICs reporting directly to sr manager
+            mgrHtml+='<div class="org-block" style="margin-left:0">'+
+              '<div class="org-manager-label">Direct to '+e(srName)+'</div>'+
+              '<div class="org-reports">'+reportCards+'</div>'+
+              '</div>';
+          } else {
+            mgrHtml+='<div class="org-block" style="margin-left:0">'+
+              '<div class="org-manager-label">Manager &amp; Team</div>'+
+              (mgrRecord?buildCard(mgrRecord,'org-manager-card'):'<div class="org-manager-label" style="color:var(--muted)">'+e(mgrName)+'</div>')+
+              '<div class="org-reports">'+reportCards+'</div>'+
+              '</div>';
+          }
+        });
+
+        if(srName==='— Direct to Director —'){
+          srHtml+='<div style="margin-bottom:20px">'+
+            '<div class="org-manager-label">Direct to '+e(dirName)+'</div>'+
+            '<div class="org-reports">'+mgrHtml+'</div>'+
+            '</div>';
+        } else {
+          srHtml+='<div style="margin-bottom:24px">'+
+            '<div class="org-manager-label">Sr Manager &amp; Team</div>'+
+            (srRecord?buildCard(srRecord,'org-manager-card'):'<div class="org-manager-label" style="color:var(--muted)">'+e(srName)+'</div>')+
+            '<div style="margin-left:20px;padding-left:16px;border-left:2px solid var(--border);margin-top:10px">'+mgrHtml+'</div>'+
+            '</div>';
+        }
+      });
+
+      html+='<div class="org-block" style="margin-bottom:32px">'+
+        '<div class="org-manager-label">Director &amp; Team</div>'+
+        (dirRecord?buildCard(dirRecord,'org-manager-card'):'<div class="org-manager-label" style="font-size:15px;font-weight:600;color:var(--text)">'+e(dirName)+'</div>')+
+        '<div style="margin-left:20px;padding-left:16px;border-left:2px solid var(--accent);margin-top:12px">'+srHtml+'</div>'+
+        '</div>';
+    });
+
+    // Anything not rendered (old data without director)
+    var solos=data.filter(function(d){return!rendered[d.name];});
+    if(solos.length){
+      html+='<div class="org-section-label">'+solos.length+' Unassigned</div>'+
+        '<div class="org-solo-grid">'+solos.map(function(d){return buildCard(d,'card');}).join('')+'</div>';
+    }
+    document.getElementById('app').innerHTML='<div style="padding:28px 40px">'+html+'</div>';
+    document.querySelectorAll('[data-name]').forEach(function(el){el.addEventListener('click',function(ev){if(ev.target.closest('a'))return;openModal(decodeURIComponent(el.dataset.name));});});
+    return;
+  }
+
+  // ── All other orgs: original logic ───────────────────────────────────────
   var mgrFilter=cfg.filters.find(function(f){return f.key==='manager'||f.key==='srManager';});
   if(mgrFilter){
     var mgrEl=document.getElementById(mgrFilter.id);

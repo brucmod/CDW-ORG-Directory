@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.1';
+var APP_VERSION='6.3';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1252,6 +1252,102 @@ function cleanPersonName(s){
     .split(/\s+/).map(titleCaseWord).join(' ');
 }
 
+// ── DCS Zoo Doc normaliser ────────────────────────────────────────
+// Handles: HI_Presales_Zoo_Doc format
+// Columns: Director Name | Sr Manager Name | Manager Name | Coworker Name |
+//          Coworker Title | Email | Presales or Practice | Segment/Vertical |
+//          AOR | Domain | CDW Office Location | Home Location
+function normaliseDCSRows(rows){
+  function cl(s){
+    if(!s||String(s).trim()==='nan'||String(s).trim()==='-')return '';
+    return String(s).replace(/[\u200b\u200c\u200d\xa0\u2060]+/g,' ').split(/\s+/).join(' ').trim();
+  }
+  function pn(s){
+    s=cl(s);
+    if(!s)return '';
+    return s.split(' ').filter(Boolean).map(titleCaseWord).join(' ');
+  }
+  function parseStates(s){
+    if(!s||s==='-')return [];
+    return String(s).split(/[,;&\/]+/).map(function(p){return p.trim();}).filter(function(p){return p&&p!=='-';});
+  }
+
+  // Detect Zoo Doc by checking for its distinctive column names
+  var sampleKeys=rows.length?Object.keys(rows[0]).map(function(k){return k.toLowerCase().replace(/\s+/g,'');}):[];
+  var isZooDoc=sampleKeys.indexOf('coworkername')>-1&&sampleKeys.indexOf('directorname')>-1;
+  var isOldDCS=sampleKeys.indexOf('hicoworker')>-1||sampleKeys.indexOf('managername')>-1;
+
+  if(!isZooDoc&&!isOldDCS){return null;} // not a DCS file — fall through to normaliseRows
+
+  return rows.map(function(row){
+    var name,email,title,manager,srMgr,director,segment,aor,solArea,office,home,domain;
+
+    if(isZooDoc){
+      name      = pn(row['Coworker Name']||'');
+      email     = cl(row['Email']||'').toLowerCase();
+      title     = cl(row['Coworker Title']||'');
+      manager   = pn(row['Manager Name']||'');
+      srMgr     = pn(row['Sr Manager Name']||'');
+      director  = pn(row['Director Name']||'');
+      segment   = cl(row['Segment/Vertical']||row['Segment']||'');
+      aor       = cl(row['AOR']||'');
+      solArea   = cl(row['Presales or Practice']||'Data Center Solutions (DCS)');
+      office    = cl(row['CDW Office Location']||'');
+      home      = cl(row['Home Location']||'');
+      domain    = cl(row['Domain']||'');
+    } else {
+      // Old DCS format (HI Coworker / Manager Name columns)
+      name      = pn(row['HI Coworker']||row['Name']||'');
+      email     = cl(row['Email']||'').toLowerCase();
+      title     = cl(row['Role/Title']||row['Title']||'');
+      manager   = pn(row['Manager']||row['Manager Name']||'');
+      srMgr     = pn(row['Sr Manager']||'');
+      director  = pn(row['Director']||'');
+      segment   = cl(row['Primary Segment Coverage / Area of Responsibility (AOR)']||row['Segment']||'');
+      aor       = cl(row['States Coworker Covers']||'');
+      solArea   = cl(row['Primary Solution Area']||'Data Center Solutions (DCS)');
+      office    = cl(row['CDW Office Location']||'');
+      home      = cl(row['Home Location']||'');
+      domain    = cl(row['Domain']||'DCS');
+    }
+
+    // Skip blank rows and TBH placeholders
+    if(!name&&!email)return null;
+    if(name.toLowerCase()==='tbh')return null;
+
+    // Normalise manager fields
+    if(!manager||manager==='-')manager='-';
+    if(!srMgr||srMgr==='-')srMgr='';
+    if(!director||director==='-')director='';
+
+    // Normalise solution area
+    if(/pre.?sales|presales/i.test(solArea))solArea='Data Center Solutions (DCS)';
+
+    return {
+      name:           name,
+      email:          email,
+      title:          title,
+      manager:        manager,
+      srManager:      srMgr,
+      director:       director,
+      segment:        segment,
+      solutionArea:   solArea,
+      // homeLocation, statesCovers, coverageParsed: always blank in incoming so
+      // mergeRecords ALWAYS preserves the existing JSON values (which are richer).
+      // Only fills these if the existing JSON record has no value at all.
+      homeLocation:   '',
+      statesCovers:   '',
+      coverageParsed: [],
+      // officeLocation from Zoo Doc is fine to update — not manually curated
+      officeLocation: office,
+      // Zoo Doc AOR stored separately so it's available if JSON has nothing
+      _zooAOR:        aor,
+      _zooHome:       home,
+      domain:         domain
+    };
+  }).filter(function(r){return r&&(r.name||r.email);});
+}
+
 function normaliseRows(rows){
   var out=rows.map(function(row){
     var rec={};
@@ -1312,17 +1408,37 @@ function mergeRecords(existing,incoming,org,incomingRoles){
     var key=keyFn(r);
     touched[key]=true;
     var old=exMap[key];
-    if(!old)return r;
+    if(!old){
+      // New record — apply Zoo Doc AOR/home directly since nothing to preserve
+      if(org==='dcs'){
+        if(!r.homeLocation&&r._zooHome)r.homeLocation=r._zooHome;
+        if(!r.statesCovers&&r._zooAOR)r.statesCovers=r._zooAOR;
+        if((!r.coverageParsed||!r.coverageParsed.length)&&r._zooAOR){
+          r.coverageParsed=r._zooAOR.split(/[,;&\/]+/).map(function(p){return p.trim();}).filter(Boolean);
+        }
+        delete r._zooAOR; delete r._zooHome;
+      }
+      return r;
+    }
     var out=Object.assign({},r);
     Object.keys(old).forEach(function(k){
       if(!(k in out)||(out[k]===''||out[k]===null||out[k]===undefined)){out[k]=old[k];}
     });
+    // DCS: apply Zoo Doc AOR/home only if still blank after JSON merge
+    if(org==='dcs'){
+      if(!out.homeLocation&&out._zooHome)out.homeLocation=out._zooHome;
+      if(!out.statesCovers&&out._zooAOR)out.statesCovers=out._zooAOR;
+      if((!out.coverageParsed||!out.coverageParsed.length)&&out._zooAOR){
+        out.coverageParsed=out._zooAOR.split(/[,;&\/]+/).map(function(p){return p.trim();}).filter(Boolean);
+      }
+      delete out._zooAOR; delete out._zooHome;
+    }
     return out;
   });
   // Always preserve existing records not matched by the incoming file
   // For Canada this covers all unmatched records regardless of role
   // For CDW/DCS a full export is expected so unmatched = truly removed
-  if(isCanada){
+  if(isCanada||org==='dcs'){
     existing.forEach(function(r){
       if(!touched[keyFn(r)]) merged.push(r);
     });
@@ -1331,7 +1447,7 @@ function mergeRecords(existing,incoming,org,incomingRoles){
   incoming.forEach(function(r){if(exMap[keyFn(r)])updated++;else added++;});
   // Removed: for Canada always 0 (unmatched records are preserved above)
   // For CDW/DCS count records genuinely absent from the incoming file
-  var removed=isCanada?0:existing.filter(function(r){return!touched[keyFn(r)];}).length;
+  var removed=(isCanada||org==='dcs')?0:existing.filter(function(r){return!touched[keyFn(r)];}).length;
   return{data:merged,added:added,updated:updated,removed:removed};
 }
 
@@ -1546,13 +1662,20 @@ function updCombineAndProcess(results){
       console.log('[UPD]',res.name,rows.length,'rows');
       if(isCanada){
         allRows=allRows.concat(normaliseCanadaRows(rows, res.name));
+      } else if(ORG==='dcs'){
+        var dcsRows=normaliseDCSRows(rows);
+        if(dcsRows){
+          allRows=allRows.concat(dcsRows);
+        } else {
+          allRows=allRows.concat(rows); // fall through to normaliseRows for old CDW export format
+        }
       } else {
         allRows=allRows.concat(rows);
       }
     });
 
     updSetProgress(60,'Normalising fields\u2026');
-    var incoming = isCanada ? allRows : normaliseRows(allRows);
+    var incoming = isCanada ? allRows : (ORG==='dcs'&&allRows.length&&allRows[0].name!==undefined ? allRows : normaliseRows(allRows));
     console.log('[UPD] total incoming:',incoming.length);
 
     if(!incoming.length) throw new Error('No valid records found after processing.');

@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='5.7';
+var APP_VERSION='5.8';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -886,86 +886,41 @@ function rCards(data){
       dirGroups[dir].push(d);
     });
 
-    Object.keys(dirGroups).sort().forEach(function(dirName){
-      var dirMembers=dirGroups[dirName];
-      var dirRecord=byName[dirName];
-      rendered[dirName]=true;
-
-      // Within director: group by sr manager
-      var srGroups={};
-      dirMembers.forEach(function(d){
-        if(d.name===dirName)return; // skip director's own card here
-        var sr=d.srManager&&d.srManager.trim()&&d.srManager!=='-'?d.srManager:'— Direct to Director —';
-        if(!srGroups[sr])srGroups[sr]=[];
-        srGroups[sr].push(d);
-      });
-
-      var srHtml='';
-      Object.keys(srGroups).sort().forEach(function(srName){
-        var srMembers=srGroups[srName];
-        var srRecord=byName[srName];
-        rendered[srName]=true;
-
-        // Within sr manager: group by manager
-        var mgrGroups={};
-        srMembers.forEach(function(d){
-          if(d.name===srName)return; // skip sr manager's own card
-          var mgr=(!d.manager||d.manager==='-'||d.manager===srName)?'— Direct Reports —':d.manager;
-          if(!mgrGroups[mgr])mgrGroups[mgr]=[];
-          mgrGroups[mgr].push(d);
-        });
-
-        var mgrHtml='';
-        Object.keys(mgrGroups).sort().forEach(function(mgrName){
-          var mgrMembers=mgrGroups[mgrName];
-          var mgrRecord=byName[mgrName];
-          rendered[mgrName]=true;
-
-          var reportCards=mgrMembers.map(function(r){
-            rendered[r.name]=true;
-            return buildCard(r,'org-report-card');
-          }).join('');
-
-          if(mgrName==='— Direct Reports —'){
-            // ICs reporting directly to sr manager
-            mgrHtml+='<div class="org-block" style="margin-left:0">'+
-              '<div class="org-manager-label">Direct to '+e(srName)+'</div>'+
-              '<div class="org-reports">'+reportCards+'</div>'+
-              '</div>';
-          } else {
-            mgrHtml+='<div class="org-block" style="margin-left:0">'+
-              '<div class="org-manager-label">Manager &amp; Team</div>'+
-              (mgrRecord?buildCard(mgrRecord,'org-manager-card'):'<div class="org-manager-label" style="color:var(--muted)">'+e(mgrName)+'</div>')+
-              '<div class="org-reports">'+reportCards+'</div>'+
-              '</div>';
-          }
-        });
-
-        if(srName==='— Direct to Director —'){
-          srHtml+='<div style="margin-bottom:20px">'+
-            '<div class="org-manager-label">Direct to '+e(dirName)+'</div>'+
-            '<div class="org-reports">'+mgrHtml+'</div>'+
-            '</div>';
-        } else {
-          srHtml+='<div style="margin-bottom:24px">'+
-            '<div class="org-manager-label">Sr Manager &amp; Team</div>'+
-            (srRecord?buildCard(srRecord,'org-manager-card'):'<div class="org-manager-label" style="color:var(--muted)">'+e(srName)+'</div>')+
-            '<div style="margin-left:20px;padding-left:16px;border-left:2px solid var(--border);margin-top:10px">'+mgrHtml+'</div>'+
-            '</div>';
-        }
-      });
-
-      html+='<div class="org-block" style="margin-bottom:32px">'+
-        '<div class="org-manager-label">Director &amp; Team</div>'+
-        (dirRecord?buildCard(dirRecord,'org-manager-card'):'<div class="org-manager-label" style="font-size:15px;font-weight:600;color:var(--text)">'+e(dirName)+'</div>')+
-        '<div style="margin-left:20px;padding-left:16px;border-left:2px solid var(--accent);margin-top:12px">'+srHtml+'</div>'+
+    // Topological sort — same style as CDW/Canada, respects 4-level DCS hierarchy
+    var reportsOf={};
+    data.forEach(function(d){
+      var m=d.manager||'';
+      if(m&&m!=='-'){if(!reportsOf[m])reportsOf[m]=[];reportsOf[m].push(d);}
+    });
+    var mgrNames=Object.keys(reportsOf).filter(function(m){return byName[m];});
+    var mgrSet={};mgrNames.forEach(function(m){mgrSet[m]=true;});
+    function mgrDepth(name,seen){
+      if(!seen)seen={};if(seen[name])return 0;seen[name]=true;
+      var up=byName[name]?byName[name].manager:'';
+      return(up&&mgrSet[up])?1+mgrDepth(up,seen):0;
+    }
+    mgrNames.sort(function(a,b){
+      var da=mgrDepth(a),db=mgrDepth(b);
+      if(da!==db)return db-da;
+      return reportsOf[b].length-reportsOf[a].length;
+    });
+    mgrNames.forEach(function(mgrName){
+      var mgr=byName[mgrName];
+      var reports=reportsOf[mgrName];
+      rendered[mgrName]=true;
+      var reportCards=reports.map(function(r){
+        if(!mgrSet[r.name])rendered[r.name]=true;
+        return buildCard(r,'org-report-card');
+      }).join('');
+      html+='<div class="org-block">'+
+        '<div class="org-manager-label">Manager &amp; Team</div>'+
+        buildCard(mgr,'org-manager-card')+
+        '<div class="org-reports">'+reportCards+'</div>'+
         '</div>';
     });
-
-    // Anything not rendered (old data without director)
     var solos=data.filter(function(d){return!rendered[d.name];});
     if(solos.length){
-      html+='<div class="org-section-label">'+solos.length+' Unassigned</div>'+
+      html+='<div class="org-section-label">'+solos.length+' Individual Contributors</div>'+
         '<div class="org-solo-grid">'+solos.map(function(d){return buildCard(d,'card');}).join('')+'</div>';
     }
     document.getElementById('app').innerHTML='<div style="padding:28px 40px">'+html+'</div>';

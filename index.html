@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.3';
+var APP_VERSION='6.6';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -1272,29 +1272,38 @@ function normaliseDCSRows(rows){
     return String(s).split(/[,;&\/]+/).map(function(p){return p.trim();}).filter(function(p){return p&&p!=='-';});
   }
 
-  // Detect Zoo Doc by checking for its distinctive column names
-  var sampleKeys=rows.length?Object.keys(rows[0]).map(function(k){return k.toLowerCase().replace(/\s+/g,'');}):[];
-  var isZooDoc=sampleKeys.indexOf('coworkername')>-1&&sampleKeys.indexOf('directorname')>-1;
-  var isOldDCS=sampleKeys.indexOf('hicoworker')>-1||sampleKeys.indexOf('managername')>-1;
+  // Detect Zoo Doc by checking for its distinctive column names (use startsWith to handle trailing spaces/extra text)
+  function normKey(k){return k.toLowerCase().replace(/[^a-z0-9]/g,'');}
+  var sampleKeys=rows.length?Object.keys(rows[0]).map(normKey):[];
+  var isZooDoc=sampleKeys.some(function(k){return k==='coworkername';})&&sampleKeys.some(function(k){return k==='directorname';});
+  var isOldDCS=sampleKeys.some(function(k){return k==='hicoworker';});
 
   if(!isZooDoc&&!isOldDCS){return null;} // not a DCS file — fall through to normaliseRows
+
+  // Helper: get row value by loose column name match (handles trailing spaces, extra text)
+  function get(row,target){
+    var t=normKey(target);
+    var keys=Object.keys(row);
+    for(var i=0;i<keys.length;i++){if(normKey(keys[i])===t||normKey(keys[i]).indexOf(t)===0)return row[keys[i]];}
+    return '';
+  }
 
   return rows.map(function(row){
     var name,email,title,manager,srMgr,director,segment,aor,solArea,office,home,domain;
 
     if(isZooDoc){
-      name      = pn(row['Coworker Name']||'');
-      email     = cl(row['Email']||'').toLowerCase();
-      title     = cl(row['Coworker Title']||'');
-      manager   = pn(row['Manager Name']||'');
-      srMgr     = pn(row['Sr Manager Name']||'');
-      director  = pn(row['Director Name']||'');
-      segment   = cl(row['Segment/Vertical']||row['Segment']||'');
-      aor       = cl(row['AOR']||'');
-      solArea   = cl(row['Presales or Practice']||'Data Center Solutions (DCS)');
-      office    = cl(row['CDW Office Location']||'');
-      home      = cl(row['Home Location']||'');
-      domain    = cl(row['Domain']||'');
+      name      = pn(get(row,'Coworker Name'));
+      email     = cl(get(row,'Email')).toLowerCase();
+      title     = cl(get(row,'Coworker Title'));
+      manager   = pn(get(row,'Manager Name'));
+      srMgr     = pn(get(row,'Sr Manager Name'));
+      director  = pn(get(row,'Director Name'));
+      segment   = cl(get(row,'Segment/Vertical')||get(row,'Segment'));
+      aor       = cl(get(row,'AOR'));
+      solArea   = cl(get(row,'Presales or Practice'))||'Data Center Solutions (DCS)';
+      office    = cl(get(row,'CDW Office Location'));
+      home      = cl(get(row,'Home Location'));
+      domain    = cl(get(row,'Domain'));
     } else {
       // Old DCS format (HI Coworker / Manager Name columns)
       name      = pn(row['HI Coworker']||row['Name']||'');
@@ -1314,6 +1323,17 @@ function normaliseDCSRows(rows){
     // Skip blank rows and TBH placeholders
     if(!name&&!email)return null;
     if(name.toLowerCase()==='tbh')return null;
+
+    // Normalise known name spelling variants to match canonical JSON names
+    var DCS_NAME_ALIASES={
+      'jessica keehnen':'Jessica Keehan',
+      'pete mccloughan':'Pete McCloughan',
+      'leslie fielding-russell':'Leslie Fielding-Russell',
+      'alejandro roman':'Alejandro Roman',
+      'kathryn averyheart':'Kat Averyheart'
+    };
+    var nameLower=name.toLowerCase();
+    if(DCS_NAME_ALIASES[nameLower])name=DCS_NAME_ALIASES[nameLower];
 
     // Normalise manager fields
     if(!manager||manager==='-')manager='-';

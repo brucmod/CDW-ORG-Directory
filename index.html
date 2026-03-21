@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.0';
+var APP_VERSION='6.1';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -918,7 +918,9 @@ function rCards(data){
       var reports=reportsOf[mgrName];
       rendered[mgrName]=true;
       var reportCards=reports.map(function(r){
-        if(dcsTier(r.name)>dcsTier(mgrName)||!reportsOf[r.name])rendered[r.name]=true;
+        // Mark as rendered: ICs always, sub-managers only if they appear at a lower tier
+        // Sub-managers with their own block will be rendered separately — don't mark them here
+        if(!reportsOf[r.name])rendered[r.name]=true;
         return buildCard(r,'org-report-card');
       }).join('');
       html+='<div class="org-block">'+
@@ -926,6 +928,11 @@ function rCards(data){
         buildCard(mgr,'org-manager-card')+
         '<div class="org-reports">'+reportCards+'</div>'+
         '</div>';
+    });
+    // Mark all people who appeared as report cards under any manager block as rendered
+    // (catches ICs whose manager was rendered as a report card under a higher-tier node)
+    data.forEach(function(d){
+      if(rendered[d.manager||''])rendered[d.name]=true;
     });
     var solos=data.filter(function(d){return!rendered[d.name];});
     if(solos.length){

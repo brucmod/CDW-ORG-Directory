@@ -494,7 +494,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.7';
+var APP_VERSION='6.8';
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -593,7 +593,7 @@ var CDWGEO = {
 
 var CFG = {
   cdw:{file:'CDW_data_.json',eyebrow:'CDW \u00b7 Sales Organization',title:'CDW Org <em>Directory</em>',hint:'Search name, title, email, manager\u2026',hasMap:true,defaultView:'cards',
-    filters:[{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-ch',key:'channel',lbl:'All Channels'},{id:'f-tier',key:'tier',lbl:'All Tiers'},{id:'f-reg',key:'region',lbl:'All Regions'},{id:'f-dist',key:'district',lbl:'All Districts'},{id:'f-tg',key:'titleGroup',lbl:'All Roles'},{id:'f-mgr',key:'manager',lbl:'All Managers'}],
+    filters:[{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-ch',key:'channel',lbl:'All Channels'},{id:'f-tier',key:'tier',lbl:'All Tiers'},{id:'f-reg',key:'region',lbl:'All Regions'},{id:'f-dist',key:'district',lbl:'All Districts'},{id:'f-tg',key:'titleGroup',lbl:'All Roles'},{id:'f-mgr',key:'manager',lbl:'All Managers'},{id:'f-state',key:'state',lbl:'All States'},{id:'f-loc',key:'location',lbl:'All Offices',vfn:function(d){var l=d.location||'';if(!l)return null;var cv=l.replace(/\s*-\s*[A-Z]{2}\s*$/,'').replace(/\s*\/\s*\d+\s*$/,'').trim();return cv||null;}}],
     cols:[{k:'name',l:'Name'},{k:'titleGroup',l:'Role'},{k:'segment',l:'Segment'},{k:'channel',l:'Channel'},{k:'tier',l:'Tier'},{k:'region',l:'Region'},{k:'manager',l:'Manager'}],
     grpKey:'manager',
     sub:function(d){return d.title||d.titleGroup||'';},
@@ -606,7 +606,7 @@ var CFG = {
       if(ch)ch='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+ch+'</div>';
       return s1+s2+ch;}},
   dcs:{file:'dcs_data.json',eyebrow:'CDW \u00b7 Hybrid Infrastructure',title:'DCS Org <em>Directory</em>',hint:'Search name, title, email, location\u2026',hasMap:false,defaultView:'cards',
-    filters:[{id:'f-dir',key:'director',lbl:'All Directors',vfn:function(d){var v=d.director;return(v&&v.trim()&&v.charAt(0)!=='_')?v:null;}},{id:'f-sr',key:'srManager',lbl:'All Sr Managers',vfn:function(d){var v=d.srManager;return(v&&v.trim()&&v!=='-')?v:null;}},{id:'f-mgr',key:'manager',lbl:'All Managers',vfn:function(d){var m=d.manager;return(!m||m==='-'||m.charAt(0)==='_')?null:m;}},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-sol',key:'solutionArea',lbl:'All Solution Areas'}],
+    filters:[{id:'f-dir',key:'director',lbl:'All Directors',vfn:function(d){var v=d.director;return(v&&v.trim()&&v.charAt(0)!=='_')?v:null;}},{id:'f-sr',key:'srManager',lbl:'All Sr Managers',vfn:function(d){var v=d.srManager;return(v&&v.trim()&&v!=='-')?v:null;}},{id:'f-mgr',key:'manager',lbl:'All Managers',vfn:function(d){var m=d.manager;return(!m||m==='-'||m.charAt(0)==='_')?null:m;}},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-sol',key:'solutionArea',lbl:'All Solution Areas'},{id:'f-hst',key:'homeLocation',lbl:'All Home States',vfn:function(d){var h=d.homeLocation||'';if(!h)return null;var m=h.match(/,\s*([A-Z]{2})\s*$/);if(m)return m[1];if(h.length===2&&h===h.toUpperCase())return h;return null;}},{id:'f-off',key:'officeLocation',lbl:'All Offices',vfn:function(d){return d.officeLocation||null;}}],
     cols:[{k:'name',l:'Name'},{k:'title',l:'Title'},{k:'director',l:'Director'},{k:'srManager',l:'Sr Manager'},{k:'manager',l:'Manager'},{k:'segment',l:'Segment'},{k:'homeLocation',l:'Home'}],
     grpKey:'manager',
     sub:function(d){return d.title||'';},
@@ -614,7 +614,7 @@ var CFG = {
     mhdr:function(d){var t='';if(d.segment)t+='<span class="tag seg">'+e(d.segment)+'</span> ';if(d.solutionArea)t+='<span class="tag sol">'+e(d.solutionArea)+'</span>';return{s:d.title||'',t:t};},
     mbody:function(d){var m=(!d.manager||d.manager==='-'||d.manager.charAt(0)==='_')?'Leadership':e(d.manager);var dir=(d.director&&d.director.charAt(0)!=='_')?e(d.director):'Leadership';var sr=d.srManager&&d.srManager!=='-'?e(d.srManager):'';var chain='';if(dir)chain+=cr('Director',dir,'','');if(sr)chain+=cr('Sr Manager',sr,'','');if(m&&m!=='Leadership'&&m!==sr)chain+=cr('Manager',m,'','');if(chain)chain='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+chain+'</div>';return ds('Details',[{l:'Email',v:d.email?'<a href="mailto:'+e(d.email)+'">'+e(d.email)+'</a>':'&mdash;',f:1},{l:'Solution Area',v:e(d.solutionArea)||'&mdash;'},{l:'Segment',v:e(d.segment)||'&mdash;',f:1},{l:'Home Location',v:e(d.homeLocation)||'&mdash;'},{l:'CDW Office',v:e(d.officeLocation)||'&mdash;'},{l:'States Covered',v:e(d.statesCovers)||'&mdash;',f:1}])+chain;}},
   canada:{file:'canada_data.json',eyebrow:'CDW \u00b7 Canada',title:'Canada Org <em>Directory</em>',hint:'Search name, email, location, manager\u2026',hasMap:true,defaultView:'cards',
-    filters:[{id:'f-role',key:'role',lbl:'All Roles'},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-prov',key:'province',lbl:'All Provinces',dfn:function(v){return(PROV[v]||v)+' ('+v+')';}},{id:'f-mgr',key:'manager',lbl:'All Managers'},{id:'f-sr',key:'srManager',lbl:'All Sr Managers'}],
+    filters:[{id:'f-role',key:'role',lbl:'All Roles'},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-prov',key:'province',lbl:'All Provinces',dfn:function(v){return(PROV[v]||v)+' ('+v+')';}},{id:'f-mgr',key:'manager',lbl:'All Managers'},{id:'f-sr',key:'srManager',lbl:'All Sr Managers'},{id:'f-city',key:'location',lbl:'All Cities',vfn:function(d){var l=d.location||'';if(!l)return null;var cv=l.replace(/\s*-\s*[A-Z]{2}\s*$/,'').replace(/\s*\([^)]*\)\s*$/,'').trim();if(/^virtual/i.test(cv))return null;return cv||null;}}],
     cols:[{k:'name',l:'Name'},{k:'role',l:'Role'},{k:'segment',l:'Segment'},{k:'province',l:'Province',dfn:function(v){return v?(PROV[v]||v)+' ('+v+')':'&mdash;';}},{k:'location',l:'Location'},{k:'manager',l:'Manager'},{k:'srManager',l:'Sr Manager'}],
     grpKey:'manager',
     sub:function(d){return d.role||'';},

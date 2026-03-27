@@ -494,7 +494,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='6.8';
+var APP_VERSION='6.9';
+/* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
+var NAME_OVERRIDES = {
+  'scothie@cdw.com': 'Scott Hiemstra'
+};
 var PROV = {ON:'Ontario',BC:'British Columbia',AB:'Alberta',QC:'Quebec',MB:'Manitoba',SK:'Saskatchewan',NB:'New Brunswick',NS:'Nova Scotia',NL:'Newfoundland',PE:'PEI',NT:'NWT',YT:'Yukon',NU:'Nunavut'};
 document.getElementById('sp-footer').textContent='February 2026 \u00b7 v'+APP_VERSION;
 document.getElementById('version-badge').textContent='v'+APP_VERSION;
@@ -679,7 +683,7 @@ function loadOrg(org,cb){
   x.open('GET',url);
   x.onload=function(){
     if(x.status>=200&&x.status<300){
-      try{var d=JSON.parse(x.responseText);CACHE[org]=d;cb(null,d);}
+      try{var d=JSON.parse(x.responseText);d.forEach(function(p){var ov=NAME_OVERRIDES[(p.email||'').toLowerCase()];if(ov)p.name=ov;});CACHE[org]=d;cb(null,d);}
       catch(err){cb('JSON parse error: '+err.message);}
     }else{cb('HTTP '+x.status+' loading '+CFG[org].file);}
   };
@@ -1855,6 +1859,7 @@ document.getElementById('upd-push-btn').addEventListener('click',async function(
 
   try{
     // Apply to session first
+    pendingMerge.data.forEach(function(p){var ov=NAME_OVERRIDES[(p.email||'').toLowerCase()];if(ov)p.name=ov;});
     CACHE[ORG]=pendingMerge.data;
     DATA=pendingMerge.data;
     buildSearchIndex();

@@ -278,8 +278,9 @@
   .tree-l1-block { display:flex; flex-direction:column; }
   .tree-l1-card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; cursor:pointer; transition:all .15s; }
   .tree-l1-card:hover { border-color:var(--accent); background:var(--card-hover); }
-  .tree-l1-expand { width:22px; height:22px; border-radius:50%; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-size:12px; line-height:20px; text-align:center; cursor:pointer; transition:all .15s; flex-shrink:0; }
-  .tree-l1-expand:hover { border-color:var(--accent); color:var(--accent); }
+  .tree-l1-expand-row { padding:4px 0; }
+  .tree-l1-expand { display:inline-flex; align-items:center; gap:4px; padding:4px 12px; border-radius:6px; background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.04em; cursor:pointer; transition:all .15s; user-select:none; }
+  .tree-l1-expand:hover { border-color:var(--accent); color:var(--accent); background:var(--card-hover); }
   .vtree-list { margin-top:6px; margin-bottom:4px; border-left:2px solid var(--border); margin-left:10px; padding-left:0; }
   .vtree-row { }
   .vtree-node { display:flex; align-items:center; gap:8px; padding:6px 12px; border-radius:6px; cursor:pointer; transition:background .1s; }
@@ -1359,12 +1360,18 @@ function rTree(data){
         if(subKids.length){
           html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">';
           html+='<span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted)">'+subKids.length+' direct &middot; '+subDesc+' total</span>';
-          html+='<div class="tree-l1-expand" data-person="'+encodeURIComponent(kid.name)+'" title="Expand team">'+(isOpen?'&#x25B4;':'&#x25BE;')+'</div>';
           html+='</div>';
         }
         html+='</div>';
 
-        // L2+ vertical list (hidden by default)
+        // L2+ expand button and vertical list (outside the card div)
+        if(subKids.length){
+          html+='<div class="tree-l1-expand-row">';
+          html+='<div class="tree-l1-expand" data-person="'+encodeURIComponent(kid.name)+'" title="'+(isOpen?'Collapse':'Expand')+' team">'+(isOpen?'&#x25B4; Collapse':'&#x25BE; Expand')+' ('+subKids.length+')</div>';
+          html+='</div>';
+        }
+
+        // L2+ vertical list
         if(subKids.length && isOpen){
           html+='<div class="vtree-list">';
           subKids.forEach(function(sub){ html+=renderListNode(sub,2); });
@@ -1386,10 +1393,9 @@ function rTree(data){
     card.addEventListener('click',function(){ openModal(decodeURIComponent(card.dataset.name)); });
   });
 
-  // L1 cards → modal (click on card body, not expand button)
+  // L1 cards → modal
   app.querySelectorAll('.tree-l1-card').forEach(function(card){
-    card.addEventListener('click',function(ev){
-      if(ev.target.closest('.tree-l1-expand'))return;
+    card.addEventListener('click',function(){
       openModal(decodeURIComponent(card.dataset.name));
     });
   });
@@ -1397,10 +1403,10 @@ function rTree(data){
   // L1 expand buttons → toggle vertical list
   app.querySelectorAll('.tree-l1-expand').forEach(function(btn){
     btn.addEventListener('click',function(ev){
-      ev.stopPropagation();
+      ev.preventDefault();
       var person=decodeURIComponent(btn.dataset.person);
       _treeCollapsed[person]=!_treeCollapsed[person];
-      rTree(data);
+      rTree(getFiltered());
     });
   });
 
@@ -1410,7 +1416,7 @@ function rTree(data){
       ev.stopPropagation();
       var person=decodeURIComponent(tog.dataset.person);
       _treeCollapsed[person]=!_treeCollapsed[person];
-      rTree(data);
+      rTree(getFiltered());
     });
   });
 

@@ -1282,9 +1282,8 @@ function rTree(data){
   function renderListNode(d,depth){
     var kids=sortKids(childrenOf[d.name]||[]);
     var hasKids=kids.length>0;
-    var isOpen=_treeCollapsed[d.name]===false?false: _treeCollapsed[d.name]===true?false: hasKids&&_treeCollapsed[d.name]!==undefined?!_treeCollapsed[d.name]:true;
-    // Default: collapsed at depth 2+
-    if(_treeCollapsed[d.name]===undefined) isOpen=false;
+    // Default: collapsed. _treeCollapsed[name]===true means open.
+    var isOpen=_treeCollapsed[d.name]===true;
 
     var indent=Math.max(0,depth-2)*20;
     var seg=d.segment||d.channel||'';

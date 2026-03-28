@@ -1,19 +1,5 @@
 [
   {
-    "name": "First name Last name",
-    "email": "Email",
-    "role": "Manager",
-    "title": "Manager",
-    "location": "Location",
-    "province": "",
-    "dept": "Dept / Team",
-    "segment": "Commercial",
-    "losMonths": "LOS (months) months",
-    "manager": "Manager First Manager Last",
-    "managerEmail": "",
-    "srManager": "Sr Mgr First Sr Mgr Last"
-  },
-  {
     "name": "Glenn Kaul",
     "email": "glenn.kaul@cdw.ca",
     "manager": "",
@@ -194,7 +180,7 @@
     "phone": ""
   },
   {
-    "name": "Judy Ah-fat",
+    "name": "Judy Ah-Fat",
     "email": "judy.ah-fat@cdw.ca",
     "role": "Manager",
     "title": "Manager",
@@ -359,7 +345,7 @@
     "phone": ""
   },
   {
-    "name": "Sb Khurana",
+    "name": "Suphot Khurana",
     "email": "sb.khurana@cdw.ca",
     "manager": "Kale Johnson",
     "srManager": "Isaac Ling",
@@ -4512,5 +4498,17 @@
     "managerEmail": "peter.hunter@cdw.ca",
     "srManager": "",
     "phone": ""
+  },
+  {
+    "name": "Nisha Abrol",
+    "email": "",
+    "role": "Manager",
+    "title": "Manager",
+    "segment": "Enterprise",
+    "province": "ON",
+    "manager": "Colin Rose",
+    "srManager": "Colin Rose",
+    "location": "",
+    "dept": ""
   }
 ]

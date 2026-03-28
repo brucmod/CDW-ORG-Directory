@@ -7371,5 +7371,16 @@
     "manager": "Jeremy Wilson",
     "coverageParsed": [],
     "director": "Jeremy Wilson"
+  },
+  {
+    "name": "Julie Morgan",
+    "title": "Manager - Hybrid Infrastructure",
+    "email": "",
+    "segment": "Healthcare",
+    "solutionArea": "Data Center Solutions (DCS)",
+    "manager": "CJ Steiner",
+    "director": "CJ Steiner",
+    "srManager": "",
+    "domain": "DCS"
   }
 ]

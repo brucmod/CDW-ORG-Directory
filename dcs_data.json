@@ -3134,7 +3134,7 @@
     "name": "Clarissa Jackson",
     "title": "Sr ISA",
     "email": "clarissa@cdwg.com",
-    "segment": "State and Local west  ( temporary gig) and SI’s",
+    "segment": "State and Local west\u00a0 ( temporary gig) and SI\u2019s",
     "solutionArea": "Data Center Solutions (DCS)",
     "homeLocation": "NJ",
     "statesCovers": "",
@@ -3553,7 +3553,7 @@
     "__EMPTY_14": "",
     "__EMPTY_15": "",
     "__EMPTY_16": "",
-    "manager": "Jessica Keehnen",
+    "manager": "Jessica Keehan",
     "coverageParsed": [
       "Majors",
       "NW/SW Enterprise & Majors"
@@ -3588,7 +3588,7 @@
     "__EMPTY_14": "",
     "__EMPTY_15": "",
     "__EMPTY_16": "",
-    "manager": "Jessica Keehnen",
+    "manager": "Jessica Keehan",
     "coverageParsed": [
       "Central Enterprise",
       "TX/OK/LA/AR"
@@ -3623,7 +3623,7 @@
     "__EMPTY_14": "",
     "__EMPTY_15": "",
     "__EMPTY_16": "",
-    "manager": "Jessica Keehnen",
+    "manager": "Jessica Keehan",
     "coverageParsed": [
       "Majors",
       "NW/SW Enterprise & Majors"
@@ -7099,7 +7099,7 @@
     "director": "Shea Hart"
   },
   {
-    "name": "Gary Atnce",
+    "name": "Gary Arnce",
     "title": "Manager - Hybrid Infrastructure",
     "email": "Garyarn@cdw.com",
     "segment": "FED",

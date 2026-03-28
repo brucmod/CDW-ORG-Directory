@@ -256,21 +256,29 @@
   /* Theme toggle button */
   .theme-btn { display:flex; align-items:center; justify-content:center; background:none; border:1px solid var(--border); border-radius:7px; color:var(--muted); cursor:pointer; padding:7px 9px; transition:all .15s; }
   .theme-btn:hover { border-color:var(--accent); color:var(--accent); }
-  /* Org tree styles */
-  .tree-container { padding:28px 40px; overflow-x:auto; }
-  .tree-node { position:relative; display:flex; flex-direction:column; align-items:center; }
-  .tree-children { display:flex; gap:0; justify-content:center; position:relative; padding-top:24px; }
-  .tree-children::before { content:''; position:absolute; top:0; left:50%; width:0; height:24px; border-left:2px solid var(--border); }
-  .tree-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 16px; min-width:160px; max-width:220px; text-align:center; cursor:pointer; transition:all .15s; box-shadow:var(--shadow-card); position:relative; }
-  .tree-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 4px 16px var(--glow-accent); }
-  .tree-card .tree-name { font-weight:500; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tree-card .tree-title { font-size:10px; color:var(--muted); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tree-card .tree-count { font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); margin-top:4px; }
-  .tree-branch { display:flex; flex-direction:column; align-items:center; padding:0 8px; }
-  .tree-connector { width:2px; height:24px; background:var(--border); }
-  .tree-h-line { position:absolute; top:0; height:2px; background:var(--border); }
-  .tree-expand-btn { position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); width:20px; height:20px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:11px; line-height:18px; text-align:center; cursor:pointer; z-index:2; transition:all .15s; }
-  .tree-expand-btn:hover { border-color:var(--accent); color:var(--accent); }
+  /* Org tree styles — hybrid layout */
+  .tree-container { padding:28px 40px; }
+  .tree-section { margin-bottom:28px; }
+  .tree-root-card { background:var(--surface); border:1px solid var(--accent); border-radius:10px; padding:16px 20px; cursor:pointer; transition:all .15s; box-shadow:var(--shadow-card); margin-bottom:12px; }
+  .tree-root-card:hover { background:var(--card-hover); transform:translateY(-1px); box-shadow:0 4px 16px var(--glow-accent); }
+  .tree-l1-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:10px; margin-left:24px; padding-left:16px; border-left:2px solid var(--border); margin-bottom:8px; }
+  .tree-l1-block { display:flex; flex-direction:column; }
+  .tree-l1-card { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; cursor:pointer; transition:all .15s; }
+  .tree-l1-card:hover { border-color:var(--accent); background:var(--card-hover); }
+  .tree-l1-expand { width:22px; height:22px; border-radius:50%; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-size:12px; line-height:20px; text-align:center; cursor:pointer; transition:all .15s; flex-shrink:0; }
+  .tree-l1-expand:hover { border-color:var(--accent); color:var(--accent); }
+  .vtree-list { margin-top:6px; margin-bottom:4px; border-left:2px solid var(--border); margin-left:10px; padding-left:0; }
+  .vtree-row { }
+  .vtree-node { display:flex; align-items:center; gap:8px; padding:6px 12px; border-radius:6px; cursor:pointer; transition:background .1s; }
+  .vtree-node:hover { background:var(--card-hover); }
+  .vtree-toggle { width:16px; height:16px; flex-shrink:0; text-align:center; font-size:11px; color:var(--muted); cursor:pointer; line-height:16px; border-radius:3px; transition:all .1s; }
+  .vtree-toggle:hover { color:var(--accent); background:var(--surface2); }
+  .vtree-toggle-spacer { width:16px; flex-shrink:0; }
+  .vtree-info { flex:1; min-width:0; }
+  .vtree-name { font-size:12px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vtree-sub { font-size:10px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vtree-badge { display:inline-block; font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); background:rgba(255,112,35,.1); border:1px solid rgba(255,112,35,.25); border-radius:8px; padding:0 5px; margin-left:4px; vertical-align:middle; }
+  .vtree-children { margin-left:12px; border-left:1px solid var(--border); }
   @media(max-width:900px){ header{padding:16px 24px;gap:14px} .filters{padding:10px 24px} #app{padding:20px 24px} .map-shell{flex-direction:column;height:auto} .map-panel{width:100%;border-left:none;border-top:1px solid var(--border);max-height:340px} #map-container{height:340px} }
   @media(max-width:640px){ header{padding:14px 16px;flex-direction:column;align-items:stretch;gap:10px} .org-selector{justify-content:center} .search-wrap{max-width:100%} .filters{padding:9px 14px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none} .filters::-webkit-scrollbar{display:none} .filter-label{display:none} #app{padding:12px 14px} .detail-grid{grid-template-columns:1fr} .modal-overlay{padding:0;align-items:flex-end} .modal{max-width:100%;border-radius:16px 16px 0 0;max-height:88vh} }
 </style>
@@ -1206,12 +1214,12 @@ function buildLegend(){
   }
 }
 
-// ── ORG TREE VIEW ─────────────────────────────────────────────
+// ── ORG TREE VIEW (Hybrid: cards for L0-L1, vertical list below) ──
+var _treeCollapsed={};
 function rTree(data){
   var byName={};
   data.forEach(function(d){byName[d.name]=d;});
 
-  // Build children map from the filtered data
   var childrenOf={};
   data.forEach(function(d){
     var mgr=d.manager||'';
@@ -1221,166 +1229,173 @@ function rTree(data){
     }
   });
 
-  // Find roots: people whose manager is not in the dataset
   var roots=data.filter(function(d){
     var mgr=d.manager||'';
     return !mgr || !byName[mgr];
   });
 
-  // Sort roots by number of descendants (biggest trees first)
   function countDesc(name){
     var kids=childrenOf[name]||[];
     var n=kids.length;
     kids.forEach(function(k){n+=countDesc(k.name);});
     return n;
   }
-  roots.sort(function(a,b){return countDesc(b.name)-countDesc(a.name);});
 
-  // Collapse state tracking
-  var collapsed={};
-  var treeId='tree-'+Date.now();
-
-  function renderNode(d,depth){
-    var kids=(childrenOf[d.name]||[]).slice().sort(function(a,b){
-      return(countDesc(b.name)+((childrenOf[b.name]||[]).length?1000:0))-(countDesc(a.name)+((childrenOf[a.name]||[]).length?1000:0));
+  function sortKids(arr){
+    return arr.slice().sort(function(a,b){
+      var ha=(childrenOf[a.name]||[]).length?1:0;
+      var hb=(childrenOf[b.name]||[]).length?1:0;
+      if(hb!==ha)return hb-ha;
+      return countDesc(b.name)-countDesc(a.name);
     });
+  }
+
+  roots=sortKids(roots);
+
+  // ── Vertical list node (depth 2+) ──
+  function renderListNode(d,depth){
+    var kids=sortKids(childrenOf[d.name]||[]);
     var hasKids=kids.length>0;
-    var nodeId=treeId+'-'+encodeURIComponent(d.name);
-    var isCollapsed=depth>=2 && hasKids && collapsed[d.name]!==false && collapsed[d.name]===undefined;
+    var isOpen=_treeCollapsed[d.name]===false?false: _treeCollapsed[d.name]===true?false: hasKids&&_treeCollapsed[d.name]!==undefined?!_treeCollapsed[d.name]:true;
+    // Default: collapsed at depth 2+
+    if(_treeCollapsed[d.name]===undefined) isOpen=false;
 
-    var html='<div class="tree-branch">';
-    if(depth>0) html+='<div class="tree-connector"></div>';
-
-    // Card
+    var indent=Math.max(0,depth-2)*20;
     var seg=d.segment||d.channel||'';
-    html+='<div class="tree-card" data-name="'+encodeURIComponent(d.name)+'" id="'+nodeId+'">';
-    html+=av(d.name,32,12,seg);
-    html+='<div class="tree-name">'+e(d.name)+'</div>';
-    html+='<div class="tree-title">'+e(d.title||d.titleGroup||'')+'</div>';
-    if(hasKids) html+='<div class="tree-count">'+kids.length+' report'+(kids.length>1?'s':'')+'</div>';
-    if(hasKids) html+='<div class="tree-expand-btn" data-person="'+encodeURIComponent(d.name)+'" data-depth="'+depth+'">'+(isCollapsed?'+':'&minus;')+'</div>';
+    var html='<div class="vtree-row" style="padding-left:'+indent+'px">';
+    html+='<div class="vtree-node" data-name="'+encodeURIComponent(d.name)+'">';
+    if(hasKids){
+      html+='<div class="vtree-toggle" data-person="'+encodeURIComponent(d.name)+'">'+(isOpen?'&#x25BE;':'&#x25B8;')+'</div>';
+    } else {
+      html+='<div class="vtree-toggle-spacer"></div>';
+    }
+    html+=av(d.name,28,10,seg);
+    html+='<div class="vtree-info">';
+    html+='<div class="vtree-name">'+e(d.name)+'</div>';
+    html+='<div class="vtree-sub">'+e(d.title||d.titleGroup||'');
+    if(hasKids) html+=' <span class="vtree-badge">'+kids.length+'</span>';
+    html+='</div></div>';
+    if(d.email) html+='<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()" style="margin-left:auto;flex-shrink:0">&#x2709;</a>';
     html+='</div>';
 
-    // Children
-    if(hasKids && !isCollapsed){
-      html+='<div class="tree-children" style="position:relative">';
-      // Horizontal connector line
-      if(kids.length>1) html+='<div class="tree-h-line" style="left:calc(50% - '+(kids.length-1)*0.5+'* (160px + 16px) / 2);right:calc(50% - '+(kids.length-1)*0.5+'* (160px + 16px) / 2)"></div>';
-      kids.forEach(function(kid){
-        html+=renderNode(kid,depth+1);
-      });
+    if(hasKids && isOpen){
+      html+='<div class="vtree-children">';
+      kids.forEach(function(kid){ html+=renderListNode(kid,depth+1); });
       html+='</div>';
     }
     html+='</div>';
     return html;
   }
 
-  // For very large datasets, show a simplified flat tree instead of the full hierarchy
-  var totalNodes=data.length;
+  // ── Build HTML ──
   var app=document.getElementById('app');
+  var totalNodes=data.length;
+  var html='<div class="tree-container">';
+  html+='<div style="margin-bottom:18px;font-family:\'DM Mono\',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em">'+
+    'ORG TREE &middot; '+totalNodes.toLocaleString()+' people &middot; '+roots.length+' top-level nodes</div>';
 
-  if(totalNodes>500){
-    // Simplified: show top-level roots with expandable children lists
-    var html='<div class="tree-container">';
-    html+='<div style="margin-bottom:16px;font-family:\'DM Mono\',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em">'+
-      'ORG TREE &middot; '+totalNodes+' people &middot; '+roots.length+' top-level nodes &middot; Click to expand</div>';
-
-    roots.forEach(function(root){
-      var kids=childrenOf[root.name]||[];
-      html+='<div style="margin-bottom:12px">';
-      html+='<div class="tree-card" data-name="'+encodeURIComponent(root.name)+'" style="display:inline-flex;align-items:center;gap:10px;text-align:left;max-width:none;min-width:auto;padding:10px 16px">';
-      html+=av(root.name,30,11,root.segment||root.channel);
-      html+='<div><div class="tree-name" style="white-space:normal">'+e(root.name)+'</div>';
-      html+='<div class="tree-title">'+e(root.title||root.titleGroup||'')+'</div></div>';
-      if(kids.length) html+='<span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--accent);margin-left:8px">'+kids.length+' reports</span>';
-      html+='</div>';
-
-      if(kids.length){
-        html+='<div class="tree-flat-kids" data-parent="'+encodeURIComponent(root.name)+'" style="display:none;margin-left:40px;margin-top:6px;border-left:2px solid var(--border);padding-left:14px">';
-        kids.sort(function(a,b){return(childrenOf[b.name]||[]).length-(childrenOf[a.name]||[]).length;});
-        kids.forEach(function(kid){
-          var subKids=childrenOf[kid.name]||[];
-          html+='<div class="tree-card" data-name="'+encodeURIComponent(kid.name)+'" style="display:inline-flex;align-items:center;gap:8px;text-align:left;max-width:none;min-width:auto;padding:8px 12px;margin:3px 0">';
-          html+=av(kid.name,26,10,kid.segment||kid.channel);
-          html+='<div><div class="tree-name" style="white-space:normal;font-size:12px">'+e(kid.name)+'</div>';
-          html+='<div class="tree-title" style="font-size:9px">'+e(kid.title||kid.titleGroup||'')+'</div></div>';
-          if(subKids.length) html+='<span style="font-family:\'DM Mono\',monospace;font-size:9px;color:var(--accent);margin-left:6px">'+subKids.length+'</span>';
-          html+='</div>';
-        });
-        html+='</div>';
-      }
-      html+='</div>';
-    });
-    html+='</div>';
-    app.innerHTML=html;
-
-    // Toggle flat kid sections on root card click (not modal)
-    app.querySelectorAll('.tree-card').forEach(function(card){
-      card.addEventListener('click',function(ev){
-        var parent=card.dataset.name;
-        var kidDiv=app.querySelector('.tree-flat-kids[data-parent="'+parent+'"]');
-        if(kidDiv){
-          ev.stopPropagation();
-          kidDiv.style.display=kidDiv.style.display==='none'?'block':'none';
-          return;
-        }
-        openModal(decodeURIComponent(card.dataset.name));
-      });
-    });
-    return;
-  }
-
-  // Full graphical tree for smaller datasets
-  var html='<div class="tree-container" style="text-align:center">';
-  html+='<div style="margin-bottom:16px;font-family:\'DM Mono\',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em">'+
-    'ORG TREE &middot; '+totalNodes+' people &middot; Click nodes to expand/collapse &middot; Click name for details</div>';
-  html+='<div style="display:inline-flex;gap:24px;flex-wrap:wrap;justify-content:center">';
+  // Render each root as a card section
   roots.forEach(function(root){
-    html+=renderNode(root,0);
+    var kids=sortKids(childrenOf[root.name]||[]);
+    var desc=countDesc(root.name);
+    var seg=root.segment||root.channel||'';
+
+    // Root card (L0)
+    html+='<div class="tree-section">';
+    html+='<div class="tree-root-card" data-name="'+encodeURIComponent(root.name)+'">';
+    html+='<div style="display:flex;align-items:center;gap:12px">';
+    html+=av(root.name,44,16,seg);
+    html+='<div>';
+    html+='<div style="font-weight:500;font-size:15px">'+e(root.name)+'</div>';
+    html+='<div style="font-size:11px;color:var(--muted);margin-top:2px">'+e(root.title||root.titleGroup||'')+'</div>';
+    html+='</div>';
+    if(desc) html+='<div style="margin-left:auto;font-family:\'DM Mono\',monospace;font-size:11px;color:var(--accent)">'+desc+' total</div>';
+    html+='</div>';
+    html+='</div>';
+
+    // L1 children as cards in a grid
+    if(kids.length){
+      html+='<div class="tree-l1-grid">';
+      kids.forEach(function(kid){
+        var subKids=sortKids(childrenOf[kid.name]||[]);
+        var subDesc=countDesc(kid.name);
+        var kSeg=kid.segment||kid.channel||'';
+        var isOpen=_treeCollapsed[kid.name]===true;
+
+        html+='<div class="tree-l1-block">';
+        html+='<div class="tree-l1-card" data-name="'+encodeURIComponent(kid.name)+'">';
+        html+='<div style="display:flex;align-items:center;gap:10px">';
+        html+=av(kid.name,34,12,kSeg);
+        html+='<div style="flex:1;min-width:0">';
+        html+='<div style="font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+e(kid.name)+'</div>';
+        html+='<div style="font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+e(kid.title||kid.titleGroup||'')+'</div>';
+        html+='</div>';
+        html+='</div>';
+        if(subKids.length){
+          html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">';
+          html+='<span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted)">'+subKids.length+' direct &middot; '+subDesc+' total</span>';
+          html+='<div class="tree-l1-expand" data-person="'+encodeURIComponent(kid.name)+'" title="Expand team">'+(isOpen?'&#x25B4;':'&#x25BE;')+'</div>';
+          html+='</div>';
+        }
+        html+='</div>';
+
+        // L2+ vertical list (hidden by default)
+        if(subKids.length && isOpen){
+          html+='<div class="vtree-list">';
+          subKids.forEach(function(sub){ html+=renderListNode(sub,2); });
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
   });
-  html+='</div></div>';
+
+  html+='</div>';
   app.innerHTML=html;
 
-  // Wire up expand/collapse buttons
-  app.querySelectorAll('.tree-expand-btn').forEach(function(btn){
-    btn.addEventListener('click',function(ev){
-      ev.stopPropagation();
-      var person=decodeURIComponent(btn.dataset.person);
-      var depth=parseInt(btn.dataset.depth);
-      if(collapsed[person]===false){collapsed[person]=true;}
-      else if(collapsed[person]===undefined && depth>=2){collapsed[person]=false;}
-      else{collapsed[person]=!collapsed[person];}
-      rTree(data);
-    });
+  // ── Wire events ──
+  // Root cards → modal
+  app.querySelectorAll('.tree-root-card').forEach(function(card){
+    card.addEventListener('click',function(){ openModal(decodeURIComponent(card.dataset.name)); });
   });
 
-  // Wire up card clicks for modal
-  app.querySelectorAll('.tree-card').forEach(function(card){
+  // L1 cards → modal (click on card body, not expand button)
+  app.querySelectorAll('.tree-l1-card').forEach(function(card){
     card.addEventListener('click',function(ev){
-      if(ev.target.closest('.tree-expand-btn'))return;
+      if(ev.target.closest('.tree-l1-expand'))return;
       openModal(decodeURIComponent(card.dataset.name));
     });
   });
 
-  // Auto-fit horizontal connector lines
-  app.querySelectorAll('.tree-children').forEach(function(cont){
-    var branches=cont.querySelectorAll(':scope > .tree-branch');
-    if(branches.length>1){
-      var first=branches[0],last=branches[branches.length-1];
-      var cl=cont.getBoundingClientRect().left;
-      var fl=first.querySelector('.tree-card');
-      var ll=last.querySelector('.tree-card');
-      if(fl&&ll){
-        var fRect=fl.getBoundingClientRect();
-        var lRect=ll.getBoundingClientRect();
-        var hLine=cont.querySelector('.tree-h-line');
-        if(hLine){
-          hLine.style.left=(fRect.left+fRect.width/2-cl)+'px';
-          hLine.style.right=(cont.getBoundingClientRect().right-lRect.left-lRect.width/2)+'px';
-          hLine.style.width='auto';
-        }
-      }
-    }
+  // L1 expand buttons → toggle vertical list
+  app.querySelectorAll('.tree-l1-expand').forEach(function(btn){
+    btn.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      var person=decodeURIComponent(btn.dataset.person);
+      _treeCollapsed[person]=!_treeCollapsed[person];
+      rTree(data);
+    });
+  });
+
+  // Vertical tree toggles
+  app.querySelectorAll('.vtree-toggle').forEach(function(tog){
+    tog.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      var person=decodeURIComponent(tog.dataset.person);
+      _treeCollapsed[person]=!_treeCollapsed[person];
+      rTree(data);
+    });
+  });
+
+  // Vertical tree node clicks → modal
+  app.querySelectorAll('.vtree-node').forEach(function(node){
+    node.addEventListener('click',function(ev){
+      if(ev.target.closest('.vtree-toggle'))return;
+      if(ev.target.closest('a'))return;
+      openModal(decodeURIComponent(node.dataset.name));
+    });
   });
 }
 

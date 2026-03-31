@@ -582,7 +582,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.2';
+var APP_VERSION='7.3';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -867,7 +867,15 @@ function getVal(f,d){
 
 function buildSearchIndex(){
   SEARCH_INDEX=DATA.map(function(d){
-    return Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
+    var base=Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
+    // Append account customer names if loaded (CDW only)
+    if(ACCT_LOADED&&ORG==='cdw'&&d.email){
+      var accts=acctForEmail(d.email);
+      if(accts.length){
+        base+=' '+accts.map(function(a){return a.customer;}).join(' ').toLowerCase();
+      }
+    }
+    return base;
   });
 }
 
@@ -2317,7 +2325,8 @@ function processAcctFile(data,btn){
     btn.textContent='Accounts ('+sellers+')';
     btn.title=mapped+' accounts mapped to '+sellers+' sellers';
     showToast(mapped.toLocaleString()+' accounts mapped to '+sellers+' sellers','#8FA596');
-    render(); // Re-render to show badges
+    buildSearchIndex(); // Rebuild so account names are searchable
+    render();
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';

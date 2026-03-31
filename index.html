@@ -293,6 +293,20 @@
   .vtree-sub { font-size:10px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .vtree-badge { display:inline-block; font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); background:rgba(255,112,35,.1); border:1px solid rgba(255,112,35,.25); border-radius:8px; padding:0 5px; margin-left:4px; vertical-align:middle; }
   .vtree-children { margin-left:12px; border-left:1px solid var(--border); }
+  /* Account badge on cards */
+  .acct-badge { display:inline-flex; align-items:center; gap:4px; font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); background:rgba(255,112,35,.08); border:1px solid rgba(255,112,35,.2); border-radius:10px; padding:1px 7px; }
+  :root[data-theme="light"] .acct-badge { color:#a0522d; background:rgba(212,88,26,.06); border-color:rgba(212,88,26,.2); }
+  /* Account table in modal */
+  .acct-section { margin-top:4px; }
+  .acct-table-wrap { max-height:280px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; margin-top:8px; }
+  .acct-table { width:100%; border-collapse:collapse; font-size:11px; }
+  .acct-table thead { background:var(--surface2); position:sticky; top:0; z-index:1; }
+  .acct-table th { padding:7px 10px; text-align:left; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:500; border-bottom:1px solid var(--border); cursor:pointer; user-select:none; white-space:nowrap; }
+  .acct-table th:hover { color:var(--text); }
+  .acct-table td { padding:6px 10px; border-bottom:1px solid var(--border); color:var(--text); }
+  .acct-table tr:last-child td { border-bottom:none; }
+  .acct-table tr:hover td { background:var(--card-hover); }
+  .acct-t12 { font-family:'DM Mono',monospace; font-size:10px; text-align:right; }
   @media(max-width:900px){ header{padding:16px 24px;gap:14px} .filters{padding:10px 24px} #app{padding:20px 24px} .map-shell{flex-direction:column;height:auto} .map-panel{width:100%;border-left:none;border-top:1px solid var(--border);max-height:340px} #map-container{height:340px} }
   @media(max-width:640px){ header{padding:14px 16px;flex-direction:column;align-items:stretch;gap:10px} .org-selector{justify-content:center} .search-wrap{max-width:100%} .filters{padding:9px 14px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none} .filters::-webkit-scrollbar{display:none} .filter-label{display:none} #app{padding:12px 14px} .detail-grid{grid-template-columns:1fr} .modal-overlay{padding:0;align-items:flex-end} .modal{max-width:100%;border-radius:16px 16px 0 0;max-height:88vh} }
 </style>
@@ -321,6 +335,11 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Update Data
     </button>
+    <button class="upd-btn" id="acct-btn" title="Upload account mapping (CDW only)" style="display:none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Accounts
+    </button>
+    <input type="file" id="acct-file" accept=".xlsx,.xls" style="display:none">
     <button class="theme-btn" id="theme-toggle" title="Toggle light/dark theme">
       <svg id="theme-icon-dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       <svg id="theme-icon-light" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -563,7 +582,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.1';
+var APP_VERSION='7.2';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -677,7 +696,8 @@ var CFG = {
       var s2=ds('Role &amp; Organization',[{l:'Title',v:e(d.title)||'&mdash;',f:1},{l:'Role Group',v:e(d.titleGroup)||'&mdash;'},{l:'Segment',v:e(d.segment)||'&mdash;'},{l:'Channel',v:e(d.channel)||'&mdash;'},{l:'Tier',v:e(d.tier)||'&mdash;'},{l:'Region',v:e(d.region)||'&mdash;'},{l:'Area',v:e(d.area)||'&mdash;'},{l:'District',v:e(d.district)||'&mdash;'}]);
       var ch='';if(d.manager)ch+=cr('Manager',d.manager,d.managerTitle,d.managerEmail);if(d.director)ch+=cr('Director',d.director,d.directorTitle,d.directorEmail);
       if(ch)ch='<div class="detail-section"><div class="detail-section-title">Reporting Chain</div>'+ch+'</div>';
-      return s1+s2+ch;}},
+      var acctHtml=ACCT_LOADED?acctTableHTML(acctForEmail(d.email)):'';
+      return s1+s2+ch+acctHtml;}},
   dcs:{file:'dcs_data.json',eyebrow:'CDW \u00b7 Hybrid Infrastructure',title:'DCS Org <em>Directory</em>',hint:'Search name, title, email, location\u2026',hasMap:false,defaultView:'cards',
     filters:[{id:'f-dir',key:'director',lbl:'All Directors',vfn:function(d){var v=d.director;return(v&&v.trim()&&v.charAt(0)!=='_')?v:null;}},{id:'f-sr',key:'srManager',lbl:'All Sr Managers',vfn:function(d){var v=d.srManager;return(v&&v.trim()&&v!=='-')?v:null;}},{id:'f-mgr',key:'manager',lbl:'All Managers',vfn:function(d){var m=d.manager;return(!m||m==='-'||m.charAt(0)==='_')?null:m;}},{id:'f-seg',key:'segment',lbl:'All Segments'},{id:'f-sol',key:'solutionArea',lbl:'All Solution Areas'},{id:'f-hst',key:'homeLocation',lbl:'All Home States',vfn:function(d){var h=d.homeLocation||'';if(!h)return null;var m=h.match(/,\s*([A-Z]{2})\s*$/);if(m)return m[1];if(h.length===2&&h===h.toUpperCase())return h;return null;}},{id:'f-off',key:'officeLocation',lbl:'All Offices',vfn:function(d){return d.officeLocation||null;}}],
     cols:[{k:'name',l:'Name'},{k:'title',l:'Title'},{k:'director',l:'Director'},{k:'srManager',l:'Sr Manager'},{k:'manager',l:'Manager'},{k:'segment',l:'Segment'},{k:'homeLocation',l:'Home'}],
@@ -801,6 +821,7 @@ function switchOrg(org){
     document.getElementById('search').value='';
     var mb=document.getElementById('btn-map');
     mb.style.display=cfg.hasMap?'':'none';
+    var ab=document.getElementById('acct-btn');if(ab)ab.style.display=org==='cdw'?'':'none';
     if(!cfg.hasMap&&VIEW==='map'){VIEW='table';document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('btn-table').classList.add('active');}
     if(cfg.defaultView&&VIEW!==cfg.defaultView){VIEW=cfg.defaultView;document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});var dvb=document.getElementById('btn-'+cfg.defaultView);if(dvb)dvb.classList.add('active');}
     populateFilters();
@@ -948,8 +969,9 @@ function buildCard(d,cls){
   cls=cls||'card';
   var tags=cardTags(d);
   var mgr=cleanName(d[CFG[ORG].grpKey]||'');
+  var ab=ACCT_LOADED&&ORG==='cdw'?acctBadgeHTML(d.email):'';
   return'<div class="'+cls+'" data-name="'+encodeURIComponent(d.name)+'">'+
-    '<div class="card-header">'+av(d.name,40,14,d.segment||d.channel)+'<div><div class="card-name">'+e(d.name)+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
+    '<div class="card-header">'+av(d.name,40,14,d.segment||d.channel)+'<div><div class="card-name">'+e(d.name)+' '+ab+'</div><div class="card-subtitle">'+e(CFG[ORG].sub(d))+'</div></div></div>'+
     '<div class="card-tags">'+tags+'</div>'+
     '<div class="card-footer"><div class="card-mgr">'+(mgr?'Mgr: <strong>'+e(mgr)+'</strong>':'')+'</div>'+(d.email?'<a class="email-link" href="mailto:'+e(d.email)+'" onclick="event.stopPropagation()">&#x2709;</a>':'')+'</div>'+
     '</div>';
@@ -2187,6 +2209,121 @@ updOpen=function(){
   _origUpdOpen();
   ghLoad();
 };
+
+// ── ACCOUNT MAPPING ───────────────────────────────────────────
+// Stores accounts keyed by lowercase email: { 'email@cdw.com': [{customer, city, state, custNum, t12},...] }
+var ACCT_MAP={};
+var ACCT_LOADED=false;
+
+// Column indices in the XLSX (0-based)
+var ACCT_COLS={customer:6,city:9,state:10,custNum:18,t12:20,amFirst:28,amLast:29,amEmail:30,amPhone:31};
+
+function acctForEmail(email){
+  if(!email)return[];
+  return ACCT_MAP[email.toLowerCase()]||[];
+}
+
+function fmtT12(v){
+  if(!v&&v!==0)return'';
+  var n=parseFloat(v);
+  if(isNaN(n))return'';
+  if(n>=1000000)return'$'+( n/1000000).toFixed(1)+'M';
+  if(n>=1000)return'$'+(n/1000).toFixed(1)+'K';
+  return'$'+n.toFixed(0);
+}
+
+function acctTableHTML(accts){
+  if(!accts||!accts.length)return'';
+  // Sort by T12 descending
+  var sorted=accts.slice().sort(function(a,b){return(parseFloat(b.t12)||0)-(parseFloat(a.t12)||0);});
+  var rows=sorted.map(function(a){
+    return'<tr><td>'+e(a.customer)+'</td><td>'+e(a.city)+'</td><td>'+e(a.state)+'</td><td>'+e(a.custNum)+'</td><td class="acct-t12">'+fmtT12(a.t12)+'</td></tr>';
+  }).join('');
+  return'<div class="detail-section acct-section"><div class="detail-section-title">Accounts &middot; '+accts.length+'</div>'+
+    '<div class="acct-table-wrap"><table class="acct-table"><thead><tr><th>Customer</th><th>City</th><th>St</th><th>Cust #</th><th style="text-align:right">T12 Spend</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+}
+
+function acctBadgeHTML(email){
+  var accts=acctForEmail(email);
+  if(!accts.length)return'';
+  return'<span class="acct-badge">'+accts.length+' acct'+(accts.length>1?'s':'')+'</span>';
+}
+
+// Upload handler
+document.getElementById('acct-btn').addEventListener('click',function(){
+  document.getElementById('acct-file').click();
+});
+
+document.getElementById('acct-file').addEventListener('change',function(ev){
+  var file=ev.target.files[0];
+  if(!file)return;
+  ev.target.value='';
+  var btn=document.getElementById('acct-btn');
+  btn.classList.add('loading');
+  btn.textContent='Loading…';
+
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      if(typeof XLSX==='undefined'){
+        // Load SheetJS if not already loaded
+        var s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        s.onload=function(){processAcctFile(e.target.result,btn);};
+        document.head.appendChild(s);
+      }else{
+        processAcctFile(e.target.result,btn);
+      }
+    }catch(err){
+      btn.classList.remove('loading');
+      btn.textContent='Accounts';
+      showToast('Error: '+err.message,'#DEA193');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+function processAcctFile(data,btn){
+  try{
+    var wb=XLSX.read(data,{type:'array'});
+    var ws=wb.Sheets[wb.SheetNames[0]];
+    var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+
+    ACCT_MAP={};
+    var mapped=0,skipped=0;
+
+    rows.forEach(function(row){
+      // Find columns by header name
+      var email=String(row['MatchAMEmail']||'').trim().toLowerCase();
+      if(!email||email.indexOf('@')===-1){skipped++;return;}
+
+      var acct={
+        customer:String(row['CustomerDescription']||'').trim(),
+        city:String(row['City']||'').trim(),
+        state:String(row['State']||'').trim(),
+        custNum:String(row['MatchCustomerNumber']||'').trim(),
+        t12:row['MatchT12Spend']||''
+      };
+      if(!acct.customer){skipped++;return;}
+
+      if(!ACCT_MAP[email])ACCT_MAP[email]=[];
+      ACCT_MAP[email].push(acct);
+      mapped++;
+    });
+
+    ACCT_LOADED=true;
+    var sellers=Object.keys(ACCT_MAP).length;
+    btn.classList.remove('loading');
+    btn.textContent='Accounts ('+sellers+')';
+    btn.title=mapped+' accounts mapped to '+sellers+' sellers';
+    showToast(mapped.toLocaleString()+' accounts mapped to '+sellers+' sellers','#8FA596');
+    render(); // Re-render to show badges
+  }catch(err){
+    btn.classList.remove('loading');
+    btn.textContent='Accounts';
+    showToast('Parse error: '+err.message,'#DEA193');
+  }
+}
 </script>
 </body>
 </html>

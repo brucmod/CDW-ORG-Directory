@@ -593,7 +593,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.1';
+var APP_VERSION='8.2';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -2396,6 +2396,7 @@ function processAcctFile(data,btn){
 
     ACCT_MAP={};
     var mapped=0,skipped=0,emailMatches=0,nameMatches=0,noCustomer=0,noMatch=0;
+    var unmappedAccounts=[];
 
     rows.forEach(function(row,idx){
       // Extract account data using new column names
@@ -2448,18 +2449,36 @@ function processAcctFile(data,btn){
         ACCT_MAP[matchKey].push(acct);
         mapped++;
       }else{
+        // Store unmapped account with the email/name that failed to match
+        var unmappedAcct={
+          customer:acct.customer,
+          city:acct.city,
+          state:acct.state,
+          custNum:acct.custNum,
+          t12:acct.t12,
+          attemptedEmail:email||'',
+          attemptedName:(row['MatchAMFirstName']||'')+' '+(row['MatchAMLastName']||'')
+        };
+        unmappedAccounts.push(unmappedAcct);
         skipped++;
       }
     });
+
+    // Add all unmapped accounts under a special key
+    if(unmappedAccounts.length>0){
+      ACCT_MAP['__UNMAPPED__']=unmappedAccounts;
+      console.log('[ACCT] Stored',unmappedAccounts.length,'unmapped accounts under __UNMAPPED__ key');
+    }
 
     console.log('[ACCT] Results: mapped='+mapped+', skipped='+skipped+', noCustomer='+noCustomer+', noMatch='+noMatch);
     console.log('[ACCT] Email matches: '+emailMatches+', Name matches: '+nameMatches);
 
     ACCT_LOADED=true;
     var sellers=Object.keys(ACCT_MAP).length;
+    var totalAccounts=mapped+skipped;
     btn.classList.remove('loading');
-    btn.textContent='Accounts ('+sellers+')';
-    btn.title=mapped+' accounts mapped to '+sellers+' sellers ('+emailMatches+' by email, '+nameMatches+' by name, '+skipped+' skipped)';
+    btn.textContent='Accounts ('+totalAccounts.toLocaleString()+')';
+    btn.title=totalAccounts.toLocaleString()+' total accounts: '+mapped.toLocaleString()+' mapped to '+sellers+' sellers, '+skipped.toLocaleString()+' unmapped';
     var asw=document.getElementById('acct-search-wrap');
     if(asw&&ORG==='cdw')asw.style.display='block';
     buildSearchIndex();
@@ -2474,7 +2493,7 @@ function processAcctFile(data,btn){
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 '+emailMatches+' email \u00b7 '+nameMatches+' name \u00b7 '+skipped.toLocaleString()+' skipped','#8FA596');
+    showToast(totalAccounts.toLocaleString()+' accounts \u00b7 '+mapped.toLocaleString()+' mapped to '+sellers+' sellers \u00b7 '+skipped.toLocaleString()+' unmapped','#8FA596');
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';

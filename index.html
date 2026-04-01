@@ -359,7 +359,7 @@
 <!-- ── ACCOUNT SEARCH BAR (below header) ── -->
 <div class="acct-search-container" id="acct-search-container">
   <div class="acct-search-wrap">
-    <input type="text" id="acct-search" placeholder="Search Accounts">
+    <input type="text" id="acct-search" placeholder="Search Accounts (press Enter)">
   </div>
 </div>
 
@@ -598,7 +598,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.6';
+var APP_VERSION='8.7';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -1568,15 +1568,12 @@ document.getElementById('search').addEventListener('input',function(){
     });
   },150);
 });
-var _acctSearchDebounce=null;
-document.getElementById('acct-search').addEventListener('input',function(){
-  clearTimeout(_acctSearchDebounce);
-  _acctSearchDebounce=setTimeout(function(){
-    requestAnimationFrame(function(){
-      refreshFilters(null);
-      render();
-    });
-  },250);
+// Account search: Only search on Enter key
+document.getElementById('acct-search').addEventListener('keydown',function(ev){
+  if(ev.key==='Enter'){
+    refreshFilters(null);
+    render();
+  }
 });
 document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.getElementById('acct-search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
 

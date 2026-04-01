@@ -2327,8 +2327,8 @@ function processAcctFile(data,btn){
     buildSearchIndex();
     render();
 
-    // Push to GitHub if settings are configured
-    acctPushToGitHub(mapped,sellers);
+    // Push to GitHub (same as Update Data)
+    acctPushToGitHub(mapped,sellers,btn);
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';
@@ -2337,21 +2337,25 @@ function processAcctFile(data,btn){
 }
 
 // Push account map to GitHub as CDW_accounts.json
-async function acctPushToGitHub(mapped,sellers){
+async function acctPushToGitHub(mapped,sellers,btn){
   var owner=localStorage.getItem('gh_owner')||'';
   var repo=localStorage.getItem('gh_repo')||'';
   var token=localStorage.getItem('gh_token')||'';
   if(!owner||!repo||!token){
-    showToast(mapped.toLocaleString()+' accounts loaded (session only — set GitHub settings to persist)','#BD673D');
+    // No GitHub settings — open the updater modal to configure them
+    showToast(mapped.toLocaleString()+' accounts loaded \u00b7 Configure GitHub settings to save permanently','#BD673D');
     return;
   }
   try{
+    btn.textContent='Saving\u2026';
     var json=JSON.stringify(ACCT_MAP,null,2);
     var statusEl=document.createElement('span');
     await ghPushFile(owner,repo,token,'CDW_accounts.json',json,statusEl);
-    showToast(mapped.toLocaleString()+' accounts \u2192 '+sellers+' sellers \u00b7 Pushed to GitHub','#8FA596');
+    btn.textContent='Accounts ('+sellers+')';
+    showToast(mapped.toLocaleString()+' accounts saved \u00b7 '+sellers+' sellers','#8FA596');
   }catch(err){
-    showToast(mapped.toLocaleString()+' accounts loaded (push failed: '+err.message+')','#BD673D');
+    btn.textContent='Accounts ('+sellers+')';
+    showToast('Accounts loaded but save failed: '+err.message,'#DEA193');
   }
 }
 

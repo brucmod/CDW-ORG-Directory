@@ -593,7 +593,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.0';
+var APP_VERSION='8.1';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -2307,7 +2307,8 @@ var ACCT_LOADED=false;
 
 function acctForEmail(email){
   if(!email)return[];
-  return ACCT_MAP[email.toLowerCase()]||[];
+  var key=email.toLowerCase();
+  return ACCT_MAP[key]||[];
 }
 
 function fmtT12(v){
@@ -2376,6 +2377,9 @@ function processAcctFile(data,btn){
     var ws=wb.Sheets[wb.SheetNames[0]];
     var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
 
+    console.log('[ACCT] Total rows in file:',rows.length);
+    console.log('[ACCT] Sample row columns:',rows.length?Object.keys(rows[0]):[]);
+
     // Build lookup maps for DATA by email and by name
     var byEmail={};
     var byName={};
@@ -2388,10 +2392,12 @@ function processAcctFile(data,btn){
       }
     });
 
-    ACCT_MAP={};
-    var mapped=0,skipped=0,emailMatches=0,nameMatches=0;
+    console.log('[ACCT] Org has',Object.keys(byEmail).length,'people with email,',Object.keys(byName).length,'people with name');
 
-    rows.forEach(function(row){
+    ACCT_MAP={};
+    var mapped=0,skipped=0,emailMatches=0,nameMatches=0,noCustomer=0,noMatch=0;
+
+    rows.forEach(function(row,idx){
       // Extract account data using new column names
       var acct={
         customer:String(row['CustomerDescription']||'').trim(),
@@ -2400,7 +2406,7 @@ function processAcctFile(data,btn){
         custNum:String(row['MatchCustomerNumber']||'').trim(),
         t12:row['MatchT12Spend']||''
       };
-      if(!acct.customer){skipped++;return;}
+      if(!acct.customer){noCustomer++;return;}
 
       // Try to match by email first
       var email=String(row['MatchAMEmail']||'').trim().toLowerCase();
@@ -2421,7 +2427,19 @@ function processAcctFile(data,btn){
             matchedPerson=byName[fullName];
             matchKey=matchedPerson.email?matchedPerson.email.toLowerCase():fullName;
             nameMatches++;
+          }else{
+            // Log first few mismatches to help debug
+            if(noMatch<5){
+              console.log('[ACCT] No match for:',fullName,'(email was:',email||'none',')');
+            }
+            noMatch++;
           }
+        }else{
+          // Log first few cases with no name data
+          if(noMatch<5&&!email){
+            console.log('[ACCT] Row',idx+2,'has no email and incomplete name:',first,last);
+          }
+          noMatch++;
         }
       }
 
@@ -2434,11 +2452,14 @@ function processAcctFile(data,btn){
       }
     });
 
+    console.log('[ACCT] Results: mapped='+mapped+', skipped='+skipped+', noCustomer='+noCustomer+', noMatch='+noMatch);
+    console.log('[ACCT] Email matches: '+emailMatches+', Name matches: '+nameMatches);
+
     ACCT_LOADED=true;
     var sellers=Object.keys(ACCT_MAP).length;
     btn.classList.remove('loading');
     btn.textContent='Accounts ('+sellers+')';
-    btn.title=mapped+' accounts mapped to '+sellers+' sellers ('+emailMatches+' by email, '+nameMatches+' by name)';
+    btn.title=mapped+' accounts mapped to '+sellers+' sellers ('+emailMatches+' by email, '+nameMatches+' by name, '+skipped+' skipped)';
     var asw=document.getElementById('acct-search-wrap');
     if(asw&&ORG==='cdw')asw.style.display='block';
     buildSearchIndex();
@@ -2453,11 +2474,12 @@ function processAcctFile(data,btn){
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 '+emailMatches+' email matches \u00b7 '+nameMatches+' name matches \u00b7 JSON downloaded','#8FA596');
+    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 '+emailMatches+' email \u00b7 '+nameMatches+' name \u00b7 '+skipped.toLocaleString()+' skipped','#8FA596');
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';
     showToast('Parse error: '+err.message,'#DEA193');
+    console.error('[ACCT] Error:',err);
   }
 }
 

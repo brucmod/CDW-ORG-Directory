@@ -718,6 +718,7 @@ var CFG = {
 
 var CACHE={}, ORG='cdw', DATA=[], VIEW='cards', SCOL='name', SDIR=1, SHOW_SMIT=false;
 var SEARCH_INDEX=[]; // pre-built search strings, parallel to DATA
+var ACCT_SEARCH_INDEX=[]; // account customer names, parallel to DATA
 var lmap=null, lmarkers=[], aloc=null, mq='', mf1='', mf2='';
 var COLORS=['#71584C','#5A6359','#95685D','#8FA596','#BD673D','#DEA193','#C5E4CC','#F2CDC4','#D0C8BA','#7a6255','#6b7a6a','#a07060'];
 var SEG_COLORS={'Commercial':'#BD673D','Government':'#5A6359','Education':'#8FA596','Healthcare':'#95685D','Financial Services':'#71584C','Federal':'#6b7a6a','State & Local':'#7a6255'};
@@ -869,20 +870,23 @@ function getVal(f,d){
 
 function buildSearchIndex(){
   SEARCH_INDEX=DATA.map(function(d){
-    var base=Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
-    // Append account customer names if loaded (CDW only)
+    return Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
+  });
+  // Build separate account search index (CDW only)
+  ACCT_SEARCH_INDEX=DATA.map(function(d){
     if(ACCT_LOADED&&ORG==='cdw'&&d.email){
       var accts=acctForEmail(d.email);
       if(accts.length){
-        base+=' '+accts.map(function(a){return a.customer;}).join(' ').toLowerCase();
+        return accts.map(function(a){return a.customer;}).join(' ').toLowerCase();
       }
     }
-    return base;
+    return '';
   });
 }
 
 function getFilteredBy(excludeId){
   var cfg=CFG[ORG],q=document.getElementById('search').value.toLowerCase();
+  var aq=document.getElementById('acct-search').value.toLowerCase();
   return DATA.filter(function(d,i){
     if(ORG==='cdw'&&!SHOW_SMIT){var roleEl=document.getElementById('f-tg');if(!(roleEl&&roleEl.value&&/smit/i.test(roleEl.value))&&isSMIT(d))return false;}
     for(var j=0;j<cfg.filters.length;j++){
@@ -893,6 +897,7 @@ function getFilteredBy(excludeId){
       if(getVal(f,d)!==el.value)return false;
     }
     if(q&&SEARCH_INDEX[i].indexOf(q)===-1)return false;
+    if(aq&&ACCT_SEARCH_INDEX[i].indexOf(aq)===-1)return false;
     return true;
   });
 }
@@ -920,6 +925,7 @@ function refreshFilters(changedId){
 
 function getFiltered(){
   var cfg=CFG[ORG],q=document.getElementById('search').value.toLowerCase();
+  var aq=document.getElementById('acct-search').value.toLowerCase();
   return DATA.filter(function(d,i){
     for(var j=0;j<cfg.filters.length;j++){
       var f=cfg.filters[j],el=document.getElementById(f.id);
@@ -927,6 +933,7 @@ function getFiltered(){
       if(getVal(f,d)!==el.value)return false;
     }
     if(q&&SEARCH_INDEX[i].indexOf(q)===-1)return false;
+    if(aq&&ACCT_SEARCH_INDEX[i].indexOf(aq)===-1)return false;
     return true;
   });
 }

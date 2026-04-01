@@ -598,7 +598,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.4';
+var APP_VERSION='8.5';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -1559,12 +1559,22 @@ document.querySelectorAll('.org-btn').forEach(function(b){b.addEventListener('cl
 var _searchDebounce=null;
 document.getElementById('search').addEventListener('input',function(){
   clearTimeout(_searchDebounce);
-  _searchDebounce=setTimeout(function(){refreshFilters(null);render();},50);
+  _searchDebounce=setTimeout(function(){
+    requestAnimationFrame(function(){
+      refreshFilters(null);
+      render();
+    });
+  },120);
 });
 var _acctSearchDebounce=null;
 document.getElementById('acct-search').addEventListener('input',function(){
   clearTimeout(_acctSearchDebounce);
-  _acctSearchDebounce=setTimeout(function(){refreshFilters(null);render();},50);
+  _acctSearchDebounce=setTimeout(function(){
+    requestAnimationFrame(function(){
+      refreshFilters(null);
+      render();
+    });
+  },120);
 });
 document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.getElementById('acct-search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
 

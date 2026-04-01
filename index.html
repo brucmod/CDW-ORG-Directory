@@ -598,7 +598,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.5';
+var APP_VERSION='8.6';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -1038,18 +1038,20 @@ function rCards(data){
   if(aq&&ACCT_LOADED&&ORG==='cdw'){
     var acctCards=[];
     var seen={}; // Track unique accounts to avoid duplicates
+    var aqLower=aq.toLowerCase();
+
+    // data is already filtered by ACCT_SEARCH_INDEX, so we just need to extract matching accounts
     data.forEach(function(d){
       if(!d.email)return;
       var accts=acctForEmail(d.email);
       if(!accts.length)return;
+      // Only check accounts that match the query
       accts.forEach(function(acct){
-        var key=acct.customer.toLowerCase()+'|'+d.name;
+        if(acct.customer.toLowerCase().indexOf(aqLower)===-1)return;
+        var key=acct.customer.toLowerCase()+'|'+acct.custNum;
         if(seen[key])return;
         seen[key]=true;
-        // Filter by account query
-        if(acct.customer.toLowerCase().indexOf(aq.toLowerCase())!==-1){
-          acctCards.push(buildAcctCard(acct,d.name));
-        }
+        acctCards.push(buildAcctCard(acct,d.name));
       });
     });
     if(!acctCards.length){
@@ -1564,7 +1566,7 @@ document.getElementById('search').addEventListener('input',function(){
       refreshFilters(null);
       render();
     });
-  },120);
+  },150);
 });
 var _acctSearchDebounce=null;
 document.getElementById('acct-search').addEventListener('input',function(){
@@ -1574,7 +1576,7 @@ document.getElementById('acct-search').addEventListener('input',function(){
       refreshFilters(null);
       render();
     });
-  },120);
+  },250);
 });
 document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.getElementById('acct-search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
 

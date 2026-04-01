@@ -95,6 +95,11 @@
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
   #search:focus { border-color:var(--accent); }
   #search::placeholder { color:var(--muted); }
+  .acct-search-wrap { position:relative; min-width:200px; display:none; }
+  .acct-search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+  #acct-search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
+  #acct-search:focus { border-color:var(--accent3); }
+  #acct-search::placeholder { color:var(--muted); }
   .filters { padding:12px 40px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; background:var(--surface); position:sticky; top:68px; z-index:90; backdrop-filter:blur(12px); }
   .filter-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:2px; white-space:nowrap; }
   select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; padding:6px 26px 6px 10px; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D0C8BA' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center; outline:none; transition:border-color .2s; }
@@ -325,6 +330,10 @@
   <div class="search-wrap">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search" placeholder="Search&hellip;">
+  </div>
+  <div class="acct-search-wrap" id="acct-search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    <input type="text" id="acct-search" placeholder="Search accounts&hellip;">
   </div>
   <div class="header-right">
     <button class="upd-btn" id="upd-btn" title="Update data for current org">
@@ -714,6 +723,7 @@ var CFG = {
 
 var CACHE={}, ORG='cdw', DATA=[], VIEW='cards', SCOL='name', SDIR=1, SHOW_SMIT=false;
 var SEARCH_INDEX=[]; // pre-built search strings, parallel to DATA
+var ACCT_SEARCH_INDEX=[]; // account customer names, parallel to DATA
 var lmap=null, lmarkers=[], aloc=null, mq='', mf1='', mf2='';
 var COLORS=['#71584C','#5A6359','#95685D','#8FA596','#BD673D','#DEA193','#C5E4CC','#F2CDC4','#D0C8BA','#7a6255','#6b7a6a','#a07060'];
 var SEG_COLORS={'Commercial':'#BD673D','Government':'#5A6359','Education':'#8FA596','Healthcare':'#95685D','Financial Services':'#71584C','Federal':'#6b7a6a','State & Local':'#7a6255'};
@@ -815,9 +825,11 @@ function switchOrg(org){
     document.getElementById('header-meta').textContent='March 2026 \u00b7 v'+APP_VERSION+' \u00b7 '+data.length.toLocaleString()+' people';
     document.getElementById('search').placeholder=cfg.hint;
     document.getElementById('search').value='';
+    document.getElementById('acct-search').value='';
     var mb=document.getElementById('btn-map');
     mb.style.display=cfg.hasMap?'':'none';
     var ab=document.getElementById('acct-btn');if(ab)ab.style.display=org==='cdw'?'':'none';
+    var asw=document.getElementById('acct-search-wrap');if(asw)asw.style.display=(org==='cdw'&&ACCT_LOADED)?'block':'none';
     if(!cfg.hasMap&&VIEW==='map'){VIEW='table';document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('btn-table').classList.add('active');}
     if(cfg.defaultView&&VIEW!==cfg.defaultView){VIEW=cfg.defaultView;document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});var dvb=document.getElementById('btn-'+cfg.defaultView);if(dvb)dvb.classList.add('active');}
     populateFilters();
@@ -863,20 +875,23 @@ function getVal(f,d){
 
 function buildSearchIndex(){
   SEARCH_INDEX=DATA.map(function(d){
-    var base=Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
-    // Append account customer names if loaded (CDW only)
+    return Object.values(d).filter(function(v){return typeof v==='string';}).join(' ').toLowerCase();
+  });
+  // Build separate account search index (CDW only)
+  ACCT_SEARCH_INDEX=DATA.map(function(d){
     if(ACCT_LOADED&&ORG==='cdw'&&d.email){
       var accts=acctForEmail(d.email);
       if(accts.length){
-        base+=' '+accts.map(function(a){return a.customer;}).join(' ').toLowerCase();
+        return accts.map(function(a){return a.customer;}).join(' ').toLowerCase();
       }
     }
-    return base;
+    return '';
   });
 }
 
 function getFilteredBy(excludeId){
   var cfg=CFG[ORG],q=document.getElementById('search').value.toLowerCase();
+  var aq=document.getElementById('acct-search').value.toLowerCase();
   return DATA.filter(function(d,i){
     if(ORG==='cdw'&&!SHOW_SMIT){var roleEl=document.getElementById('f-tg');if(!(roleEl&&roleEl.value&&/smit/i.test(roleEl.value))&&isSMIT(d))return false;}
     for(var j=0;j<cfg.filters.length;j++){
@@ -887,6 +902,7 @@ function getFilteredBy(excludeId){
       if(getVal(f,d)!==el.value)return false;
     }
     if(q&&SEARCH_INDEX[i].indexOf(q)===-1)return false;
+    if(aq&&ACCT_SEARCH_INDEX[i].indexOf(aq)===-1)return false;
     return true;
   });
 }
@@ -914,6 +930,7 @@ function refreshFilters(changedId){
 
 function getFiltered(){
   var cfg=CFG[ORG],q=document.getElementById('search').value.toLowerCase();
+  var aq=document.getElementById('acct-search').value.toLowerCase();
   return DATA.filter(function(d,i){
     for(var j=0;j<cfg.filters.length;j++){
       var f=cfg.filters[j],el=document.getElementById(f.id);
@@ -921,6 +938,7 @@ function getFiltered(){
       if(getVal(f,d)!==el.value)return false;
     }
     if(q&&SEARCH_INDEX[i].indexOf(q)===-1)return false;
+    if(aq&&ACCT_SEARCH_INDEX[i].indexOf(aq)===-1)return false;
     return true;
   });
 }
@@ -1477,7 +1495,12 @@ document.getElementById('search').addEventListener('input',function(){
   clearTimeout(_searchDebounce);
   _searchDebounce=setTimeout(function(){refreshFilters(null);render();},180);
 });
-document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
+var _acctSearchDebounce=null;
+document.getElementById('acct-search').addEventListener('input',function(){
+  clearTimeout(_acctSearchDebounce);
+  _acctSearchDebounce=setTimeout(function(){refreshFilters(null);render();},180);
+});
+document.getElementById('clear-filters').addEventListener('click',function(){document.getElementById('search').value='';document.getElementById('acct-search').value='';document.querySelectorAll('#filter-container select').forEach(function(s){s.value='';});mq='';mf1='';mf2='';refreshFilters(null);render();});
 
 // ── KEYBOARD SHORTCUT: / to focus search ──────────────────────
 document.addEventListener('keydown',function(ev){
@@ -2319,6 +2342,8 @@ function processAcctFile(data,btn){
     btn.classList.remove('loading');
     btn.textContent='Accounts ('+sellers+')';
     btn.title=mapped+' accounts mapped to '+sellers+' sellers';
+    var asw=document.getElementById('acct-search-wrap');
+    if(asw&&ORG==='cdw')asw.style.display='block';
     buildSearchIndex();
     render();
 
@@ -2353,6 +2378,8 @@ function loadAccounts(){
         var btn=document.getElementById('acct-btn');
         if(btn)btn.textContent='Accounts ('+sellers+')';
         if(btn)btn.title=total+' accounts mapped to '+sellers+' sellers';
+        var asw=document.getElementById('acct-search-wrap');
+        if(asw&&ORG==='cdw')asw.style.display='block';
         if(ORG==='cdw'){buildSearchIndex();render();}
       }catch(err){/* silent */}
     }

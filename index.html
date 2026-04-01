@@ -95,11 +95,12 @@
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
   #search:focus { border-color:var(--accent); }
   #search::placeholder { color:var(--muted); }
-  .acct-search-wrap { position:relative; min-width:200px; display:none; }
+  .acct-search-container { background:var(--surface); border-bottom:1px solid var(--border); padding:8px 40px 12px; display:none; }
+  .acct-search-wrap { position:relative; max-width:400px; }
   #acct-search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px; outline:none; transition:border-color .2s; }
   #acct-search:focus { border-color:var(--accent3); }
   #acct-search::placeholder { color:var(--muted); }
-  .filters { padding:12px 40px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; background:var(--surface); position:sticky; top:68px; z-index:90; backdrop-filter:blur(12px); }
+  .filters { padding:12px 40px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; background:var(--surface); position:sticky; top:68px; z-index:90; backdrop-filter:blur(12px); transition:top .2s; }
   .filter-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:2px; white-space:nowrap; }
   select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; padding:6px 26px 6px 10px; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D0C8BA' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center; outline:none; transition:border-color .2s; }
   select:focus { border-color:var(--accent); }
@@ -338,9 +339,6 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search" placeholder="Search&hellip;">
   </div>
-  <div class="acct-search-wrap" id="acct-search-wrap">
-    <input type="text" id="acct-search" placeholder="Search accounts&hellip;">
-  </div>
   <div class="header-right">
     <button class="upd-btn" id="upd-btn" title="Update data for current org">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -357,6 +355,13 @@
     </button>
   </div>
 </header>
+
+<!-- ── ACCOUNT SEARCH BAR (below header) ── -->
+<div class="acct-search-container" id="acct-search-container">
+  <div class="acct-search-wrap">
+    <input type="text" id="acct-search" placeholder="Search Accounts">
+  </div>
+</div>
 
 <!-- ── UPDATER MODAL ── -->
 <input type="file" id="upd-file" accept=".xlsx,.xls" style="display:none" multiple>
@@ -593,7 +598,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='8.3';
+var APP_VERSION='8.4';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -835,7 +840,7 @@ function switchOrg(org){
     var mb=document.getElementById('btn-map');
     mb.style.display=cfg.hasMap?'':'none';
     var ab=document.getElementById('acct-btn');if(ab)ab.style.display=org==='cdw'?'':'none';
-    var asw=document.getElementById('acct-search-wrap');if(asw)asw.style.display=(org==='cdw'&&ACCT_LOADED)?'block':'none';
+    var asw=document.getElementById('acct-search-container');if(asw)asw.style.display=(org==='cdw'&&ACCT_LOADED)?'block':'none';
     if(!cfg.hasMap&&VIEW==='map'){VIEW='table';document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('btn-table').classList.add('active');}
     if(cfg.defaultView&&VIEW!==cfg.defaultView){VIEW=cfg.defaultView;document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});var dvb=document.getElementById('btn-'+cfg.defaultView);if(dvb)dvb.classList.add('active');}
     populateFilters();
@@ -2479,7 +2484,7 @@ function processAcctFile(data,btn){
     btn.classList.remove('loading');
     btn.textContent='Accounts ('+totalAccounts.toLocaleString()+')';
     btn.title=totalAccounts.toLocaleString()+' total accounts: '+mapped.toLocaleString()+' mapped to '+sellers+' sellers, '+skipped.toLocaleString()+' unmapped';
-    var asw=document.getElementById('acct-search-wrap');
+    var asw=document.getElementById('acct-search-container');
     if(asw&&ORG==='cdw')asw.style.display='block';
     buildSearchIndex();
     render();
@@ -2516,7 +2521,7 @@ function loadAccounts(){
         var btn=document.getElementById('acct-btn');
         if(btn)btn.textContent='Accounts ('+sellers+')';
         if(btn)btn.title=total+' accounts mapped to '+sellers+' sellers';
-        var asw=document.getElementById('acct-search-wrap');
+        var asw=document.getElementById('acct-search-container');
         if(asw&&ORG==='cdw')asw.style.display='block';
         if(ORG==='cdw'){buildSearchIndex();render();}
       }catch(err){/* silent */}

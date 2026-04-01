@@ -14,10 +14,8 @@
   :root[data-theme="light"] { --bg:#F5F0E8; --surface:#FFFFFF; --surface2:#EDE8DF; --border:#D0C8BA; --accent:#D4581A; --accent2:#3A6B45; --accent3:#5A7D65; --accent4:#A0522D; --text:#2D2A27; --muted:#71584C; --tag-bg:#EDE8DF; --card-hover:#E8E2D8; --shadow-card:0 2px 12px rgba(0,0,0,.08); --glow-accent:rgba(212,88,26,.1); }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; min-height:100vh; }
-  header { background:linear-gradient(135deg,#252220 0%,#2D2A27 60%,#252220 100%); border-bottom:1px solid var(--border); padding:22px 40px 18px; display:flex; align-items:center; gap:24px; flex-wrap:nowrap; position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); justify-content:space-between; }
-  header { justify-content:space-between; }
-  .header-center { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:10px; }
-  .header-right { display:flex; align-items:center; gap:10px; margin-left:auto; }
+  header { background:linear-gradient(135deg,#252220 0%,#2D2A27 60%,#252220 100%); border-bottom:1px solid var(--border); padding:22px 40px 18px; display:flex; align-items:center; gap:16px; flex-wrap:nowrap; position:sticky; top:0; z-index:100; backdrop-filter:blur(12px); }
+  .header-right { display:flex; align-items:center; gap:10px; margin-left:auto; flex-shrink:0; }
   .version-badge { display:inline-block; font-family:'DM Mono',monospace; font-size:10px; font-weight:500; letter-spacing:.06em; color:var(--accent); background:rgba(255,112,35,.12); border:1px solid rgba(255,112,35,.3); border-radius:20px; padding:2px 8px; vertical-align:middle; margin-left:8px; position:relative; top:-2px; }
   header h1 { font-family:'DM Serif Display',serif; font-size:24px; font-weight:400; letter-spacing:-.3px; line-height:1; }
   header h1 em { font-style:italic; color:var(--accent2); }
@@ -92,7 +90,7 @@
   .gh-save-btn:hover { background:var(--accent3); color:#1a2419; }
   .gh-status { font-size:11px; font-family:'DM Mono',monospace; margin-top:8px; min-height:16px; }
   .upd-push-status { font-size:11px; font-family:'DM Mono',monospace; margin-top:6px; min-height:16px; text-align:center; }
-  .search-wrap { flex:2; min-width:240px; max-width:420px; position:relative; }
+  .search-wrap { flex:1; min-width:180px; position:relative; }
   .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
   #search:focus { border-color:var(--accent); }
@@ -319,18 +317,16 @@
     <h1 id="header-h1">CDW Org <em>Directory</em><span class="version-badge" id="version-badge">v1.0</span></h1>
     <div class="header-meta" id="header-meta">Loading&hellip;</div>
   </div>
-  <div class="header-center">
-    <div class="org-selector">
-      <button class="org-btn active" data-org="cdw">CDW</button>
-      <button class="org-btn" data-org="dcs">DCS</button>
-      <button class="org-btn" data-org="canada">Canada</button>
-    </div>
+  <div class="org-selector">
+    <button class="org-btn active" data-org="cdw">CDW</button>
+    <button class="org-btn" data-org="dcs">DCS</button>
+    <button class="org-btn" data-org="canada">Canada</button>
+  </div>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search&hellip;">
   </div>
   <div class="header-right">
-    <div class="search-wrap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="Search&hellip;">
-    </div>
     <button class="upd-btn" id="upd-btn" title="Update data for current org">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Update Data
@@ -582,7 +578,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.4';
+var APP_VERSION='7.6';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -2301,7 +2297,6 @@ function processAcctFile(data,btn){
     var mapped=0,skipped=0;
 
     rows.forEach(function(row){
-      // Find columns by header name
       var email=String(row['MatchAMEmail']||'').trim().toLowerCase();
       if(!email||email.indexOf('@')===-1){skipped++;return;}
 
@@ -2327,35 +2322,20 @@ function processAcctFile(data,btn){
     buildSearchIndex();
     render();
 
-    // Push to GitHub (same as Update Data)
-    acctPushToGitHub(mapped,sellers,btn);
+    // Download CDW_accounts.json
+    var json=JSON.stringify(ACCT_MAP,null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download='CDW_accounts.json';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 JSON downloaded','#8FA596');
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';
     showToast('Parse error: '+err.message,'#DEA193');
-  }
-}
-
-// Push account map to GitHub as CDW_accounts.json
-async function acctPushToGitHub(mapped,sellers,btn){
-  var owner=localStorage.getItem('gh_owner')||'';
-  var repo=localStorage.getItem('gh_repo')||'';
-  var token=localStorage.getItem('gh_token')||'';
-  if(!owner||!repo||!token){
-    // No GitHub settings — open the updater modal to configure them
-    showToast(mapped.toLocaleString()+' accounts loaded \u00b7 Configure GitHub settings to save permanently','#BD673D');
-    return;
-  }
-  try{
-    btn.textContent='Saving\u2026';
-    var json=JSON.stringify(ACCT_MAP,null,2);
-    var statusEl=document.createElement('span');
-    await ghPushFile(owner,repo,token,'CDW_accounts.json',json,statusEl);
-    btn.textContent='Accounts ('+sellers+')';
-    showToast(mapped.toLocaleString()+' accounts saved \u00b7 '+sellers+' sellers','#8FA596');
-  }catch(err){
-    btn.textContent='Accounts ('+sellers+')';
-    showToast('Accounts loaded but save failed: '+err.message,'#DEA193');
   }
 }
 

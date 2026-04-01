@@ -95,6 +95,10 @@
   #search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px 9px 38px; outline:none; transition:border-color .2s; }
   #search:focus { border-color:var(--accent); }
   #search::placeholder { color:var(--muted); }
+  .acct-search-wrap { position:relative; min-width:200px; display:none; }
+  #acct-search { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px; outline:none; transition:border-color .2s; }
+  #acct-search:focus { border-color:var(--accent3); }
+  #acct-search::placeholder { color:var(--muted); }
   .filters { padding:12px 40px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--border); align-items:center; background:var(--surface); position:sticky; top:68px; z-index:90; backdrop-filter:blur(12px); }
   .filter-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:2px; white-space:nowrap; }
   select { background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; padding:6px 26px 6px 10px; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D0C8BA' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center; outline:none; transition:border-color .2s; }
@@ -335,7 +339,6 @@
     <input type="text" id="search" placeholder="Search&hellip;">
   </div>
   <div class="acct-search-wrap" id="acct-search-wrap">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
     <input type="text" id="acct-search" placeholder="Search accounts&hellip;">
   </div>
   <div class="header-right">
@@ -590,7 +593,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.8';
+var APP_VERSION='7.9';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'

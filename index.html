@@ -582,7 +582,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.3';
+var APP_VERSION='7.4';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -2324,15 +2324,59 @@ function processAcctFile(data,btn){
     btn.classList.remove('loading');
     btn.textContent='Accounts ('+sellers+')';
     btn.title=mapped+' accounts mapped to '+sellers+' sellers';
-    showToast(mapped.toLocaleString()+' accounts mapped to '+sellers+' sellers','#8FA596');
-    buildSearchIndex(); // Rebuild so account names are searchable
+    buildSearchIndex();
     render();
+
+    // Push to GitHub if settings are configured
+    acctPushToGitHub(mapped,sellers);
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';
     showToast('Parse error: '+err.message,'#DEA193');
   }
 }
+
+// Push account map to GitHub as CDW_accounts.json
+async function acctPushToGitHub(mapped,sellers){
+  var owner=localStorage.getItem('gh_owner')||'';
+  var repo=localStorage.getItem('gh_repo')||'';
+  var token=localStorage.getItem('gh_token')||'';
+  if(!owner||!repo||!token){
+    showToast(mapped.toLocaleString()+' accounts loaded (session only — set GitHub settings to persist)','#BD673D');
+    return;
+  }
+  try{
+    var json=JSON.stringify(ACCT_MAP,null,2);
+    var statusEl=document.createElement('span');
+    await ghPushFile(owner,repo,token,'CDW_accounts.json',json,statusEl);
+    showToast(mapped.toLocaleString()+' accounts \u2192 '+sellers+' sellers \u00b7 Pushed to GitHub','#8FA596');
+  }catch(err){
+    showToast(mapped.toLocaleString()+' accounts loaded (push failed: '+err.message+')','#BD673D');
+  }
+}
+
+// Load CDW_accounts.json on startup (silent, non-blocking)
+function loadAccounts(){
+  var x=new XMLHttpRequest();
+  x.open('GET','CDW_accounts.json');
+  x.onload=function(){
+    if(x.status>=200&&x.status<300){
+      try{
+        ACCT_MAP=JSON.parse(x.responseText);
+        ACCT_LOADED=true;
+        var sellers=Object.keys(ACCT_MAP).length;
+        var total=0;Object.keys(ACCT_MAP).forEach(function(k){total+=ACCT_MAP[k].length;});
+        var btn=document.getElementById('acct-btn');
+        if(btn)btn.textContent='Accounts ('+sellers+')';
+        if(btn)btn.title=total+' accounts mapped to '+sellers+' sellers';
+        if(ORG==='cdw'){buildSearchIndex();render();}
+      }catch(err){/* silent */}
+    }
+  };
+  x.onerror=function(){/* CDW_accounts.json doesn't exist yet — that's fine */};
+  x.send();
+}
+loadAccounts();
 </script>
 </body>
 </html>

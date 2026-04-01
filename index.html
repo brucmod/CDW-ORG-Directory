@@ -593,7 +593,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.9';
+var APP_VERSION='8.0';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -2299,12 +2299,11 @@ updOpen=function(){
 };
 
 // ── ACCOUNT MAPPING ───────────────────────────────────────────
-// Stores accounts keyed by lowercase email: { 'email@cdw.com': [{customer, city, state, custNum, t12},...] }
+// Stores accounts keyed by lowercase email (or name if email not found)
+// Format: { 'email@cdw.com': [{customer, city, state, custNum, t12},...] }
+// Matching logic: Try email first, fall back to FirstName + LastName
 var ACCT_MAP={};
 var ACCT_LOADED=false;
-
-// Column indices in the XLSX (0-based)
-var ACCT_COLS={customer:6,city:9,state:10,custNum:18,t12:20,amFirst:28,amLast:29,amEmail:30,amPhone:31};
 
 function acctForEmail(email){
   if(!email)return[];
@@ -2377,32 +2376,69 @@ function processAcctFile(data,btn){
     var ws=wb.Sheets[wb.SheetNames[0]];
     var rows=XLSX.utils.sheet_to_json(ws,{defval:''});
 
+    // Build lookup maps for DATA by email and by name
+    var byEmail={};
+    var byName={};
+    DATA.forEach(function(person){
+      if(person.email){
+        byEmail[person.email.toLowerCase()]=person;
+      }
+      if(person.name){
+        byName[person.name.toLowerCase()]=person;
+      }
+    });
+
     ACCT_MAP={};
-    var mapped=0,skipped=0;
+    var mapped=0,skipped=0,emailMatches=0,nameMatches=0;
 
     rows.forEach(function(row){
-      var email=String(row['MatchAMEmail']||'').trim().toLowerCase();
-      if(!email||email.indexOf('@')===-1){skipped++;return;}
-
+      // Extract account data using new column names
       var acct={
         customer:String(row['CustomerDescription']||'').trim(),
-        city:String(row['City']||'').trim(),
-        state:String(row['State']||'').trim(),
+        city:String(row['MatchBillToCity']||'').trim(),
+        state:String(row['MatchBillToState']||'').trim(),
         custNum:String(row['MatchCustomerNumber']||'').trim(),
         t12:row['MatchT12Spend']||''
       };
       if(!acct.customer){skipped++;return;}
 
-      if(!ACCT_MAP[email])ACCT_MAP[email]=[];
-      ACCT_MAP[email].push(acct);
-      mapped++;
+      // Try to match by email first
+      var email=String(row['MatchAMEmail']||'').trim().toLowerCase();
+      var matchedPerson=null;
+      var matchKey=null;
+
+      if(email&&email.indexOf('@')!==-1&&byEmail[email]){
+        matchedPerson=byEmail[email];
+        matchKey=email;
+        emailMatches++;
+      }else{
+        // Fall back to first name + last name
+        var first=String(row['MatchAMFirstName']||'').trim();
+        var last=String(row['MatchAMLastName']||'').trim();
+        if(first&&last){
+          var fullName=(first+' '+last).toLowerCase();
+          if(byName[fullName]){
+            matchedPerson=byName[fullName];
+            matchKey=matchedPerson.email?matchedPerson.email.toLowerCase():fullName;
+            nameMatches++;
+          }
+        }
+      }
+
+      if(matchKey){
+        if(!ACCT_MAP[matchKey])ACCT_MAP[matchKey]=[];
+        ACCT_MAP[matchKey].push(acct);
+        mapped++;
+      }else{
+        skipped++;
+      }
     });
 
     ACCT_LOADED=true;
     var sellers=Object.keys(ACCT_MAP).length;
     btn.classList.remove('loading');
     btn.textContent='Accounts ('+sellers+')';
-    btn.title=mapped+' accounts mapped to '+sellers+' sellers';
+    btn.title=mapped+' accounts mapped to '+sellers+' sellers ('+emailMatches+' by email, '+nameMatches+' by name)';
     var asw=document.getElementById('acct-search-wrap');
     if(asw&&ORG==='cdw')asw.style.display='block';
     buildSearchIndex();
@@ -2417,7 +2453,7 @@ function processAcctFile(data,btn){
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 JSON downloaded','#8FA596');
+    showToast(mapped.toLocaleString()+' accounts \u00b7 '+sellers+' sellers \u00b7 '+emailMatches+' email matches \u00b7 '+nameMatches+' name matches \u00b7 JSON downloaded','#8FA596');
   }catch(err){
     btn.classList.remove('loading');
     btn.textContent='Accounts';

@@ -157,6 +157,14 @@
   .org-report-card:hover { border-color:var(--accent); border-left:3px solid var(--accent); background:var(--card-hover); box-shadow:0 2px 12px var(--glow-accent); }
   .org-solo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; margin-bottom:28px; }
   .org-section-label { font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .acct-card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:10px; padding:18px; cursor:pointer; transition:border-color .15s,transform .15s,background .15s,box-shadow .2s; box-shadow:var(--shadow-card); }
+  .acct-card:hover { border-color:var(--accent3); background:var(--card-hover); transform:translateY(-2px); box-shadow:0 4px 20px rgba(143,165,150,.3),0 2px 8px rgba(0,0,0,.15); }
+  .acct-card-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .acct-card-icon { width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#8FA596cc,#8FA59655); color:white; flex-shrink:0; }
+  .acct-card-name { font-weight:500; font-size:14px; line-height:1.3; color:var(--text); }
+  .acct-card-meta { font-size:11px; color:var(--muted); margin-top:4px; }
+  .acct-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:10px; border-top:1px solid var(--border); }
+  .acct-card-mgr { font-size:11px; color:var(--muted); }
   .group-section { margin-bottom:28px; }
   .group-header { display:flex; align-items:center; gap:12px; padding:12px 18px; background:var(--surface2); border:1px solid var(--border); border-radius:8px 8px 0 0; cursor:pointer; user-select:none; }
   .group-header:hover { background:var(--card-hover); }
@@ -582,7 +590,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <script>
-var APP_VERSION='7.7';
+var APP_VERSION='7.8';
 /* Name overrides — keyed by lowercase email. Applied after XLSX import & JSON load. */
 var NAME_OVERRIDES = {
   'scothie@cdw.com': 'Scott Hiemstra'
@@ -994,8 +1002,63 @@ function buildCard(d,cls){
     '</div>';
 }
 
+function buildAcctCard(acct,mgrName){
+  var icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>';
+  var meta='';
+  if(acct.city&&acct.state)meta=e(acct.city)+', '+e(acct.state);
+  else if(acct.state)meta=e(acct.state);
+  if(acct.custNum)meta+=(meta?' &middot; ':'')+e(acct.custNum);
+  var t12='';
+  if(acct.t12){t12='<div style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--accent3);font-weight:500">'+fmtT12(acct.t12)+'</div>';}
+  return'<div class="acct-card" data-name="'+encodeURIComponent(mgrName)+'">'+
+    '<div class="acct-card-header">'+
+      '<div class="acct-card-icon">'+icon+'</div>'+
+      '<div style="flex:1"><div class="acct-card-name">'+e(acct.customer)+'</div>'+(meta?'<div class="acct-card-meta">'+meta+'</div>':'')+'</div>'+
+    '</div>'+
+    '<div class="acct-card-footer">'+
+      '<div class="acct-card-mgr">AM: <strong>'+e(mgrName)+'</strong></div>'+
+      t12+
+    '</div>'+
+    '</div>';
+}
+
 function rCards(data){
   var cfg=CFG[ORG];
+
+  // ── ACCOUNT VIEW: Show account cards when account search is active ──
+  var aq=document.getElementById('acct-search')?document.getElementById('acct-search').value.trim():'';
+  if(aq&&ACCT_LOADED&&ORG==='cdw'){
+    var acctCards=[];
+    var seen={}; // Track unique accounts to avoid duplicates
+    data.forEach(function(d){
+      if(!d.email)return;
+      var accts=acctForEmail(d.email);
+      if(!accts.length)return;
+      accts.forEach(function(acct){
+        var key=acct.customer.toLowerCase()+'|'+d.name;
+        if(seen[key])return;
+        seen[key]=true;
+        // Filter by account query
+        if(acct.customer.toLowerCase().indexOf(aq.toLowerCase())!==-1){
+          acctCards.push(buildAcctCard(acct,d.name));
+        }
+      });
+    });
+    if(!acctCards.length){
+      document.getElementById('app').innerHTML='<div style="padding:28px 40px"><div class="empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No accounts found</p></div></div>';
+      return;
+    }
+    var html='<div class="org-section-label">'+acctCards.length+' Accounts</div>'+
+      '<div class="cards-grid">'+acctCards.join('')+'</div>';
+    document.getElementById('app').innerHTML='<div style="padding:28px 40px">'+html+'</div>';
+    document.querySelectorAll('[data-name]').forEach(function(el){
+      el.addEventListener('click',function(ev){
+        if(ev.target.closest('a'))return;
+        openModal(decodeURIComponent(el.dataset.name));
+      });
+    });
+    return;
+  }
 
   // ── DCS: 4-level hierarchy renderer (Director > Sr Manager > Manager > IC) ──
   if(ORG==='dcs'){
